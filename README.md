@@ -8,8 +8,8 @@ The recipes can also be created/edited/deleted and filtered by different categor
 ## Team Information
 
 | Seminar Group | Team |
-|---------------| ---- |
-| PV168/03      | Y    | 
+|---------------|---|
+| PV168/03      | 9 | 
 
 ### Members
 

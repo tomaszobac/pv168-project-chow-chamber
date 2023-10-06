@@ -1,11 +1,6 @@
 package cz.muni.fi.pv168.project.ui;
 
-import cz.muni.fi.pv168.project.ui.action.AddAction;
-import cz.muni.fi.pv168.project.ui.action.DeleteAction;
-import cz.muni.fi.pv168.project.ui.action.EditAction;
-import cz.muni.fi.pv168.project.ui.action.QuitAction;
-import cz.muni.fi.pv168.project.ui.action.ImportAction;
-import cz.muni.fi.pv168.project.ui.action.ExportAction;
+import cz.muni.fi.pv168.project.ui.action.*;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 
 import javax.swing.Action;
@@ -29,6 +24,7 @@ public class MainWindow {
     private final Action deleteAction;
     private final Action importAction;
     private final Action exportAction;
+    private final Action filterAction;
     public MainWindow() {
         frame = createFrame();
 
@@ -37,11 +33,10 @@ public class MainWindow {
         deleteAction = new DeleteAction();
         importAction = new ImportAction();
         exportAction = new ExportAction();
+        filterAction = new FilterAction();
 
-        // ### START OF NEW CODE ###
-        JTable recipeTable = createRecipeTable();
-        frame.add(new JScrollPane(recipeTable), BorderLayout.CENTER); // TODO: Add our table into the JScroll Pane
-        // ### END OF NEW CODE ###
+        JTable recipeTable = createRecipeTable(); // TODO: this method take a list of (test) data
+        frame.add(new JScrollPane(recipeTable), BorderLayout.CENTER);
         frame.add(createToolbar(), BorderLayout.BEFORE_FIRST_LINE);
         frame.setJMenuBar(createMenuBar());
         frame.pack();
@@ -73,6 +68,8 @@ public class MainWindow {
         toolbar.addSeparator();
         toolbar.add(importAction);
         toolbar.add(exportAction);
+        toolbar.addSeparator();
+        toolbar.add(filterAction);
         return toolbar;
     }
 
@@ -91,6 +88,8 @@ public class MainWindow {
         dataMenu.setMnemonic('d');
         dataMenu.add(importAction);
         dataMenu.add(exportAction);
+        dataMenu.addSeparator();
+        dataMenu.add(filterAction);
 
         menuBar.add(editMenu);
         menuBar.add(dataMenu);

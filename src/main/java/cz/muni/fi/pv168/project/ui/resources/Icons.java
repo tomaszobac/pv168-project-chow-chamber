@@ -11,6 +11,7 @@ public class Icons {
     public static final Icon DELETE_ICON = createIcon("recycle-bin-line-icon.png");
     public static final Icon IMPORT_ICON = createIcon("document-import-icon.png");
     public static final Icon EXPORT_ICON = createIcon("document-send-icon.png");
+    public static final Icon FILTER_ICON = createIcon("filter-line-icon.png");
 
     private Icons() {
         throw new AssertionError("This class is not instantiable");

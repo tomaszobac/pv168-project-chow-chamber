@@ -7,8 +7,16 @@ import cz.muni.fi.pv168.project.ui.action.QuitAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Action;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
+import javax.swing.WindowConstants;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 public class MainWindow {
     private final JFrame frame;

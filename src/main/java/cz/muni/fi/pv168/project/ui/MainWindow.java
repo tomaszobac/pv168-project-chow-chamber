@@ -21,6 +21,7 @@ public class MainWindow {
         editAction = new EditAction();
         deleteAction = new DeleteAction();
 
+        frame.add(new JScrollPane(), BorderLayout.CENTER); // TODO: Add our table into the JScroll Pane
         frame.add(createToolbar(), BorderLayout.BEFORE_FIRST_LINE);
         frame.setJMenuBar(createMenuBar());
         frame.pack();

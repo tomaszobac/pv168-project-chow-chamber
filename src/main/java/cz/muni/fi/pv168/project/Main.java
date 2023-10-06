@@ -1,5 +1,7 @@
 package cz.muni.fi.pv168.project;
 
+import cz.muni.fi.pv168.project.ui.MainWindow;
+
 /**
  * The entry point of the application.
  */
@@ -10,7 +12,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // TODO: Replace with your code
+        new MainWindow();
         System.out.println("Hello World!");
     }
 }

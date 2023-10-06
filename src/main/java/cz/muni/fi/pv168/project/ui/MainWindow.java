@@ -16,6 +16,8 @@ public class MainWindow {
     private final Action deleteAction;
     public MainWindow() {
         frame = createFrame();
+        Dimension min_size = new Dimension(800, 400);
+        frame.setMinimumSize(min_size);
 
         addAction = new AddAction();
         editAction = new EditAction();
@@ -33,6 +35,7 @@ public class MainWindow {
         jFrame.setVisible(true);
         return jFrame;
     }
+
 
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();

@@ -46,8 +46,12 @@ public class MainWindow {
         JFrame jFrame = new JFrame("Recipe DB");
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
+
         Dimension min_size = new Dimension(800, 400);
+        Dimension max_size = new Dimension(1920, 1080);
         jFrame.setMinimumSize(min_size);
+        jFrame.setMaximumSize(max_size);
+
         return jFrame;
     }
 

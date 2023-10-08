@@ -6,17 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeTableModel extends AbstractTableModel {
-
-    // TODO: Change Object everywhere into Recipe class
-    private final List<Object> recipes;
-    private final List<Column<Object, ?>> columns = List.of(
-            Column.changeToEditable("Category", String.class),
+    private final List<Recipe> recipes;
+    private final List<Column<Recipe, ?>> columns = List.of(
             Column.changeToEditable("Name", String.class),
+            Column.changeToEditable("Category", String.class),
             Column.changeToEditable("Time", String.class),
             Column.changeToEditable("Portions", Integer.class)
     );
 
-    public RecipeTableModel(List<Object> recipes) {
+    public RecipeTableModel(List<Recipe> recipes) {
         this.recipes = new ArrayList<>(recipes);
     }
 
@@ -39,5 +37,11 @@ public class RecipeTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return null;
+    }
+
+    public void addRow(Recipe recipe) {
+        int newRowIndex = recipes.size();
+        recipes.add(recipe);
+        fireTableRowsInserted(newRowIndex, newRowIndex);
     }
 }

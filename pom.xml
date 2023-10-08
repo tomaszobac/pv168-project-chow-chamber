@@ -16,9 +16,21 @@
         <version.junit>5.8.0</version.junit>
         <version.assertj>3.21.0</version.assertj>
         <version.mockito>3.12.4</version.mockito>
+        <flatlaf.version>3.2.1</flatlaf.version>
+        <miglayout.version>3.7.4</miglayout.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>${flatlaf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout</artifactId>
+            <version>${miglayout.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

@@ -5,13 +5,13 @@ import javax.swing.ImageIcon;
 import java.net.URL;
 
 public class Icons {
-    public static final Icon QUIT_ICON = createIcon("power-off-line-icon.png");
-    public static final Icon ADD_ICON = createIcon("plus-line-icon.png");
-    public static final Icon EDIT_ICON = createIcon("edit-document-icon.png");
-    public static final Icon DELETE_ICON = createIcon("recycle-bin-line-icon.png");
-    public static final Icon IMPORT_ICON = createIcon("document-import-icon.png");
-    public static final Icon EXPORT_ICON = createIcon("document-send-icon.png");
-    public static final Icon FILTER_ICON = createIcon("filter-line-icon.png");
+    public static final Icon QUIT_ICON = createIcon("mat3powerW.png");
+    public static final Icon ADD_ICON = createIcon("mat3addW.png");
+    public static final Icon EDIT_ICON = createIcon("mat3editW.png");
+    public static final Icon DELETE_ICON = createIcon("mat3deleteW.png");
+    public static final Icon IMPORT_ICON = createIcon("mat3importW.png");
+    public static final Icon EXPORT_ICON = createIcon("mat3exportW.png");
+    public static final Icon FILTER_ICON = createIcon("mat3filterW.png");
 
     private Icons() {
         throw new AssertionError("This class is not instantiable");

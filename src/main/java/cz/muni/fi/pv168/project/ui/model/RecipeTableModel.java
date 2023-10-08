@@ -8,10 +8,10 @@ import java.util.List;
 public class RecipeTableModel extends AbstractTableModel {
     private final List<Recipe> recipes;
     private final List<Column<Recipe, ?>> columns = List.of(
-            Column.changeToEditable("Name", String.class),
-            Column.changeToEditable("Category", String.class),
-            Column.changeToEditable("Time", String.class),
-            Column.changeToEditable("Portions", Integer.class)
+            Column.editable("Name", String.class, Recipe::getName, Recipe::setName),
+            Column.editable("Category", String.class, Recipe::getCategory, Recipe::setCategory),
+            Column.editable("Time", String.class, Recipe::getTime, Recipe::setTime),
+            Column.editable("Portions", String.class, Recipe::getPortions, Recipe::setPortions)
     );
 
     public RecipeTableModel(List<Recipe> recipes) {
@@ -33,15 +33,30 @@ public class RecipeTableModel extends AbstractTableModel {
         return columns.get(columnIndex).getName();
     }
 
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return columns.get(columnIndex).isEditable();
+    }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return null;
+        var recipe = getEntity(rowIndex);
+        return columns.get(columnIndex).getValue(recipe);
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        var recipe = getEntity(rowIndex);
+        columns.get(columnIndex).setValue(value, recipe);
     }
 
     public void addRow(Recipe recipe) {
         int newRowIndex = recipes.size();
         recipes.add(recipe);
         fireTableRowsInserted(newRowIndex, newRowIndex);
+    }
+
+    public Recipe getEntity(int rowIndex) {
+        return recipes.get(rowIndex);
     }
 }

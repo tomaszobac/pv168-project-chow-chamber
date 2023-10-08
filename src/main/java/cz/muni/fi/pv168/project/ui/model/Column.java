@@ -51,7 +51,22 @@ public class Column<E, T> {
         return new Column<>(name, columnClass, valueGetter, null);
     }
 
+    void setValue(Object value, E entity) {
+        if (valueSetter == null) {
+            throw new UnsupportedOperationException("Cannot set value in readonly column: '" + name + "'");
+        }
+        valueSetter.accept(entity, columnType.cast(value)); // see Item 33: Consider type-safe heterogeneous containers
+    }
+
+    T getValue(E entity) {
+        return valueGetter.apply(entity);
+    }
+
     public String getName() {
         return name;
+    }
+
+    boolean isEditable() {
+        return valueSetter != null;
     }
 }

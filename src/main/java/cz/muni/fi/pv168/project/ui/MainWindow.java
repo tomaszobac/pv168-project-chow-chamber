@@ -8,7 +8,6 @@ import javax.swing.*;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainWindow {
@@ -22,7 +21,7 @@ public class MainWindow {
     private final Action filterAction;
     public MainWindow() {
         frame = createFrame();
-        JTable recipeTable = createRecipeTable(); // TODO: this method take a list of (test) data
+        MyTable recipeTable = createRecipeTable(); // TODO: this method take a list of (test) data
 
         addAction = new AddAction(recipeTable);
         editAction = new EditAction();
@@ -37,7 +36,11 @@ public class MainWindow {
         frame.pack();
     }
 
-    private JFrame createFrame() {
+    public void show() {
+        frame.setVisible(true);
+    }
+
+    /*private JFrame createFrame() {
         JFrame jFrame = new JFrame("Recipe DB");
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
@@ -48,9 +51,9 @@ public class MainWindow {
         jFrame.setMaximumSize(max_size);
 
         return jFrame;
-    }
+    }*/
 
-    /*private JFrame createFrame() {
+    private JFrame createFrame() {
         MyFrame Mframe = new MyFrame();
         Mframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Mframe.setVisible(true);
@@ -61,12 +64,18 @@ public class MainWindow {
         Mframe.setMaximumSize(max_size);
 
         return Mframe;
-    }*/
+    }
 
-    private JTable createRecipeTable() {
-        List<Recipe> recipes = List.of(new Recipe("vomáčka", "příloha", "00:10","4"));
+    private MyTable createRecipeTable() {
+        List<Recipe> recipes = List.of( // TODO: Move test data
+                new Recipe("vomáčka", "příloha", "00:10","4"),
+                new Recipe("polívka", "hlavní chod", "02:00","20"),
+                new Recipe("chleba", "příloha", "00:30","6"),
+                new Recipe("maso", "hlavní chod", "00:20","4"),
+                new Recipe("dort", "zákusek", "01:00","8"),
+                new Recipe("nevim", "všechno", "99:00","99"));
         var model = new RecipeTableModel(recipes); // TODO: Fix empty list here
-        JTable table = new JTable(model);
+        MyTable table = new MyTable(model);
         table.setAutoCreateRowSorter(true);
         return table;
     }

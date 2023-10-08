@@ -13,6 +13,8 @@ public class RecipeDialog extends EntityDialog<Recipe> {
 
     public RecipeDialog(Recipe recipe) {
         this.recipe = recipe;
+        setValues();
+        addFields();
     }
 
     private void setValues() {

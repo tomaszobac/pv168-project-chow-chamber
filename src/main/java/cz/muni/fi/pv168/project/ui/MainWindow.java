@@ -1,14 +1,13 @@
 package cz.muni.fi.pv168.project.ui;
 
 import cz.muni.fi.pv168.project.ui.action.*;
-import cz.muni.fi.pv168.project.ui.model.Recipe;
-import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
+import cz.muni.fi.pv168.project.testGen.TestTable;
 
 import javax.swing.*;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.*;
 
 public class MainWindow {
     private final JFrame frame;
@@ -20,8 +19,8 @@ public class MainWindow {
     private final Action exportAction;
     private final Action filterAction;
     public MainWindow() {
-        frame = createFrame();
-        MyTable recipeTable = createRecipeTable(); // TODO: this method take a list of (test) data
+        frame = createFrame(null, null, "Best recipes app"); // TODO: agree on name of our app
+        MyTable recipeTable = new TestTable().getTableOne(); // TODO: this method take a list of (test) data
 
         addAction = new AddAction(recipeTable);
         editAction = new EditAction();
@@ -33,51 +32,70 @@ public class MainWindow {
         frame.add(new JScrollPane(recipeTable), BorderLayout.CENTER);
         frame.add(createToolbar(), BorderLayout.BEFORE_FIRST_LINE);
         frame.setJMenuBar(createMenuBar());
+        recipeTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1 && SwingUtilities.isLeftMouseButton(e)) { // TODO: open recipe different way
+                    openRecipeInfoWindow(recipeTable);
+                }
+            }
+        });
         frame.pack();
     }
+
+    /**
+     * This method opens new window(s) upon clicking on recipe(s). One window contains two tabs, first tab contains basic info,
+     * second tab contains more info about one recipe.
+     *
+     * @param recipeTable represents table of stored recipes.
+     */
+    private void openRecipeInfoWindow(MyTable recipeTable) {
+        JFrame infoFrame = createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
+        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        // Create a JPanel to display the recipe information
+        JPanel infoPanel = new JPanel(new GridLayout(2, 2,  10, 10));
+        infoPanel.add(new JLabel("Name:"));
+        infoPanel.add(new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString())));
+        infoPanel.add(new JLabel("Category:"));
+        infoPanel.add(new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 1).toString())));
+        infoPanel.add(new JLabel("Time:"));
+        infoPanel.add(new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString())));
+        infoPanel.add(new JLabel("Portions:"));
+        infoPanel.add(new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString())));
+        // Add more labels for other recipe attributes here
+        tabbedPane.addTab("Basic info", null, infoPanel, "First Tab");
+
+        // TODO: add listener for edits in JTextFields so that changes can be stored
+
+        JPanel tab2 = new JPanel();
+        tab2.add(new JLabel("The missile knows where it is at all times. It knows this because it knows where it isn't.")); // TODO: add more info about each recipe
+        tabbedPane.addTab("More", null, tab2, "Second Tab");
+
+        infoFrame.add(tabbedPane);
+        infoFrame.pack();
+        infoFrame.setVisible(true);
+    }
+
 
     public void show() {
         frame.setVisible(true);
     }
 
-    /*private JFrame createFrame() {
-        JFrame jFrame = new JFrame("Recipe DB");
-        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        jFrame.setVisible(true);
 
-        Dimension min_size = new Dimension(800, 400);
-        Dimension max_size = new Dimension(1920, 1080);
-        jFrame.setMinimumSize(min_size);
-        jFrame.setMaximumSize(max_size);
-
-        return jFrame;
-    }*/
-
-    private JFrame createFrame() {
+    private JFrame createFrame(Dimension min_size, Dimension max_size, String name) {
         MyFrame Mframe = new MyFrame();
+        Mframe.setTitle(name);
         Mframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Mframe.setVisible(true);
 
-        Dimension min_size = new Dimension(800, 400);
-        Dimension max_size = new Dimension(1920, 1080);
+        if (min_size == null) {min_size = new Dimension(800, 400);}
+        if (max_size == null) {max_size = new Dimension(1920, 1080);}
         Mframe.setMinimumSize(min_size);
         Mframe.setMaximumSize(max_size);
 
         return Mframe;
-    }
-
-    private MyTable createRecipeTable() {
-        List<Recipe> recipes = List.of( // TODO: Move test data
-                new Recipe("vomáčka", "příloha", "00:10","4"),
-                new Recipe("polívka", "hlavní chod", "02:00","20"),
-                new Recipe("chleba", "příloha", "00:30","6"),
-                new Recipe("maso", "hlavní chod", "00:20","4"),
-                new Recipe("dort", "zákusek", "01:00","8"),
-                new Recipe("nevim", "všechno", "99:00","99"));
-        var model = new RecipeTableModel(recipes); // TODO: Fix empty list here
-        MyTable table = new MyTable(model);
-        table.setAutoCreateRowSorter(true);
-        return table;
     }
 
     private JToolBar createToolbar() {

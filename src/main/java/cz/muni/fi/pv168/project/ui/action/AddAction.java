@@ -14,7 +14,7 @@ public class AddAction extends AbstractAction {
 
     public AddAction(JTable recipeTable) {
         super("Add", Icons.ADD_ICON);
-        putValue(SHORT_DESCRIPTION, "Adds new employee");
+        putValue(SHORT_DESCRIPTION, "Adds new recipe");
         putValue(MNEMONIC_KEY, KeyEvent.VK_A);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl N"));
         this.recipeTable = recipeTable;
@@ -24,7 +24,7 @@ public class AddAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         var recipeTableModel = (RecipeTableModel) this.recipeTable.getModel();
         var dialog = new RecipeDialog(new Recipe("vomáčka", "příloha", "00:10","4"));
-        dialog.show(recipeTable, "Add Employee")
+        dialog.show(recipeTable, "Add recipe")
                 .ifPresent(recipeTableModel::addRow);
     }
 }

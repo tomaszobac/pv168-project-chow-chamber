@@ -2,12 +2,16 @@ package cz.muni.fi.pv168.project.ui;
 
 import cz.muni.fi.pv168.project.ui.action.*;
 import cz.muni.fi.pv168.project.testGen.TestTable;
+import cz.muni.fi.pv168.project.ui.model.Recipe;
+import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.*;
+import java.util.List;
 
 public class MainWindow {
     private final JFrame frame;
@@ -20,11 +24,11 @@ public class MainWindow {
     private final Action filterAction;
     public MainWindow() {
         frame = createFrame(null, null, "Best recipes app"); // TODO: agree on name of our app
-        MyTable recipeTable = new TestTable().getTableOne(); // TODO: this method take a list of (test) data
+        MyTable recipeTable = createTable(TestTable.getTableOne());
 
         addAction = new AddAction(recipeTable);
-        editAction = new EditAction();
-        deleteAction = new DeleteAction();
+        editAction = new EditAction(recipeTable);
+        deleteAction = new DeleteAction(recipeTable);
         importAction = new ImportAction();
         exportAction = new ExportAction();
         filterAction = new FilterAction();
@@ -134,5 +138,27 @@ public class MainWindow {
         menuBar.add(editMenu);
         menuBar.add(dataMenu);
         return menuBar;
+    }
+
+    private MyTable createTable(List<Recipe> recipes) {
+        var model = new RecipeTableModel(recipes); // TODO: Fix empty list here
+        MyTable MTable = new MyTable(model);
+        MTable.setAutoCreateRowSorter(true);
+        MTable.getSelectionModel().addListSelectionListener(this::rowSelectionChanged);
+        return MTable;
+    }
+
+    private void rowSelectionChanged(ListSelectionEvent listSelectionEvent) {
+        var selectionModel = (ListSelectionModel) listSelectionEvent.getSource();
+        if (selectionModel.isSelectionEmpty()) {
+            editAction.setEnabled(false);
+            deleteAction.setEnabled(false);
+        } else if (selectionModel.getSelectedItemsCount() == 1) {
+            editAction.setEnabled(true);
+            deleteAction.setEnabled(true);
+        } else if (selectionModel.getSelectedItemsCount() > 1) {
+            editAction.setEnabled(false);
+            deleteAction.setEnabled(true);
+        }
     }
 }

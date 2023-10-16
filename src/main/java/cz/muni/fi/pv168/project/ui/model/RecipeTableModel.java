@@ -50,10 +50,20 @@ public class RecipeTableModel extends AbstractTableModel {
         columns.get(columnIndex).setValue(value, recipe);
     }
 
+    public void deleteRow(int rowIndex) {
+        recipes.remove(rowIndex);
+        fireTableRowsDeleted(rowIndex, rowIndex);
+    }
+
     public void addRow(Recipe recipe) {
         int newRowIndex = recipes.size();
         recipes.add(recipe);
         fireTableRowsInserted(newRowIndex, newRowIndex);
+    }
+
+    public void updateRow(Recipe recipe) {
+        int rowIndex = recipes.indexOf(recipe);
+        fireTableRowsUpdated(rowIndex, rowIndex);
     }
 
     public Recipe getEntity(int rowIndex) {

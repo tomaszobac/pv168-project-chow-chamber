@@ -8,8 +8,7 @@ import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.*;
 import java.util.List;
 
@@ -22,6 +21,8 @@ public class MainWindow {
     private final Action importAction;
     private final Action exportAction;
     private final Action filterAction;
+    private JTabbedPane infoTable = null;
+    private JFrame infoFrame = null;
     public MainWindow() {
         frame = createFrame(null, null, "Best recipes app"); // TODO: agree on name of our app
         MyTable recipeTable = createTable(TestTable.getTableOne());
@@ -41,6 +42,7 @@ public class MainWindow {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1 && SwingUtilities.isLeftMouseButton(e)) { // TODO: open recipe different way
                     openRecipeInfoWindow(recipeTable);
+                    //openRecipeWindow3(recipeTable);
                 }
             }
         });
@@ -53,6 +55,61 @@ public class MainWindow {
      *
      * @param recipeTable represents table of stored recipes.
      */
+
+    private JTabbedPane openRecipeInfoWindow2(MyTable recipeTable){
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        // Create a JPanel to display the recipe information
+        JPanel infoPanel = new JPanel(new GridLayout(2, 2,  10, 10));
+
+        JTextField name = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString()));
+        JTextField category = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 1).toString()));
+        JTextField time = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString()));
+        JTextField portions = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString()));
+
+        name.setEditable(false);
+        category.setEditable(false);
+        time.setEditable(false);
+        portions.setEditable(false);
+
+        infoPanel.add(new JLabel("Name:"));
+        infoPanel.add(name);
+        infoPanel.add(new JLabel("Category:"));
+        infoPanel.add(category);
+        infoPanel.add(new JLabel("Time:"));
+        infoPanel.add(time);
+        infoPanel.add(new JLabel("Portions:"));
+        infoPanel.add(portions);
+        // Add more labels for other recipe attributes here
+        tabbedPane.addTab("Basic info", null, infoPanel, "First Tab");
+
+        // TODO: add listener for edits in JTextFields so that changes can be stored
+
+        JPanel tab2 = new JPanel();
+        tab2.add(new JLabel("The missile knows where it is at all times. It knows this because it knows where it isn't.")); // TODO: add more info about each recipe
+        tabbedPane.addTab("More", null, tab2, "Second Tab");
+        return tabbedPane;
+    }
+    private void openRecipeWindow3(MyTable recipeTable){
+        if (this.infoTable == null){
+            JFrame infoFrame = createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
+            this.infoFrame = infoFrame;
+            infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            JTabbedPane tabbedPane = openRecipeInfoWindow2(recipeTable);
+            this.infoTable = tabbedPane;
+            infoFrame.add(tabbedPane);
+            infoFrame.pack();
+            infoFrame.setVisible(true);
+            infoFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    infoTable = null;
+                }
+            });
+        } else {
+            this.infoFrame.toFront();
+        }
+    }
     private void openRecipeInfoWindow(MyTable recipeTable) {
         JFrame infoFrame = createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
         infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

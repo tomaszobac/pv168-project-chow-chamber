@@ -60,14 +60,25 @@ public class MainWindow {
 
         // Create a JPanel to display the recipe information
         JPanel infoPanel = new JPanel(new GridLayout(2, 2,  10, 10));
+
+        JTextField name = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString()));
+        JTextField category = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 1).toString()));
+        JTextField time = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString()));
+        JTextField portions = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString()));
+
+        name.setEditable(false);
+        category.setEditable(false);
+        time.setEditable(false);
+        portions.setEditable(false);
+
         infoPanel.add(new JLabel("Name:"));
-        infoPanel.add(new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString())));
+        infoPanel.add(name);
         infoPanel.add(new JLabel("Category:"));
-        infoPanel.add(new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 1).toString())));
+        infoPanel.add(category);
         infoPanel.add(new JLabel("Time:"));
-        infoPanel.add(new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString())));
+        infoPanel.add(time);
         infoPanel.add(new JLabel("Portions:"));
-        infoPanel.add(new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString())));
+        infoPanel.add(portions);
         // Add more labels for other recipe attributes here
         tabbedPane.addTab("Basic info", null, infoPanel, "First Tab");
 

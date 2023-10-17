@@ -8,10 +8,10 @@ import java.util.List;
 public class RecipeTableModel extends AbstractTableModel {
     private final List<Recipe> recipes;
     private final List<Column<Recipe, ?>> columns = List.of(
-            Column.editable("Name", String.class, Recipe::getName, Recipe::setName),
-            Column.editable("Category", String.class, Recipe::getCategory, Recipe::setCategory),
-            Column.editable("Time", String.class, Recipe::getTime, Recipe::setTime),
-            Column.editable("Portions", String.class, Recipe::getPortions, Recipe::setPortions)
+            Column.readonly("Name", String.class, Recipe::getName),
+            Column.readonly("Category", String.class, Recipe::getCategory),
+            Column.readonly("Time", String.class, Recipe::getTime),
+            Column.readonly("Portions", String.class, Recipe::getPortions)
     );
 
     public RecipeTableModel(List<Recipe> recipes) {

@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.ui;
+package cz.muni.fi.pv168.project.ui.renderers;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;

@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public class Recipe {
     private String name;
-    private String category;
+    private RecipeCategories category;
     private String time;
     private String portions;
 
-    public Recipe(String name, String category, String time, String portions) {
+    public Recipe(String name, RecipeCategories category, String time, String portions) {
         this.name = name;
         this.category = category;
         this.time = time;
@@ -23,12 +23,16 @@ public class Recipe {
         this.name = Objects.requireNonNull(name,"name must not be null");
     }
 
-    public String getCategory() {
+    public RecipeCategories getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = Objects.requireNonNull(category,"name must not be null");;
+    public String getCategoryName() {
+        return category.toString().replace("_", " ");
+    }
+
+    public void setCategory(RecipeCategories category) {
+        this.category = Objects.requireNonNull(category,"name must not be null");
     }
 
     public String getTime() {
@@ -36,7 +40,7 @@ public class Recipe {
     }
 
     public void setTime(String time) {
-        this.time = Objects.requireNonNull(time,"name must not be null");;
+        this.time = Objects.requireNonNull(time,"name must not be null");
     }
 
     public String getPortions() {

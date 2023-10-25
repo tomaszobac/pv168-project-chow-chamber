@@ -2,15 +2,15 @@ package cz.muni.fi.pv168.project.ui;
 
 import cz.muni.fi.pv168.project.ui.action.*;
 import cz.muni.fi.pv168.project.testGen.TestTable;
-import cz.muni.fi.pv168.project.ui.model.Recipe;
-import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
+import cz.muni.fi.pv168.project.ui.model.*;
+import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.AbstractTableModel;
 
 import java.awt.event.*;
 import java.awt.*;
-import java.util.List;
 
 
 public class MainWindow {
@@ -29,8 +29,12 @@ public class MainWindow {
     private int recipeInTabs = 0;
 
     public MainWindow() {
-        mainFrame = MainWindowUtilities.createFrame(null, null, "Best recipes app"); // TODO: agree on name of our app
-        MyTable recipeTable = createTable(TestTable.getTableOne());
+        mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
+        mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
+        MyTable recipeTable = createTable(new RecipeTableModel(TestTable.getTableOne()));
+        MyTable unitTable = createTable(new UnitTableModel(TestTable.getTableTwo()));
+        MyTable ingredientTable = createTable(new IngredientTableModel(TestTable.getTableThree()));
+
 
         addAction = new AddAction(recipeTable);
         editAction = new EditAction(recipeTable);
@@ -39,10 +43,19 @@ public class MainWindow {
         exportAction = new ExportAction();
         filterAction = new FilterAction();
 
-        mainFrame.add(new JScrollPane(recipeTable), BorderLayout.CENTER);
+        // tables tabs
+        JTabbedPane mainFrameTabs = new JTabbedPane();
+        mainFrameTabs.setOpaque(true);
+        mainFrameTabs.addTab("<html><b>Recipes table</b></html>", new JScrollPane(recipeTable));
+        mainFrameTabs.addTab("<html><b>Units</b></html>", new JScrollPane(unitTable));
+        mainFrameTabs.addTab("<html><b>Ingredients</b></html>", new JScrollPane(ingredientTable));
+        mainFrame.add(mainFrameTabs, BorderLayout.CENTER);
+
+        // toolbar
         mainFrame.add(createToolbar(), BorderLayout.BEFORE_FIRST_LINE);
         mainFrame.setJMenuBar(createMenuBar());
 
+        // recipe info popup window
         recipeTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -230,8 +243,7 @@ public class MainWindow {
         return menuBar;
     }
 
-    private MyTable createTable(List<Recipe> recipes) {
-        var model = new RecipeTableModel(recipes); // TODO: Fix empty list here
+    private MyTable createTable(AbstractTableModel model) {
         MyTable MTable = new MyTable(model);
         MTable.setAutoCreateRowSorter(true);
         MTable.getSelectionModel().addListSelectionListener(this::rowSelectionChanged);

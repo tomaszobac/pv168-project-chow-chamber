@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.ui;
+package cz.muni.fi.pv168.project.ui.renderers;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 

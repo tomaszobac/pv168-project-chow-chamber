@@ -1,7 +1,6 @@
 package cz.muni.fi.pv168.project.ui.model;
 
 import javax.swing.table.AbstractTableModel;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ public class RecipeTableModel extends AbstractTableModel {
     private final List<Recipe> recipes;
     private final List<Column<Recipe, ?>> columns = List.of(
             Column.readonly("Name", String.class, Recipe::getName),
-            Column.readonly("Category", String.class, Recipe::getCategory),
+            Column.readonly("Category", String.class, Recipe::getCategoryName),
             Column.readonly("Time", String.class, Recipe::getTime),
             Column.readonly("Portions", String.class, Recipe::getPortions)
     );

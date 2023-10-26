@@ -11,6 +11,8 @@ import javax.swing.table.AbstractTableModel;
 
 import java.awt.event.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainWindow {
@@ -22,7 +24,8 @@ public class MainWindow {
     private final Action importAction;
     private final Action exportAction;
     private final Action filterAction;
-    private JTabbedPane infoTable = null;
+    private List<JTabbedPane> infoTable = new ArrayList<>();
+    private List<List<String>> infoTables = new ArrayList<>();
     private JFrame recipesInfoFrame = null;
 
     private JTabbedPane recipesInfoTabs = null;
@@ -60,9 +63,35 @@ public class MainWindow {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
-                    recipeInTabs++;
-                    openRecipeInfoWindow(recipeTable);
-                    //openRecipeWindow3(recipeTable);
+                    boolean flag = true;
+                    int index = 0;
+                    for (int j = 0; j < infoTables.size(); j++) {
+                        for (int i = 0; i < 4; i++) {
+                            if (!infoTables.get(j).get(i).equals(recipeTable.getValueAt(recipeTable.getSelectedRow(), i).toString())) {
+                                flag = true;
+                                break;
+                            }
+                            flag = false;
+                        }
+                        if (!flag) {
+                            index = j;
+                            break;
+                        }
+                    }
+                    if(!flag) {
+                        MainWindowUtilities.switchToRecipeTab(index, recipesInfoTabs);
+                        recipesInfoFrame.setVisible(true);
+                    } else{
+                        recipeInTabs++;
+                        List<String> newRecipe = new ArrayList<>();
+                        newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString());
+                        newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 1).toString());
+                        newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString());
+                        newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString());
+                        infoTables.add(newRecipe);
+                        openRecipeInfoWindow(recipeTable);
+                        //openRecipeWindow3(recipeTable);
+                    }
                 }
             }
         });
@@ -118,7 +147,7 @@ public class MainWindow {
             this.recipesInfoFrame = infoFrame;
             infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             JTabbedPane tabbedPane = openRecipeInfoWindow2(recipeTable);
-            this.infoTable = tabbedPane;
+            this.infoTable.add(tabbedPane);
             infoFrame.add(tabbedPane);
             infoFrame.pack();
             infoFrame.setVisible(true);
@@ -158,20 +187,18 @@ public class MainWindow {
         JPanel tab2 = new JPanel();
         tab2.add(new JLabel("The missile knows where it is at all times. It knows this because it knows where it isn't.")); // TODO: add more info about each recipe
         singleRecipeInfo.addTab("More", null, tab2, "Second Tab");
-
         // creates and handles tabs of singleRecipeInfo
-        createNewRecipeTab(singleRecipeInfo);
+        createNewRecipeTab(singleRecipeInfo, recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString());
         MainWindowUtilities.switchToRecipeTab(recipeInTabs - 1, recipesInfoTabs);
-
         recipesInfoFrame.add(recipesInfoTabs);
         recipesInfoFrame.pack();
         recipesInfoFrame.setVisible(true);
     }
 
-    private void createNewRecipeTab(JTabbedPane singleRecipeInfo) {
+    private void createNewRecipeTab(JTabbedPane singleRecipeInfo, String name) {
         // Create a custom tab component with a close button
         JPanel customTabComponent = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-        JLabel titleLabel = new JLabel("recipe " + recipeInTabs);
+        JLabel titleLabel = new JLabel(name);
         JButton closeButton = getjButton(singleRecipeInfo);
         customTabComponent.add(titleLabel);
         customTabComponent.add(closeButton);
@@ -192,6 +219,7 @@ public class MainWindow {
             int tabIndex = recipesInfoTabs.indexOfComponent(singleRecipeInfo);
             if (tabIndex != -1) {
                 recipesInfoTabs.remove(tabIndex);
+                infoTables.remove(tabIndex);
                 recipeInTabs--; // TODO: fix recipe scuffed numbering when removed not last tab
                 if (recipeInTabs == 0) {
                     recipesInfoFrame.dispose();

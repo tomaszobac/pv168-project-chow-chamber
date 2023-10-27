@@ -6,9 +6,9 @@ public class Recipe {
     private String name;
     private RecipeCategories category;
     private String time;
-    private String portions;
+    private int portions;
 
-    public Recipe(String name, RecipeCategories category, String time, String portions) {
+    public Recipe(String name, RecipeCategories category, String time, int portions) {
         this.name = name;
         this.category = category;
         this.time = time;
@@ -43,11 +43,11 @@ public class Recipe {
         this.time = Objects.requireNonNull(time,"name must not be null");
     }
 
-    public String getPortions() {
+    public int getPortions() {
         return portions;
     }
 
-    public void setPortions(String portions) {
+    public void setPortions(int portions) {
         this.portions = portions;
     }
 

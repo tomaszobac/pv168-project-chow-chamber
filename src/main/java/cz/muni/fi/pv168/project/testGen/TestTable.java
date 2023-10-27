@@ -13,12 +13,12 @@ import static cz.muni.fi.pv168.project.ui.model.RecipeCategories.*;
  */
 public class TestTable {
     private static final List<Recipe> tableOne = List.of(
-            new Recipe("vomáčka", příloha, "00:10","4"),
-            new Recipe("polívka", hlavní_jídlo, "02:00","20"),
-            new Recipe("chleba", příloha, "00:30","6"),
-            new Recipe("maso", hlavní_jídlo, "00:20","4"),
-            new Recipe("dort", všechno, "01:00","8"),
-            new Recipe("nevim", všechno, "99:00","99"));
+            new Recipe("vomáčka", příloha, "00:10",4),
+            new Recipe("polívka", hlavní_jídlo, "02:00",20),
+            new Recipe("chleba", příloha, "00:30",6),
+            new Recipe("maso", hlavní_jídlo, "00:20",4),
+            new Recipe("dort", všechno, "01:00",8),
+            new Recipe("nevim", všechno, "99:00",99));
 
     private static final List<Unit> tableTwo = List.of(
             new Unit("Liter", UnitType.Volume, 1.0),

@@ -31,7 +31,12 @@ abstract class EntityDialog<E> {
         int result = JOptionPane.showOptionDialog(parentComponent, panel, title,
                 OK_CANCEL_OPTION, PLAIN_MESSAGE, null, null, null);
         if (result == OK_OPTION) {
-            return Optional.of(getEntity());
+            try{
+                return Optional.of(getEntity());
+            } catch (NullPointerException n){
+                return Optional.empty();
+            }
+
         } else {
             return Optional.empty();
         }

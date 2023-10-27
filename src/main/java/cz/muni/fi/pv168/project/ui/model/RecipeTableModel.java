@@ -10,7 +10,7 @@ public class RecipeTableModel extends AbstractTableModel {
             Column.readonly("Name", String.class, Recipe::getName),
             Column.readonly("Category", String.class, Recipe::getCategoryName),
             Column.readonly("Time", String.class, Recipe::getTime),
-            Column.readonly("Portions", String.class, Recipe::getPortions)
+            Column.readonly("Portions", Integer.class, Recipe::getPortions)
     );
 
     public RecipeTableModel(List<Recipe> recipes) {

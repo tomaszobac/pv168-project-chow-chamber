@@ -22,7 +22,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         nameField.setText(recipe.getName());
         categoryField.setSelectedItem(recipe.getCategory());
         timeField.setText(recipe.getTime());
-        portionsField.setText(recipe.getPortions());
+        portionsField.setText(Integer.toString(recipe.getPortions()));
     }
 
     private void addFields() {
@@ -38,7 +38,11 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         recipe.setName(nameField.getText());
         recipe.setCategory((RecipeCategories) categoryField.getSelectedItem());
         recipe.setTime(timeField.getText());
-        recipe.setPortions(portionsField.getText());
+        try{
+            recipe.setPortions(Integer.parseInt(portionsField.getText()));
+        } catch (NumberFormatException e){
+            return null;
+        }
         return recipe;
     }
 }

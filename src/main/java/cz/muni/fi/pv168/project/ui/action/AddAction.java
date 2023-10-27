@@ -25,7 +25,7 @@ public class AddAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         var recipeTableModel = (RecipeTableModel) this.recipeTable.getModel();
-        var dialog = new RecipeDialog(new Recipe("vomáčka", příloha, "00:10","4"));
+        var dialog = new RecipeDialog(new Recipe("vomáčka", příloha, "00:10",4));
         dialog.show(recipeTable, "Add recipe")
                 .ifPresent(recipeTableModel::addRow);
     }

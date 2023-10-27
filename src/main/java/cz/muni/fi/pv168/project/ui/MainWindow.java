@@ -63,22 +63,8 @@ public class MainWindow {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
-                    boolean flag = true;
-                    int index = 0;
-                    for (int j = 0; j < infoTables.size(); j++) {
-                        for (int i = 0; i < 4; i++) {
-                            if (!infoTables.get(j).get(i).equals(recipeTable.getValueAt(recipeTable.getSelectedRow(), i).toString())) {
-                                flag = true;
-                                break;
-                            }
-                            flag = false;
-                        }
-                        if (!flag) {
-                            index = j;
-                            break;
-                        }
-                    }
-                    if(!flag) {
+                    int index = findTable(recipeTable);
+                    if(index != -1) {
                         MainWindowUtilities.switchToRecipeTab(index, recipesInfoTabs);
                         recipesInfoFrame.setVisible(true);
                     } else{
@@ -97,7 +83,22 @@ public class MainWindow {
         });
         mainFrame.pack();
     }
-
+    private int findTable(MyTable recipeTable){
+        boolean flag = true;
+        for (int j = 0; j < infoTables.size(); j++) {
+            for (int i = 0; i < 4; i++) {
+                if (!infoTables.get(j).get(i).equals(recipeTable.getValueAt(recipeTable.getSelectedRow(), i).toString())) {
+                    flag = true;
+                    break;
+                }
+                flag = false;
+            }
+            if (!flag) {
+                return j;
+            }
+        }
+        return -1;
+    }
     /**
      * This method opens new window(s) upon clicking on recipe(s). One window contains two tabs, first tab contains basic info,
      * second tab contains more info about one recipe.

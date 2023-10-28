@@ -4,6 +4,7 @@ import cz.muni.fi.pv168.project.ui.model.Recipe;
 import cz.muni.fi.pv168.project.ui.model.RecipeCategories;
 
 import javax.swing.*;
+import java.time.DateTimeException;
 import java.time.LocalTime;
 
 public class RecipeDialog extends EntityDialog<Recipe> {
@@ -38,10 +39,10 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     Recipe getEntity() {
         recipe.setName(nameField.getText());
         recipe.setCategory((RecipeCategories) categoryField.getSelectedItem());
-        recipe.setTime(LocalTime.parse(timeField.getText()));
         try{
+            recipe.setTime(LocalTime.parse(timeField.getText()));
             recipe.setPortions(Integer.parseInt(portionsField.getText()));
-        } catch (NumberFormatException e){
+        } catch (DateTimeException | NumberFormatException e){
             return null;
         }
         return recipe;

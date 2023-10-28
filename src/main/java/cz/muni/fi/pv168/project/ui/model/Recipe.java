@@ -29,7 +29,7 @@ public class Recipe {
     }
 
     public String getCategoryName() {
-        return category.toString().replace("_", " ");
+        return category.getCategory();
     }
 
     public void setCategory(RecipeCategories category) {

@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.time.LocalTime;
 
-import static cz.muni.fi.pv168.project.ui.model.RecipeCategories.příloha;
+import static cz.muni.fi.pv168.project.ui.model.RecipeCategories.PRILOHA;
 
 public class AddAction extends AbstractAction {
     private final JTable recipeTable;
@@ -26,7 +26,7 @@ public class AddAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         var recipeTableModel = (RecipeTableModel) this.recipeTable.getModel();
-        var dialog = new RecipeDialog(new Recipe("vomáčka", příloha, LocalTime.parse("00:10"),4));
+        var dialog = new RecipeDialog(new Recipe("vomáčka", PRILOHA, LocalTime.parse("00:10"),4));
         dialog.show(recipeTable, "Add recipe")
                 .ifPresent(recipeTableModel::addRow);
     }

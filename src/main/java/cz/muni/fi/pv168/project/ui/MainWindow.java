@@ -126,7 +126,7 @@ public class MainWindow {
         infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
         infoPanel.add(MainWindowUtilities.createLabel(recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel((Integer.toString((Integer) recipeTable.getValueAt(recipeTable.getSelectedRow(), 3))), 1));
 
         // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");

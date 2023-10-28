@@ -12,8 +12,8 @@ public class MainWindowUtilities {
         }
     }
 
-    public static JLabel createLabel(String text, int type) {
-        Font font = type == 0 ? new Font(null, Font.BOLD, 14) : new Font(null, Font.PLAIN, 14);
+    public static JLabel createLabel(String text, int fontType) {
+        Font font = fontType == 0 ? new Font(null, Font.BOLD, 14) : new Font(null, Font.PLAIN, 14);
         JLabel label = new JLabel(text);
         label.setFont(font);
         return label;

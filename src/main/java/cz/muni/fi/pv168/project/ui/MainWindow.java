@@ -37,7 +37,6 @@ public class MainWindow {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
         MyTable recipeTable = createTable(new RecipeTableModel(TestTable.getTableOne()));
-        recipeTable.setRowSorter(new TableRowSorter<>(recipeTable.getModel()));
         MyTable unitTable = createTable(new UnitTableModel(TestTable.getTableTwo()));
         MyTable ingredientTable = createTable(new IngredientTableModel(TestTable.getTableThree()));
 
@@ -225,6 +224,7 @@ public class MainWindow {
         MTable.setDefaultRenderer(Object.class, renderer);
         MTable.setDefaultRenderer(Integer.class, renderer);
         MTable.setDefaultRenderer(LocalTime.class, renderer);
+        MTable.setRowSorter(new TableRowSorter<>(model));
         return MTable;
     }
 

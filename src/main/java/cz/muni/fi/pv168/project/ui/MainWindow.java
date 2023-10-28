@@ -4,13 +4,16 @@ import cz.muni.fi.pv168.project.ui.action.*;
 import cz.muni.fi.pv168.project.testGen.TestTable;
 import cz.muni.fi.pv168.project.ui.model.*;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
+import cz.muni.fi.pv168.project.ui.renderers.UnifiedTableCellRenderer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 
 import java.awt.event.*;
 import java.awt.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +27,7 @@ public class MainWindow {
     private final Action importAction;
     private final Action exportAction;
     private final Action filterAction;
-    private List<JTabbedPane> infoTable = new ArrayList<>();
-    private List<List<String>> infoTables = new ArrayList<>();
+    private final List<List<String>> infoTables = new ArrayList<>();
     private JFrame recipesInfoFrame = null;
 
     private JTabbedPane recipesInfoTabs = null;
@@ -35,6 +37,7 @@ public class MainWindow {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
         MyTable recipeTable = createTable(new RecipeTableModel(TestTable.getTableOne()));
+        recipeTable.setRowSorter(new TableRowSorter<>(recipeTable.getModel()));
         MyTable unitTable = createTable(new UnitTableModel(TestTable.getTableTwo()));
         MyTable ingredientTable = createTable(new IngredientTableModel(TestTable.getTableThree()));
 
@@ -76,13 +79,13 @@ public class MainWindow {
                         newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString());
                         infoTables.add(newRecipe);
                         openRecipeInfoWindow(recipeTable);
-                        //openRecipeWindow3(recipeTable);
                     }
                 }
             }
         });
         mainFrame.pack();
     }
+
     private int findTable(MyTable recipeTable){
         boolean flag = true;
         for (int j = 0; j < infoTables.size(); j++) {
@@ -105,64 +108,6 @@ public class MainWindow {
      *
      * @param recipeTable represents table of stored recipes.
      */
-
-    private JTabbedPane openRecipeInfoWindow2(MyTable recipeTable) {
-        JTabbedPane tabbedPane = new JTabbedPane();
-
-        // Create a JPanel to display the recipe information
-        JPanel infoPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-
-        JTextField name = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString()));
-        JTextField category = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 1).toString()));
-        JTextField time = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString()));
-        JTextField portions = new JTextField((recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString()));
-
-        name.setEditable(false);
-        category.setEditable(false);
-        time.setEditable(false);
-        portions.setEditable(false);
-
-        infoPanel.add(new JLabel("Name:"));
-        infoPanel.add(name);
-        infoPanel.add(new JLabel("Category:"));
-        infoPanel.add(category);
-        infoPanel.add(new JLabel("Time:"));
-        infoPanel.add(time);
-        infoPanel.add(new JLabel("Portions:"));
-        infoPanel.add(portions);
-
-        // Add more labels for other recipe attributes here
-        tabbedPane.addTab("Basic info", null, infoPanel, "First Tab");
-
-        // TODO: add listener for edits in JTextFields so that changes can be stored
-
-        JPanel tab2 = new JPanel();
-        tab2.add(new JLabel("The missile knows where it is at all times. It knows this because it knows where it isn't.")); // TODO: add more info about each recipe
-        tabbedPane.addTab("More", null, tab2, "Second Tab");
-        return tabbedPane;
-    }
-
-    private void openRecipeWindow3(MyTable recipeTable) {
-        if (this.infoTable == null) {
-            JFrame infoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
-            this.recipesInfoFrame = infoFrame;
-            infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            JTabbedPane tabbedPane = openRecipeInfoWindow2(recipeTable);
-            this.infoTable.add(tabbedPane);
-            infoFrame.add(tabbedPane);
-            infoFrame.pack();
-            infoFrame.setVisible(true);
-            infoFrame.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    infoTable = null;
-                }
-            });
-        } else {
-            this.recipesInfoFrame.toFront();
-        }
-    }
-
     private void openRecipeInfoWindow(MyTable recipeTable) {
         if (recipesInfoFrame == null) {
             recipesInfoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
@@ -172,16 +117,16 @@ public class MainWindow {
         JTabbedPane singleRecipeInfo = new JTabbedPane();
 
         // Create a JPanel to display the recipe information
-        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10)); // Use a variable number of rows (0) for flexibility
+        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
         infoPanel.add(MainWindowUtilities.createLabel((String) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
         infoPanel.add(MainWindowUtilities.createLabel((String) recipeTable.getValueAt(recipeTable.getSelectedRow(), 1), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((String) recipeTable.getValueAt(recipeTable.getSelectedRow(), 2), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((String) recipeTable.getValueAt(recipeTable.getSelectedRow(), 3), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString(), 1));
 
         // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
@@ -276,6 +221,10 @@ public class MainWindow {
         MyTable MTable = new MyTable(model);
         MTable.setAutoCreateRowSorter(true);
         MTable.getSelectionModel().addListSelectionListener(this::rowSelectionChanged);
+        UnifiedTableCellRenderer renderer = new UnifiedTableCellRenderer();
+        MTable.setDefaultRenderer(Object.class, renderer);
+        MTable.setDefaultRenderer(Integer.class, renderer);
+        MTable.setDefaultRenderer(LocalTime.class, renderer);
         return MTable;
     }
 

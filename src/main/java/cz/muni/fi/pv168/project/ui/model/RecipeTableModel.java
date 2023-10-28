@@ -1,6 +1,7 @@
 package cz.muni.fi.pv168.project.ui.model;
 
 import javax.swing.table.AbstractTableModel;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +10,19 @@ public class RecipeTableModel extends AbstractTableModel {
     private final List<Column<Recipe, ?>> columns = List.of(
             Column.readonly("Name", String.class, Recipe::getName),
             Column.readonly("Category", String.class, Recipe::getCategoryName),
-            Column.readonly("Time", String.class, Recipe::getTime),
+            Column.readonly("Time", LocalTime.class, Recipe::getTime),
             Column.readonly("Portions", Integer.class, Recipe::getPortions)
     );
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return switch (columnIndex) {
+            case 0, 1 -> String.class;
+            case 2 -> LocalTime.class;
+            case 3 -> Integer.class;
+            default -> super.getColumnClass(columnIndex);
+        };
+    }
 
     public RecipeTableModel(List<Recipe> recipes) {
         this.recipes = new ArrayList<>(recipes);

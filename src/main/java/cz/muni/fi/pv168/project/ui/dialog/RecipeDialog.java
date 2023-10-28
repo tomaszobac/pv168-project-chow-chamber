@@ -4,6 +4,7 @@ import cz.muni.fi.pv168.project.ui.model.Recipe;
 import cz.muni.fi.pv168.project.ui.model.RecipeCategories;
 
 import javax.swing.*;
+import java.time.LocalTime;
 
 public class RecipeDialog extends EntityDialog<Recipe> {
     private final JTextField nameField = new JTextField();
@@ -21,7 +22,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     private void setValues() {
         nameField.setText(recipe.getName());
         categoryField.setSelectedItem(recipe.getCategory());
-        timeField.setText(recipe.getTime());
+        timeField.setText(recipe.getTime().toString());
         portionsField.setText(Integer.toString(recipe.getPortions()));
     }
 
@@ -37,7 +38,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     Recipe getEntity() {
         recipe.setName(nameField.getText());
         recipe.setCategory((RecipeCategories) categoryField.getSelectedItem());
-        recipe.setTime(timeField.getText());
+        recipe.setTime(LocalTime.parse(timeField.getText()));
         try{
             recipe.setPortions(Integer.parseInt(portionsField.getText()));
         } catch (NumberFormatException e){

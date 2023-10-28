@@ -1,14 +1,15 @@
 package cz.muni.fi.pv168.project.ui.model;
 
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class Recipe {
     private String name;
     private RecipeCategories category;
-    private String time;
+    private LocalTime time;
     private int portions;
 
-    public Recipe(String name, RecipeCategories category, String time, int portions) {
+    public Recipe(String name, RecipeCategories category, LocalTime time, int portions) {
         this.name = name;
         this.category = category;
         this.time = time;
@@ -35,11 +36,11 @@ public class Recipe {
         this.category = Objects.requireNonNull(category,"name must not be null");
     }
 
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalTime time) {
         this.time = Objects.requireNonNull(time,"name must not be null");
     }
 

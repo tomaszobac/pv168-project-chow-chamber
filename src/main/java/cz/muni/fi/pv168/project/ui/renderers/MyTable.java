@@ -18,14 +18,15 @@ public class MyTable extends JTable {
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
         Component component = super.prepareRenderer(renderer, row, column);
+        Color alternateColor = new Color(100, 100, 100);
+        Color mainColor = getBackground();
 
-        if (!isRowSelected(row)) {
-            if (row % 2 != 0) {
-                component.setBackground(new Color(100, 100, 100));
-            } else {
-                component.setBackground(getBackground());
-            }
+        if(!component.getBackground().equals(getSelectionBackground())) {
+            Color rowColor = (row % 2 != 0 ? alternateColor : mainColor);
+            component.setBackground(rowColor);
+            rowColor = null;
         }
+
         return component;
     }
 }

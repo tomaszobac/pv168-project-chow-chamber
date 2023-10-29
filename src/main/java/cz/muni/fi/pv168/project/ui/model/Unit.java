@@ -1,9 +1,9 @@
 package cz.muni.fi.pv168.project.ui.model;
 
 public class Unit {
-    private final String name;
-    private final UnitType type;
-    private final double conversionToBase; // Conversion factor to a base unit (e.g., liters)
+    private String name;
+    private UnitType type;
+    private double conversionToBase; // Conversion factor to a base unit (e.g., liters)
 
     public Unit(String name, UnitType type, double conversionToBase) {
         this.name = name;
@@ -21,6 +21,18 @@ public class Unit {
 
     public double getConversionToBase() {
         return conversionToBase;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(UnitType type) {
+        this.type = type;
+    }
+
+    public void setConversionToBase(double conversionToBase) {
+        this.conversionToBase = conversionToBase;
     }
 
     // Method to convert a value from this unit to the base unit

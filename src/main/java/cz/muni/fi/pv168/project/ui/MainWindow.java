@@ -1,177 +1,119 @@
 package cz.muni.fi.pv168.project.ui;
 
-import cz.muni.fi.pv168.project.ui.action.*;
 import cz.muni.fi.pv168.project.testGen.TestTable;
+import cz.muni.fi.pv168.project.ui.action.ExportAction;
+import cz.muni.fi.pv168.project.ui.action.ImportAction;
+import cz.muni.fi.pv168.project.ui.action.QuitAction;
+import cz.muni.fi.pv168.project.ui.action.ingredient.AddIngredientAction;
+import cz.muni.fi.pv168.project.ui.action.ingredient.DeleteIngredientAction;
+import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
+import cz.muni.fi.pv168.project.ui.action.ingredient.FilterIngredientAction;
+import cz.muni.fi.pv168.project.ui.action.recipe.*;
+import cz.muni.fi.pv168.project.ui.action.unit.AddUnitAction;
+import cz.muni.fi.pv168.project.ui.action.unit.DeleteUnitAction;
+import cz.muni.fi.pv168.project.ui.action.unit.EditUnitAction;
+import cz.muni.fi.pv168.project.ui.action.unit.FilterUnitAction;
 import cz.muni.fi.pv168.project.ui.model.*;
+import cz.muni.fi.pv168.project.ui.model.tables.IngredientsTable;
+import cz.muni.fi.pv168.project.ui.model.tables.RecipeTable;
+import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
+import cz.muni.fi.pv168.project.ui.renderers.MyFrame;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 import cz.muni.fi.pv168.project.ui.renderers.UnifiedTableCellRenderer;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
-import java.awt.event.*;
 import java.awt.*;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainWindow {
-    private final JFrame mainFrame;
+    private final MyFrame mainFrame;
     private final Action quitAction = new QuitAction();
-    private final Action addAction;
-    private final Action editAction;
-    private final Action deleteAction;
-    private final Action importAction;
-    private final Action exportAction;
-    private final Action filterAction;
-    private final List<List<String>> infoTables = new ArrayList<>();
-    private JFrame recipesInfoFrame = null;
-
-    private JTabbedPane recipesInfoTabs = null;
-    private int recipeInTabs = 0;
+    private Action addAction;
+    private Action editAction;
+    private Action deleteAction;
+    private Action importAction;
+    private Action exportAction;
+    private Action filterAction;
+    private JToolBar toolbar;
+    private RecipeTable recipeTable;
+    private UnitTable unitTable;
+    private IngredientsTable ingredientTable;
 
     public MainWindow() {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
-        MyTable recipeTable = createTable(new RecipeTableModel(TestTable.getTableOne()));
-        MyTable unitTable = createTable(new UnitTableModel(TestTable.getTableTwo()));
-        MyTable ingredientTable = createTable(new IngredientTableModel(TestTable.getTableThree()));
+        recipeTable = createRecipeTable(new RecipeTableModel(TestTable.getTableOne()));
+        unitTable = createUnitTable(new UnitTableModel(TestTable.getTableTwo()));
+        ingredientTable = createIngredientsTable(new IngredientTableModel(TestTable.getTableThree()));
 
 
-        addAction = new AddAction(recipeTable);
-        editAction = new EditAction(recipeTable);
-        deleteAction = new DeleteAction(recipeTable);
+        addAction = new AddRecipeAction(recipeTable);
+        editAction = new EditRecipeAction(recipeTable);
+        deleteAction = new DeleteRecipeAction(recipeTable);
         importAction = new ImportAction();
         exportAction = new ExportAction();
-        filterAction = new FilterAction();
+        filterAction = new FilterRecipeAction();
 
         // tables tabs
         JTabbedPane mainFrameTabs = new JTabbedPane();
         mainFrameTabs.setOpaque(true);
-        mainFrameTabs.addTab("<html><b>Recipes table</b></html>", new JScrollPane(recipeTable));
+        mainFrameTabs.addTab("<html><b>Recipes</b></html>", new JScrollPane(recipeTable));
         mainFrameTabs.addTab("<html><b>Units</b></html>", new JScrollPane(unitTable));
         mainFrameTabs.addTab("<html><b>Ingredients</b></html>", new JScrollPane(ingredientTable));
         mainFrame.add(mainFrameTabs, BorderLayout.CENTER);
 
         // toolbar
-        mainFrame.add(createToolbar(), BorderLayout.BEFORE_FIRST_LINE);
+        this.toolbar = createToolbar();
+        mainFrame.add(this.toolbar, BorderLayout.BEFORE_FIRST_LINE);
         mainFrame.setJMenuBar(createMenuBar());
 
-        // recipe info popup window
-        recipeTable.addMouseListener(new MouseAdapter() {
+        recipeTable.setMouseListener(recipeTable);
+        unitTable.setMouseListener(unitTable);
+
+        mainFrameTabs.addChangeListener(new ChangeListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
-                    int index = findTable(recipeTable);
-                    if(index != -1) {
-                        MainWindowUtilities.switchToRecipeTab(index, recipesInfoTabs);
-                        recipesInfoFrame.setVisible(true);
-                    } else{
-                        recipeInTabs++;
-                        List<String> newRecipe = new ArrayList<>();
-                        newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString());
-                        newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 1).toString());
-                        newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString());
-                        newRecipe.add(recipeTable.getValueAt(recipeTable.getSelectedRow(), 3).toString());
-                        infoTables.add(newRecipe);
-                        openRecipeInfoWindow(recipeTable);
-                    }
-                }
+            public void stateChanged(ChangeEvent e) {
+                updateToolbar(mainFrameTabs.getSelectedIndex());
             }
         });
+
         mainFrame.pack();
     }
 
-    private int findTable(MyTable recipeTable){
-        boolean flag = true;
-        for (int j = 0; j < infoTables.size(); j++) {
-            for (int i = 0; i < 4; i++) {
-                if (!infoTables.get(j).get(i).equals(recipeTable.getValueAt(recipeTable.getSelectedRow(), i).toString())) {
-                    flag = true;
-                    break;
-                }
-                flag = false;
-            }
-            if (!flag) {
-                return j;
-            }
+    private void updateToolbar(int selectedIndex) {
+        mainFrame.remove(this.toolbar);
+
+        switch (selectedIndex) {
+            case 0:  // Recipes tab
+                addAction = new AddRecipeAction(recipeTable);
+                editAction = new EditRecipeAction(recipeTable);
+                deleteAction = new DeleteRecipeAction(recipeTable);
+                filterAction = new FilterRecipeAction();
+                break;
+            case 1:  // Units tab
+                addAction = new AddUnitAction(unitTable);
+                editAction = new EditUnitAction(unitTable);
+                deleteAction = new DeleteUnitAction(unitTable);
+                filterAction = new FilterUnitAction();
+                break;
+            case 2:  // Ingredients tab
+                addAction = new AddIngredientAction(ingredientTable);
+                editAction = new EditIngredientAction(ingredientTable);
+                deleteAction = new DeleteIngredientAction(ingredientTable);
+                filterAction = new FilterIngredientAction();
+                break;
         }
-        return -1;
-    }
-    /**
-     * This method opens new window(s) upon clicking on recipe(s). One window contains two tabs, first tab contains basic info,
-     * second tab contains more info about one recipe.
-     *
-     * @param recipeTable represents table of stored recipes.
-     */
-    private void openRecipeInfoWindow(MyTable recipeTable) {
-        if (recipesInfoFrame == null) {
-            recipesInfoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
-            recipesInfoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            recipesInfoTabs = new JTabbedPane();
-        }
-        JTabbedPane singleRecipeInfo = new JTabbedPane();
 
-        // Create a JPanel to display the recipe information
-        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((String) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((String) recipeTable.getValueAt(recipeTable.getSelectedRow(), 1), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString(), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((Integer.toString((Integer) recipeTable.getValueAt(recipeTable.getSelectedRow(), 3))), 1));
-
-        // Add more labels for other recipe attributes here
-        singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
-        JPanel tab2 = new JPanel();
-        tab2.add(new JLabel("The missile knows where it is at all times. It knows this because it knows where it isn't.")); // TODO: add more info about each recipe
-        singleRecipeInfo.addTab("More", null, tab2, "Second Tab");
-        // creates and handles tabs of singleRecipeInfo
-        createNewRecipeTab(singleRecipeInfo, recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString());
-        MainWindowUtilities.switchToRecipeTab(recipeInTabs - 1, recipesInfoTabs);
-        recipesInfoFrame.add(recipesInfoTabs);
-        recipesInfoFrame.pack();
-        recipesInfoFrame.setVisible(true);
-    }
-
-    private void createNewRecipeTab(JTabbedPane singleRecipeInfo, String name) {
-        // Create a custom tab component with a close button
-        JPanel customTabComponent = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-        JLabel titleLabel = new JLabel(name);
-        JButton closeButton = getjButton(singleRecipeInfo);
-        customTabComponent.add(titleLabel);
-        customTabComponent.add(closeButton);
-        // Add the tab to the tabbed pane with the custom tab component
-        recipesInfoTabs.addTab(null, singleRecipeInfo);
-        int tabIndex = recipesInfoTabs.indexOfComponent(singleRecipeInfo);
-        recipesInfoTabs.setTabComponentAt(tabIndex, customTabComponent);
-        // Set the selected tab
-        recipesInfoTabs.setSelectedIndex(tabIndex);
-    }
-
-    private JButton getjButton(JTabbedPane singleRecipeInfo) {
-        JButton closeButton = new JButton("X");
-        closeButton.setPreferredSize(new Dimension(16, 16));
-
-        closeButton.addActionListener(e -> {
-            // Handle tab removal when the close button is clicked
-            int tabIndex = recipesInfoTabs.indexOfComponent(singleRecipeInfo);
-            if (tabIndex != -1) {
-                recipesInfoTabs.remove(tabIndex);
-                infoTables.remove(tabIndex);
-                recipeInTabs--; // TODO: fix recipe scuffed numbering when removed not last tab
-                if (recipeInTabs == 0) {
-                    recipesInfoFrame.dispose();
-                }
-            }
-        });
-        return closeButton;
+        toolbar = createToolbar();
+        mainFrame.add(toolbar, BorderLayout.BEFORE_FIRST_LINE);
+        mainFrame.validate();
     }
 
     public void show() {
@@ -216,15 +158,31 @@ public class MainWindow {
         return menuBar;
     }
 
-    private MyTable createTable(AbstractTableModel model) {
-        MyTable MTable = new MyTable(model);
-        MTable.setAutoCreateRowSorter(true);
+    private MyTable createTable(MyTable MTable) {
         MTable.getSelectionModel().addListSelectionListener(this::rowSelectionChanged);
         UnifiedTableCellRenderer renderer = new UnifiedTableCellRenderer();
         MTable.setDefaultRenderer(Object.class, renderer);
         MTable.setDefaultRenderer(Integer.class, renderer);
         MTable.setDefaultRenderer(LocalTime.class, renderer);
-        MTable.setRowSorter(new TableRowSorter<>(model));
+        MTable.setRowSorter(new TableRowSorter<>(MTable.getModel()));
+        return MTable;
+    }
+
+    private RecipeTable createRecipeTable(AbstractTableModel model) {
+        RecipeTable MTable = new RecipeTable(model);
+        createTable(MTable);
+        return MTable;
+    }
+
+    private UnitTable createUnitTable(AbstractTableModel model) {
+        UnitTable MTable = new UnitTable(model);
+        createTable(MTable);
+        return MTable;
+    }
+
+    private IngredientsTable createIngredientsTable(AbstractTableModel model) {
+        IngredientsTable MTable = new IngredientsTable(model);
+        createTable(MTable);
         return MTable;
     }
 

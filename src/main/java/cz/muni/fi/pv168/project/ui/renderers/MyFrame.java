@@ -12,5 +12,6 @@ public class MyFrame extends JFrame {
             System.err.println("Failed to initialize LaF");
         }
     }
+
 }
 

@@ -19,7 +19,7 @@ public class MainWindowUtilities {
         return label;
     }
 
-    public static JFrame createFrame(Dimension min_size, Dimension max_size, String name) {
+    public static MyFrame createFrame(Dimension min_size, Dimension max_size, String name) {
         MyFrame Mframe = new MyFrame();
         Mframe.setTitle(name);
         Mframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

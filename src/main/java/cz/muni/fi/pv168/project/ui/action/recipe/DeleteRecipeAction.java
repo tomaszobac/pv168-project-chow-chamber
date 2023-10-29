@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.ui.action;
+package cz.muni.fi.pv168.project.ui.action.recipe;
 
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
@@ -9,9 +9,9 @@ import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class DeleteAction extends AbstractAction {
+public class DeleteRecipeAction extends AbstractAction {
     private final JTable recipeTable;
-    public DeleteAction(JTable recipeTable) {
+    public DeleteRecipeAction(JTable recipeTable) {
         super("Delete", Icons.DELETE_ICON);
         this.recipeTable = recipeTable;
         putValue(SHORT_DESCRIPTION, "Deletes selected recipes");

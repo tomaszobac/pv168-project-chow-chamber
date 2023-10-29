@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.ui.action;
+package cz.muni.fi.pv168.project.ui.action.ingredient;
 
 import cz.muni.fi.pv168.project.ui.dialog.RecipeDialog;
 import cz.muni.fi.pv168.project.ui.model.Recipe;
@@ -12,10 +12,10 @@ import java.time.LocalTime;
 
 import static cz.muni.fi.pv168.project.ui.model.RecipeCategories.PRILOHA;
 
-public class AddAction extends AbstractAction {
+public class AddIngredientAction extends AbstractAction {
     private final JTable recipeTable;
 
-    public AddAction(JTable recipeTable) {
+    public AddIngredientAction(JTable recipeTable) {
         super("Add", Icons.ADD_ICON);
         putValue(SHORT_DESCRIPTION, "Adds new recipe");
         putValue(MNEMONIC_KEY, KeyEvent.VK_A);

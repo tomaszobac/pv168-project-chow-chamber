@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.ui.action;
+package cz.muni.fi.pv168.project.ui.action.recipe;
 
 import cz.muni.fi.pv168.project.ui.dialog.RecipeDialog;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
@@ -10,10 +10,10 @@ import javax.swing.JTable;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class EditAction extends AbstractAction {
+public class EditRecipeAction extends AbstractAction {
     private final JTable recipeTable;
 
-    public EditAction(JTable recipeTable) {
+    public EditRecipeAction(JTable recipeTable) {
         super("Edit", Icons.EDIT_ICON);
         this.recipeTable = recipeTable;
         putValue(SHORT_DESCRIPTION, "Edits selected recipe");

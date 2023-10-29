@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import java.awt.*;
-
+// TODO: make the whole tables package with MyTable more abstract to avoid code duplication
 public class MyTable extends JTable {
 
     public MyTable(TableModel model) {

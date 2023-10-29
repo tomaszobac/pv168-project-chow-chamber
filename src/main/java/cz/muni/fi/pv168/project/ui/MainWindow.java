@@ -38,13 +38,13 @@ public class MainWindow {
     private Action addAction;
     private Action editAction;
     private Action deleteAction;
-    private Action importAction;
-    private Action exportAction;
+    private final Action importAction;
+    private final Action exportAction;
     private Action filterAction;
     private JToolBar toolbar;
-    private RecipeTable recipeTable;
-    private UnitTable unitTable;
-    private IngredientsTable ingredientTable;
+    private final RecipeTable recipeTable;
+    private final UnitTable unitTable;
+    private final IngredientsTable ingredientTable;
 
     public MainWindow() {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
@@ -77,12 +77,7 @@ public class MainWindow {
         recipeTable.setMouseListener(recipeTable);
         unitTable.setMouseListener(unitTable);
 
-        mainFrameTabs.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                updateToolbar(mainFrameTabs.getSelectedIndex());
-            }
-        });
+        mainFrameTabs.addChangeListener(e -> updateToolbar(mainFrameTabs.getSelectedIndex()));
 
         mainFrame.pack();
     }
@@ -158,14 +153,13 @@ public class MainWindow {
         return menuBar;
     }
 
-    private MyTable createTable(MyTable MTable) {
+    private void createTable(MyTable MTable) {
         MTable.getSelectionModel().addListSelectionListener(this::rowSelectionChanged);
         UnifiedTableCellRenderer renderer = new UnifiedTableCellRenderer();
         MTable.setDefaultRenderer(Object.class, renderer);
         MTable.setDefaultRenderer(Integer.class, renderer);
         MTable.setDefaultRenderer(LocalTime.class, renderer);
         MTable.setRowSorter(new TableRowSorter<>(MTable.getModel()));
-        return MTable;
     }
 
     private RecipeTable createRecipeTable(AbstractTableModel model) {

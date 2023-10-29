@@ -1,13 +1,10 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
-import cz.muni.fi.pv168.project.ui.model.Recipe;
-import cz.muni.fi.pv168.project.ui.model.RecipeCategories;
 import cz.muni.fi.pv168.project.ui.model.Unit;
 import cz.muni.fi.pv168.project.ui.model.UnitType;
 
 import javax.swing.*;
 import java.time.DateTimeException;
-import java.time.LocalTime;
 
 public class UnitDialog extends EntityDialog<Unit> {
     private final JTextField nameField = new JTextField();

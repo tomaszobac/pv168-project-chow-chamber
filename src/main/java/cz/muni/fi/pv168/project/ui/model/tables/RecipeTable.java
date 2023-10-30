@@ -27,7 +27,7 @@ public class RecipeTable extends MyTable {
                 if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
                     int index = findTable(recipeTable);
                     if(index != -1) {
-                        MainWindowUtilities.switchToRecipeTab(index, recipesInfoTabs);
+                        MainWindowUtilities.switchToTab(index, recipesInfoTabs);
                         recipesInfoFrame.setVisible(true);
                     } else{
                         recipeInTabs++;
@@ -93,7 +93,7 @@ public class RecipeTable extends MyTable {
         singleRecipeInfo.addTab("More", null, tab2, "Second Tab");
         // creates and handles tabs of singleRecipeInfo
         createNewRecipeTab(singleRecipeInfo, recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString());
-        MainWindowUtilities.switchToRecipeTab(recipeInTabs - 1, recipesInfoTabs);
+        MainWindowUtilities.switchToTab(recipeInTabs - 1, recipesInfoTabs);
         recipesInfoFrame.add(recipesInfoTabs);
         recipesInfoFrame.pack();
         recipesInfoFrame.setVisible(true);

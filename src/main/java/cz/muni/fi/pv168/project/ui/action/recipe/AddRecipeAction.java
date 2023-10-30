@@ -1,7 +1,7 @@
 package cz.muni.fi.pv168.project.ui.action.recipe;
 
 import cz.muni.fi.pv168.project.ui.dialog.RecipeDialog;
-import cz.muni.fi.pv168.project.ui.model.Recipe;
+import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
 
@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.time.LocalTime;
 
-import static cz.muni.fi.pv168.project.ui.model.RecipeCategories.PRILOHA;
+import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories.PRILOHA;
 
 public class AddRecipeAction extends AbstractAction {
     private final JTable recipeTable;

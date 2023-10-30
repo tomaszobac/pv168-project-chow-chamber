@@ -2,6 +2,8 @@ package cz.muni.fi.pv168.project.ui.action.unit;
 
 import cz.muni.fi.pv168.project.ui.dialog.UnitDialog;
 import cz.muni.fi.pv168.project.ui.model.*;
+import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
 
 import javax.swing.*;

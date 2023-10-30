@@ -1,7 +1,7 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
-import cz.muni.fi.pv168.project.ui.model.Recipe;
-import cz.muni.fi.pv168.project.ui.model.RecipeCategories;
+import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 
 import javax.swing.*;
 import java.time.DateTimeException;

@@ -1,11 +1,14 @@
 package cz.muni.fi.pv168.project.testGen;
 
-import cz.muni.fi.pv168.project.ui.model.*;
+import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
+import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
+import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import java.time.LocalTime;
 import java.util.List;
 
-import static cz.muni.fi.pv168.project.ui.model.RecipeCategories.*;
+import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories.*;
 
 /**
  *

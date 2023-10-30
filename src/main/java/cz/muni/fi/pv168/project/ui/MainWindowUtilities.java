@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainWindowUtilities {
-    public static void switchToRecipeTab(int tabIndex, JTabbedPane openRecipesTab) {
+    public static void switchToTab(int tabIndex, JTabbedPane openRecipesTab) {
         if (tabIndex >= 0 && tabIndex < openRecipesTab.getTabCount()) {
             openRecipesTab.setSelectedIndex(tabIndex);
         }

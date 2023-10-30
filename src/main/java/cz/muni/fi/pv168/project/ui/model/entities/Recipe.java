@@ -1,4 +1,6 @@
-package cz.muni.fi.pv168.project.ui.model;
+package cz.muni.fi.pv168.project.ui.model.entities;
+
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 
 import java.time.LocalTime;
 import java.util.Objects;

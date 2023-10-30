@@ -22,8 +22,6 @@ import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 import cz.muni.fi.pv168.project.ui.renderers.UnifiedTableCellRenderer;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
@@ -76,6 +74,7 @@ public class MainWindow {
 
         recipeTable.setMouseListener(recipeTable);
         unitTable.setMouseListener(unitTable);
+        ingredientTable.setMouseListener(ingredientTable);
 
         mainFrameTabs.addChangeListener(e -> updateToolbar(mainFrameTabs.getSelectedIndex()));
 

@@ -27,7 +27,7 @@ public class UnitTable extends MyTable {
                 if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
                     int index = findTable(unitTable);
                     if(index != -1) {
-                        MainWindowUtilities.switchToRecipeTab(index, unitInfoTabs);
+                        MainWindowUtilities.switchToTab(index, unitInfoTabs);
                         unitInfoFrame.setVisible(true);
                     } else{
                         unitInTabs++;
@@ -67,7 +67,7 @@ public class UnitTable extends MyTable {
      */
     private void openInfoWindow(MyTable unitTable) {
         if (unitInfoFrame == null) {
-            unitInfoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
+            unitInfoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Unit");
             unitInfoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             unitInfoTabs = new JTabbedPane();
         }
@@ -80,14 +80,14 @@ public class UnitTable extends MyTable {
         infoPanel.add(MainWindowUtilities.createLabel((String) unitTable.getValueAt(unitTable.getSelectedRow(), 0), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Type:", 0));
         infoPanel.add(MainWindowUtilities.createLabel(unitTable.getValueAt(unitTable.getSelectedRow(), 1).toString(), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel("Base:", 0));
         infoPanel.add(MainWindowUtilities.createLabel((Double.toString((Double) unitTable.getValueAt(unitTable.getSelectedRow(), 2))), 1));
 
         // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
         // creates and handles tabs of singleRecipeInfo
         createNewTab(singleRecipeInfo, unitTable.getValueAt(unitTable.getSelectedRow(), 0).toString());
-        MainWindowUtilities.switchToRecipeTab(unitInTabs - 1, unitInfoTabs);
+        MainWindowUtilities.switchToTab(unitInTabs - 1, unitInfoTabs);
         unitInfoFrame.add(unitInfoTabs);
         unitInfoFrame.pack();
         unitInfoFrame.setVisible(true);

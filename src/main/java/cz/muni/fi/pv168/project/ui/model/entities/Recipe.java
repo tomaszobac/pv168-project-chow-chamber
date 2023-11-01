@@ -3,6 +3,7 @@ package cz.muni.fi.pv168.project.ui.model.entities;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Recipe {
@@ -10,12 +11,15 @@ public class Recipe {
     private RecipeCategories category;
     private LocalTime time;
     private int portions;
+    private ArrayList<Ingredient> ingredients;
+    private int numberOfIngredients = 0;
 
-    public Recipe(String name, RecipeCategories category, LocalTime time, int portions) {
+    public Recipe(String name, RecipeCategories category, LocalTime time, int portions, ArrayList<Ingredient> ingredients) {
         this.name = name;
         this.category = category;
         this.time = time;
         this.portions = portions;
+        this.ingredients = ingredients;
     }
 
     public String getName() {
@@ -60,5 +64,17 @@ public class Recipe {
                 "name='" + name + '\'' +
                 ", category='" + category + '\'' +
                 '}';
+    }
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
+        numberOfIngredients++;
     }
 }

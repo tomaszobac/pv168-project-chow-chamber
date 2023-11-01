@@ -6,11 +6,18 @@ public class Ingredient {
     private String name;
     private double calories;
     private Unit unit;
+    private double amount = 0;
 
     public Ingredient(String name, double calories, Unit unit) {
         this.name = name;
         this.calories = calories;
         this.unit = unit;
+    }
+    public Ingredient(String name, double calories, Unit unit, double amount) {
+        this.name = name;
+        this.calories = calories;
+        this.unit = unit;
+        this.amount = amount;
     }
 
     public String getName() {
@@ -40,7 +47,7 @@ public class Ingredient {
 
     @Override
     public String toString() {
-        return unit.getName() + " of " + name;
+        return name;
     }
 
     public double getCalories() {

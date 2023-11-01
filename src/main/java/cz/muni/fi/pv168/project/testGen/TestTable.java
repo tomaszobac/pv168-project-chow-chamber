@@ -6,6 +6,7 @@ import cz.muni.fi.pv168.project.ui.model.entities.Unit;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories.*;
@@ -17,12 +18,12 @@ import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories.*;
  */
 public class TestTable {
     private static final List<Recipe> tableOne = List.of(
-            new Recipe("vomáčka", PRILOHA, LocalTime.parse("00:10"),4),
-            new Recipe("polívka", HLAVNI_JIDLO, LocalTime.parse("02:00"),20),
-            new Recipe("chleba", PRILOHA, LocalTime.parse("00:30"),6),
-            new Recipe("maso", HLAVNI_JIDLO, LocalTime.parse("00:20"),4),
-            new Recipe("dort", NONE, LocalTime.parse("01:00"),8),
-            new Recipe("nevim", NONE, LocalTime.parse("23:59"),99));
+            new Recipe("vomáčka", PRILOHA, LocalTime.parse("00:10"),4, new ArrayList<>()),
+            new Recipe("polívka", HLAVNI_JIDLO, LocalTime.parse("02:00"),20, new ArrayList<>()),
+            new Recipe("chleba", PRILOHA, LocalTime.parse("00:30"),6, new ArrayList<>()),
+            new Recipe("maso", HLAVNI_JIDLO, LocalTime.parse("00:20"),4, new ArrayList<>()),
+            new Recipe("dort", NONE, LocalTime.parse("01:00"),8, new ArrayList<>()),
+            new Recipe("nevim", NONE, LocalTime.parse("23:59"),99, new ArrayList<>()));
 
     private static final List<Unit> tableTwo = List.of(
             new Unit("Liter", UnitType.Volume, 1.0),
@@ -32,7 +33,9 @@ public class TestTable {
 
     private static final List<Ingredient> tableThree = List.of(
         new Ingredient("Water", 0, tableTwo.get(0)),
-        new Ingredient("Flour", 250, tableTwo.get(1)));
+        new Ingredient("Flour", 250, tableTwo.get(1)),
+        new Ingredient("Sugar", 100, tableTwo.get(1)),
+        new Ingredient("Salt", 5, tableTwo.get(1)));
 
     public static List<Recipe> getTableOne() {
         return tableOne;

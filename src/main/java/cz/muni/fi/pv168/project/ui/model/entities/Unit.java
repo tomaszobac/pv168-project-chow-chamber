@@ -51,4 +51,9 @@ public class Unit {
     public double calculateDifference(double value1, double value2) {
         return Math.abs(value1 - value2);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

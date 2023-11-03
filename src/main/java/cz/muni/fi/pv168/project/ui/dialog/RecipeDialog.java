@@ -2,8 +2,8 @@ package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.DateTimeException;
 import java.time.LocalTime;
@@ -38,16 +38,18 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         // Add a button to create a custom ingredient
         JButton createCustomIngredientButton = new JButton("Add ingredient(s) to recipe");
         createCustomIngredientButton.setOpaque(true);
+        createCustomIngredientButton.setForeground(Color.WHITE); // Set the text color to white
+        Font buttonFont = createCustomIngredientButton.getFont();
+        createCustomIngredientButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize())); // Make the text bold
         createCustomIngredientButton.setBackground(new Color(26, 72, 93));
         createCustomIngredientButton.addActionListener(e -> createCustomIngredient());
         add("", createCustomIngredientButton);
     }
 
     private void createCustomIngredient() {
-        JFrame addIngredientsFrame =  new JFrame();
+        JFrame addIngredientsFrame = new JFrame();
         CustomIngredientDialog customIngredientDialog = new CustomIngredientDialog(addIngredientsFrame, recipe);
         customIngredientDialog.setVisible(true);
-        DefaultTableModel ingredientListModel = customIngredientDialog.getIngredientListModel();
     }
 
     @Override

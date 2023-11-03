@@ -1,7 +1,5 @@
 package cz.muni.fi.pv168.project.ui.model.entities;
 
-import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
-
 public class Ingredient {
     private String name;
     private double calories;
@@ -13,6 +11,7 @@ public class Ingredient {
         this.calories = calories;
         this.unit = unit;
     }
+
     public Ingredient(String name, double calories, Unit unit, double amount) {
         this.name = name;
         this.calories = calories;
@@ -26,10 +25,6 @@ public class Ingredient {
 
     public Unit getUnit() {
         return unit;
-    }
-
-    public UnitType getUnitType() {
-        return unit.getType();
     }
 
     public String getUnitName() {
@@ -56,5 +51,13 @@ public class Ingredient {
 
     public void setCalories(double calories) {
         this.calories = calories;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public double getCaloriesPerSetAmount() {
+        return amount * calories;
     }
 }

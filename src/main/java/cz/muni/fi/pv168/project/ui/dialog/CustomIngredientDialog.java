@@ -1,27 +1,30 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.testGen.TestTable;
+import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
+import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
+import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
+import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
 import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
 import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.ui.model.tables.RecipeIngredientsTable;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class CustomIngredientDialog extends JDialog {
     private final JComboBox<Ingredient> ingredientComboBox = new JComboBox<>();
     private final JComboBox<Unit> unitComboBox = new JComboBox<>();
     private final JTextField amountTextField = new JTextField();
-    private final DefaultTableModel ingredientTableModel = new DefaultTableModel(new String[]{"Ingredient", "Amount", "Unit"}, 0);
-    private final JTable ingredientTable = new JTable(ingredientTableModel);
-    private final Recipe recipe;
+    private final RecipeIngredientsTableModel recipeIngredientsTableModel;
+    // edit action for possible editing, don't know if needed
+    private final Action editAction;
+    private final Action deleteAction;
 
     public CustomIngredientDialog(JFrame parentFrame, Recipe recipe) {
         super(parentFrame, "Recipe ingredients", true);
-        this.recipe = recipe;
         setLayout(new BorderLayout());
         for (Ingredient ingredient : TestTable.getTableThree()) {
             ingredientComboBox.addItem(ingredient);
@@ -40,33 +43,54 @@ public class CustomIngredientDialog extends JDialog {
         topPanel.add(unitComboBox);
 
         JButton addButton = new JButton("Add Ingredient");
-        addButton.setBackground(new Color(26, 72, 93));
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Ingredient selectedIngredient = (Ingredient) ingredientComboBox.getSelectedItem();
-                Unit selectedUnit = (Unit) unitComboBox.getSelectedItem();
-                String amount = amountTextField.getText();
-                if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getName().equals(selectedUnit.getName()))) {
-                    ingredientTableModel.addRow(new String[]{selectedIngredient.getName(), amount, selectedUnit.getName()});
-                    recipe.addIngredient(new Ingredient(selectedIngredient.getName(), selectedIngredient.getCalories(), selectedIngredient.getUnit(), Double.parseDouble(amountTextField.getText())));
-                } else {
-                    // Display an error dialog
-                    JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        addButton.setForeground(Color.WHITE); // Set the text color to white
+        Font buttonFont = addButton.getFont();
+        addButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize())); // Make the text bold
+        addButton.setBackground(new Color(42, 162, 26));
+
+        recipeIngredientsTableModel = new RecipeIngredientsTableModel(TestTable.getTableThree());
+        RecipeIngredientsTable recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(recipeIngredientsTableModel, 2, this::rowSelectionChanged);
+        // recipeIngredientsTable.setMouseListener(recipeIngredientsTable);
+        editAction = new EditIngredientAction(recipeIngredientsTable);
+        deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
+        add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
+        addButton.addActionListener(e -> {
+            Ingredient selectedIngredient = (Ingredient) ingredientComboBox.getSelectedItem();
+            Unit selectedUnit = (Unit) unitComboBox.getSelectedItem();
+            String amount = amountTextField.getText();
+            if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getName().equals(selectedUnit.getName()))) {
+                Ingredient newIngredient = new Ingredient(selectedIngredient.getName(), selectedIngredient.getCalories(), selectedIngredient.getUnit(), Double.parseDouble(amountTextField.getText()));
+                recipeIngredientsTableModel.addRow(newIngredient);
+                recipe.addIngredient(newIngredient);
+            } else {
+                // Display an error dialog
+                JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         topPanel.add(addButton, BorderLayout.SOUTH);
+
+        JButton deleteButton = new JButton("Delete Ingredient");
+        deleteButton.setForeground(Color.WHITE); // Set the text color to white
+        deleteButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize())); // Make the text bold
+        deleteButton.setBackground(new Color(182, 28, 28));
+        topPanel.add(deleteButton, BorderLayout.SOUTH);
+        deleteButton.addActionListener(deleteAction);
         add(topPanel, BorderLayout.NORTH);
-
-        JScrollPane ingredientScrollPane = new JScrollPane(ingredientTable);
-        add(ingredientScrollPane, BorderLayout.CENTER);
-
         pack();
         setLocationRelativeTo(parentFrame);
     }
 
-    public DefaultTableModel getIngredientListModel() {
-        return ingredientTableModel;
+    private void rowSelectionChanged(ListSelectionEvent listSelectionEvent) {
+        var selectionModel = (ListSelectionModel) listSelectionEvent.getSource();
+        if (selectionModel.isSelectionEmpty()) {
+            editAction.setEnabled(false);
+            deleteAction.setEnabled(false);
+        } else if (selectionModel.getSelectedItemsCount() == 1) {
+            editAction.setEnabled(true);
+            deleteAction.setEnabled(true);
+        } else if (selectionModel.getSelectedItemsCount() > 1) {
+            editAction.setEnabled(false);
+            deleteAction.setEnabled(true);
+        }
     }
 }

@@ -18,16 +18,11 @@ import cz.muni.fi.pv168.project.ui.model.tables.IngredientsTable;
 import cz.muni.fi.pv168.project.ui.model.tables.RecipeTable;
 import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
 import cz.muni.fi.pv168.project.ui.renderers.MyFrame;
-import cz.muni.fi.pv168.project.ui.renderers.MyTable;
-import cz.muni.fi.pv168.project.ui.renderers.UnifiedTableCellRenderer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
-import java.time.LocalTime;
 
 
 public class MainWindow {
@@ -47,9 +42,10 @@ public class MainWindow {
     public MainWindow() {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
-        recipeTable = createRecipeTable(new RecipeTableModel(TestTable.getTableOne()));
-        unitTable = createUnitTable(new UnitTableModel(TestTable.getTableTwo()));
-        ingredientTable = createIngredientsTable(new IngredientTableModel(TestTable.getTableThree()));
+        // tables
+        recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(TestTable.getTableOne()), 0, this::rowSelectionChanged);
+        unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(TestTable.getTableTwo()), 3, this::rowSelectionChanged);
+        ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(TestTable.getTableThree()), 1, this::rowSelectionChanged);
 
 
         addAction = new AddRecipeAction(recipeTable);
@@ -150,33 +146,6 @@ public class MainWindow {
         menuBar.add(editMenu);
         menuBar.add(dataMenu);
         return menuBar;
-    }
-
-    private void createTable(MyTable MTable) {
-        MTable.getSelectionModel().addListSelectionListener(this::rowSelectionChanged);
-        UnifiedTableCellRenderer renderer = new UnifiedTableCellRenderer();
-        MTable.setDefaultRenderer(Object.class, renderer);
-        MTable.setDefaultRenderer(Integer.class, renderer);
-        MTable.setDefaultRenderer(LocalTime.class, renderer);
-        MTable.setRowSorter(new TableRowSorter<>(MTable.getModel()));
-    }
-
-    private RecipeTable createRecipeTable(AbstractTableModel model) {
-        RecipeTable MTable = new RecipeTable(model);
-        createTable(MTable);
-        return MTable;
-    }
-
-    private UnitTable createUnitTable(AbstractTableModel model) {
-        UnitTable MTable = new UnitTable(model);
-        createTable(MTable);
-        return MTable;
-    }
-
-    private IngredientsTable createIngredientsTable(AbstractTableModel model) {
-        IngredientsTable MTable = new IngredientsTable(model);
-        createTable(MTable);
-        return MTable;
     }
 
     private void rowSelectionChanged(ListSelectionEvent listSelectionEvent) {

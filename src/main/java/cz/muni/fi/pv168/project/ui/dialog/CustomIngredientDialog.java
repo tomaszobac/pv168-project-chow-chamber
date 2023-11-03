@@ -48,7 +48,7 @@ public class CustomIngredientDialog extends JDialog {
         addButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize())); // Make the text bold
         addButton.setBackground(new Color(42, 162, 26));
 
-        recipeIngredientsTableModel = new RecipeIngredientsTableModel(TestTable.getTableThree());
+        recipeIngredientsTableModel = new RecipeIngredientsTableModel(recipe.getIngredients());
         RecipeIngredientsTable recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(recipeIngredientsTableModel, 2, this::rowSelectionChanged);
         // recipeIngredientsTable.setMouseListener(recipeIngredientsTable);
         editAction = new EditIngredientAction(recipeIngredientsTable);
@@ -75,6 +75,19 @@ public class CustomIngredientDialog extends JDialog {
         deleteButton.setBackground(new Color(182, 28, 28));
         topPanel.add(deleteButton, BorderLayout.SOUTH);
         deleteButton.addActionListener(deleteAction);
+        deleteButton.addActionListener(e -> {
+            int selectedRow = recipeIngredientsTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                Ingredient ingredientToDelete = recipeIngredientsTableModel.getEntity(selectedRow);
+                if (ingredientToDelete != null) {
+                    recipeIngredientsTableModel.deleteRow(selectedRow);
+                    recipe.getIngredients().remove(ingredientToDelete);
+                }
+            } else {
+                // Display an error dialog if no ingredient is selected
+                JOptionPane.showMessageDialog(CustomIngredientDialog.this, "Please select an ingredient to delete", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         add(topPanel, BorderLayout.NORTH);
         pack();
         setLocationRelativeTo(parentFrame);

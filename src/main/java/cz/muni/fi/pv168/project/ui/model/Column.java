@@ -31,17 +31,6 @@ public class Column<E, T> {
         this.valueSetter = valueSetter;
     }
 
-    // TODO: Remove constructor and changeToEditable, these are placeholders
-    private Column(String name, Class<T> columnClass) {
-        this.name = name;
-        this.columnType = columnClass;
-        this.valueGetter = null;
-        this.valueSetter = null;
-    }
-    public static <E, T> Column<E, T> changeToEditable(String name, Class<T> columnClass) {
-        return new Column<>(name, columnClass);
-    }
-
     public static <E, T> Column<E, T> editable(String name, Class<T> columnClass, Function<E, T> valueGetter,
                                                BiConsumer<E, T> valueSetter) {
         return new Column<>(name, columnClass, valueGetter, Objects.requireNonNull(valueSetter, "value setter cannot be null"));

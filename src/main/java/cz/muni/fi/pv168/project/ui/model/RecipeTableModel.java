@@ -10,6 +10,7 @@ import java.util.List;
 public class RecipeTableModel extends AbstractTableModel {
     private final List<Recipe> recipes;
     private final List<Column<Recipe, ?>> columns = List.of(
+            Column.readonly("Recipe", Recipe.class, Recipe -> Recipe),
             Column.readonly("Name", String.class, Recipe::getName),
             Column.readonly("Category", String.class, Recipe::getCategoryName),
             Column.readonly("Time", LocalTime.class, Recipe::getTime),
@@ -19,9 +20,10 @@ public class RecipeTableModel extends AbstractTableModel {
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return switch (columnIndex) {
-            case 0, 1 -> String.class;
-            case 2 -> LocalTime.class;
-            case 3 -> Integer.class;
+            case 0 -> Recipe.class;
+            case 1, 2 -> String.class;
+            case 3 -> LocalTime.class;
+            case 4 -> Integer.class;
             default -> super.getColumnClass(columnIndex);
         };
     }

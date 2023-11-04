@@ -21,6 +21,8 @@ import cz.muni.fi.pv168.project.ui.renderers.MyFrame;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import java.awt.*;
 
@@ -47,6 +49,12 @@ public class MainWindow {
         unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(TestTable.getTableTwo()), 3, this::rowSelectionChanged);
         ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(TestTable.getTableThree()), 1, this::rowSelectionChanged);
 
+        TableColumnModel columnModel = recipeTable.getColumnModel();
+        TableColumn column = columnModel.getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setPreferredWidth(0);
+        column.setWidth(0);
 
         addAction = new AddRecipeAction(recipeTable);
         editAction = new EditRecipeAction(recipeTable);

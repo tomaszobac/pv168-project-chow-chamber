@@ -1,6 +1,13 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
+import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
+import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
+import cz.muni.fi.pv168.project.ui.dialog.CustomIngredientDialog;
+import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
+import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
+import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
+import cz.muni.fi.pv168.project.ui.model.entities.Unit;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
 import javax.swing.*;
@@ -73,26 +80,54 @@ public class RecipeTable extends MyTable {
             recipesInfoTabs = new JTabbedPane();
         }
         JTabbedPane singleRecipeInfo = new JTabbedPane();
+        Recipe recipe = (Recipe) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0);
 
         // Create a JPanel to display the recipe information
         JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((String) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getName(), 0), 1);
         infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((String) recipeTable.getValueAt(recipeTable.getSelectedRow(), 1), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getCategoryName(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipeTable.getValueAt(recipeTable.getSelectedRow(), 2).toString(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getTime().toString(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((Integer.toString((Integer) recipeTable.getValueAt(recipeTable.getSelectedRow(), 3))), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(Integer.toString(recipe.getPortions()), 1));
 
         // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
-        JPanel tab2 = new JPanel();
-        tab2.add(new JLabel("The missile knows where it is at all times. It knows this because it knows where it isn't.")); // TODO: add more info about each recipe
-        singleRecipeInfo.addTab("More", null, tab2, "Second Tab");
+
+        // Use GridBagConstraints to control resizing
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0; // Allows horizontal resizing
+        gbc.weighty = 1.0; // Allows vertical resizing
+
+        JPanel ingredientsTab = new JPanel(new GridBagLayout());
+        RecipeIngredientsTableModel recipeIngredientsTableModel = new RecipeIngredientsTableModel(recipe.getIngredients());
+        RecipeIngredientsTable recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(recipeIngredientsTableModel, 2, null);
+        JScrollPane recipeIngredientsScrollPane = new JScrollPane(recipeIngredientsTable);
+
+        ingredientsTab.add(recipeIngredientsScrollPane, gbc);
+
+        singleRecipeInfo.addTab("Ingredients", null, ingredientsTab, "Second Tab");
+
+
+
+        JPanel instructionTab = new JPanel(new GridBagLayout());
+
+        JTextArea textArea = new JTextArea(recipe.getInstructions());
+        textArea.setEnabled(false);
+        textArea.setDisabledTextColor(new Color(255, 255, 255));
+        JScrollPane instructionsScrollPane = new JScrollPane(textArea);
+        instructionTab.add(instructionsScrollPane, gbc);
+
+        gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
+        singleRecipeInfo.addTab("Instructions", null, instructionTab, "Third Tab");
+
+
         // creates and handles tabs of singleRecipeInfo
-        createNewRecipeTab(singleRecipeInfo, recipeTable.getValueAt(recipeTable.getSelectedRow(), 0).toString());
+        createNewRecipeTab(singleRecipeInfo, recipe.getName());
         MainWindowUtilities.switchToTab(recipeInTabs - 1, recipesInfoTabs);
         recipesInfoFrame.add(recipesInfoTabs);
         recipesInfoFrame.pack();

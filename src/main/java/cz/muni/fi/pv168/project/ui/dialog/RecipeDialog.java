@@ -63,6 +63,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     Recipe getEntity() {
         recipe.setName(nameField.getText());
         recipe.setCategory((RecipeCategories) categoryField.getSelectedItem());
+        recipe.setInstructions(instructionsArea.getText());
         try {
             recipe.setTime(LocalTime.parse(timeField.getText()));
             recipe.setPortions(Integer.parseInt(portionsField.getText()));

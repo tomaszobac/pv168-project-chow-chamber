@@ -2,19 +2,27 @@ package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
 import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
+import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
 
 import javax.swing.*;
 import java.time.DateTimeException;
+import java.util.ArrayList;
 
 public class IngredientDialog extends EntityDialog<Ingredient> {
     private final JTextField nameField = new JTextField();
     private final JTextField caloryField = new JTextField();
     private final JTextField unitField = new JTextField();
+    private final JComboBox<Unit> unitComboBox;
     private final Ingredient ingredient;
 
-    public IngredientDialog(Ingredient ingredient) {
+    public IngredientDialog(Ingredient ingredient, JTable unitTable) {
         this.ingredient = ingredient;
+        unitComboBox = new JComboBox<>();
+        for (int i = 0; i < unitTable.getRowCount(); i++) {
+            unitComboBox.addItem((Unit) unitTable.getValueAt(i, 0));
+        }
         setValues();
         addFields();
     }
@@ -28,7 +36,7 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
     private void addFields() {
         add("Name:", nameField);
         add("Calories:", caloryField);
-        add("Unit:", unitField);
+        add("Unit:", unitComboBox);
     }
 
     @Override
@@ -36,7 +44,7 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
         try{
             ingredient.setName(nameField.getText());
             ingredient.setCalories(Double.parseDouble(caloryField.getText()));
-            ingredient.setUnit(new Unit(unitField.getName(), UnitType.Volume, 1.0)); // TODO: keep units somewhere so we can show created units here in combobox for example, alternatively we can compare entered value with existing units and call a new unit creation window to add new unit
+            ingredient.setUnit((Unit) unitComboBox.getSelectedItem());
         } catch (DateTimeException | NumberFormatException e){
             return null;
         }

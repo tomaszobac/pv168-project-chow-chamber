@@ -123,7 +123,7 @@ public class RecipeTable extends MyTable {
         instructionTab.add(instructionsScrollPane, gbc);
 
         gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
-        singleRecipeInfo.addTab("Instructions", null, instructionTab, "Instructinos on how to make the recipe");
+        singleRecipeInfo.addTab("Instructions", null, instructionTab, "Instructions on how to make the recipe");
 
 
         // creates and handles tabs of singleRecipeInfo

@@ -9,6 +9,7 @@ import java.util.List;
 public class IngredientTableModel extends AbstractTableModel {
     private final List<Ingredient> ingredients;
     private final List<Column<Ingredient, ?>> columns = List.of(
+            Column.readonly("Ingredient", Ingredient.class, Ingredient -> Ingredient),
             Column.readonly("Name", String.class, Ingredient::getName),
             Column.readonly("Calories", Double.class, Ingredient::getCalories),
             Column.readonly("Unit", String.class, Ingredient::getUnitName)

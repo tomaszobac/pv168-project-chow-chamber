@@ -11,6 +11,8 @@ import cz.muni.fi.pv168.project.ui.renderers.UnifiedTableCellRenderer;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.time.LocalTime;
@@ -67,4 +69,12 @@ public class MainWindowUtilities {
         return Mframe;
     }
 
+    public static void hideFirstColumn(JTable table) {
+        TableColumnModel columnModel = table.getColumnModel();
+        TableColumn column = columnModel.getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setPreferredWidth(0);
+        column.setWidth(0);
+    }
 }

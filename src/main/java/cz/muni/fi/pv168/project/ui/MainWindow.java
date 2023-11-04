@@ -49,12 +49,10 @@ public class MainWindow {
         unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(TestTable.getTableTwo()), 3, this::rowSelectionChanged);
         ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(TestTable.getTableThree()), 1, this::rowSelectionChanged);
 
-        TableColumnModel columnModel = recipeTable.getColumnModel();
-        TableColumn column = columnModel.getColumn(0);
-        column.setMinWidth(0);
-        column.setMaxWidth(0);
-        column.setPreferredWidth(0);
-        column.setWidth(0);
+        // Hide the first columns with their respective classes
+        MainWindowUtilities.hideFirstColumn(recipeTable);
+        MainWindowUtilities.hideFirstColumn(unitTable);
+        MainWindowUtilities.hideFirstColumn(ingredientTable);
 
         addAction = new AddRecipeAction(recipeTable);
         editAction = new EditRecipeAction(recipeTable);
@@ -102,7 +100,7 @@ public class MainWindow {
                 filterAction = new FilterUnitAction();
                 break;
             case 2:  // Ingredients tab
-                addAction = new AddIngredientAction(ingredientTable);
+                addAction = new AddIngredientAction(ingredientTable, unitTable);
                 editAction = new EditIngredientAction(ingredientTable);
                 deleteAction = new DeleteIngredientAction(ingredientTable);
                 filterAction = new FilterIngredientAction();

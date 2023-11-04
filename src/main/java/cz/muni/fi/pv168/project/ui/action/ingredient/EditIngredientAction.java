@@ -31,7 +31,7 @@ public class EditIngredientAction extends AbstractAction {
         var ingredientTableModel = (IngredientTableModel) ingredientTable.getModel();
         int modelRow = ingredientTable.convertRowIndexToModel(selectedRows[0]);
         var ingredient = ingredientTableModel.getEntity(modelRow);
-        var dialog = new IngredientDialog(ingredient);
+        var dialog = new IngredientDialog(ingredient, null);
         dialog.show(ingredientTable, "Edit ingredient")
                 .ifPresent(ingredientTableModel::updateRow);
     }

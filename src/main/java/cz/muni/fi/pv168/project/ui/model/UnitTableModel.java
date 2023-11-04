@@ -10,6 +10,7 @@ import java.util.List;
 public class UnitTableModel extends AbstractTableModel {
     private final List<Unit> units;
     private final List<Column<Unit, ?>> columns = List.of(
+            Column.readonly("Unit", Unit.class, Unit -> Unit),
             Column.readonly("Name", String.class, Unit::getName),
             Column.readonly("Type", UnitType.class, Unit::getType),
             Column.readonly("Conversion to base", Double.class, Unit::getConversionToBase)

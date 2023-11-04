@@ -28,7 +28,7 @@ public class AddRecipeAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         var recipeTableModel = (RecipeTableModel) this.recipeTable.getModel();
-        var dialog = new RecipeDialog(new Recipe("vomáčka", PRILOHA, LocalTime.parse("00:10"),4, new ArrayList<>()));
+        var dialog = new RecipeDialog(new Recipe("vomáčka", PRILOHA, LocalTime.parse("00:10"),4, new ArrayList<>(), "The missile knows where it is at all times. It knows this because it knows where it isn't."));
         dialog.show(recipeTable, "Add recipe")
                 .ifPresent(recipeTableModel::addRow);
     }

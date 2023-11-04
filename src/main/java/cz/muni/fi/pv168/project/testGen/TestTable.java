@@ -17,13 +17,14 @@ import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories.*;
  *
  */
 public class TestTable {
+    private static final String instructionsTemplate = "The missile knows where it is at all times. It knows this because it knows where it isn't.";
     private static final List<Recipe> tableOne = List.of(
-            new Recipe("vomáčka", PRILOHA, LocalTime.parse("00:10"),4, new ArrayList<>()),
-            new Recipe("polívka", HLAVNI_JIDLO, LocalTime.parse("02:00"),20, new ArrayList<>()),
-            new Recipe("chleba", PRILOHA, LocalTime.parse("00:30"),6, new ArrayList<>()),
-            new Recipe("maso", HLAVNI_JIDLO, LocalTime.parse("00:20"),4, new ArrayList<>()),
-            new Recipe("dort", NONE, LocalTime.parse("01:00"),8, new ArrayList<>()),
-            new Recipe("nevim", NONE, LocalTime.parse("23:59"),99, new ArrayList<>()));
+            new Recipe("vomáčka", PRILOHA, LocalTime.parse("00:10"),4, new ArrayList<>(), instructionsTemplate),
+            new Recipe("polívka", HLAVNI_JIDLO, LocalTime.parse("02:00"),20, new ArrayList<>(), instructionsTemplate),
+            new Recipe("chleba", PRILOHA, LocalTime.parse("00:30"),6, new ArrayList<>(), instructionsTemplate),
+            new Recipe("maso", HLAVNI_JIDLO, LocalTime.parse("00:20"),4, new ArrayList<>(), instructionsTemplate),
+            new Recipe("dort", NONE, LocalTime.parse("01:00"),8, new ArrayList<>(), instructionsTemplate),
+            new Recipe("nevim", NONE, LocalTime.parse("23:59"),99, new ArrayList<>(), instructionsTemplate));
 
     private static final List<Unit> tableTwo = List.of(
             new Unit("Liter", UnitType.Volume, 1.0),

@@ -118,7 +118,7 @@ public class UnitTable extends MyTable {
             if (tabIndex != -1) {
                 unitInfoTabs.remove(tabIndex);
                 infoTables.remove(tabIndex);
-                unitInTabs--; // TODO: fix recipe scuffed numbering when removed not last tab
+                unitInTabs--;
                 if (unitInTabs == 0) {
                     unitInfoFrame.dispose();
                 }

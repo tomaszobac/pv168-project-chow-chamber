@@ -118,7 +118,7 @@ public class IngredientsTable extends MyTable {
             if (tabIndex != -1) {
                 ingredientInfoTabs.remove(tabIndex);
                 infoTables.remove(tabIndex);
-                ingredientInTabs--; // TODO: fix Ingredient scuffed numbering when removed not last tab
+                ingredientInTabs--;
                 if (ingredientInTabs == 0) {
                     ingredientInfoFrame.dispose();
                 }

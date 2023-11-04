@@ -13,6 +13,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     private final ComboBoxModel<RecipeCategories> categoryField = new DefaultComboBoxModel<>(RecipeCategories.values());
     private final JTextField timeField = new JTextField();
     private final JTextField portionsField = new JTextField();
+    private final JTextArea instructionsArea = new JTextArea();
     private final Recipe recipe;
 
     public RecipeDialog(Recipe recipe) {
@@ -26,6 +27,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         categoryField.setSelectedItem(recipe.getCategory());
         timeField.setText(recipe.getTime().toString());
         portionsField.setText(Integer.toString(recipe.getPortions()));
+        instructionsArea.setText("Instructions go here!");
     }
 
     private void addFields() {
@@ -44,6 +46,11 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         createCustomIngredientButton.setBackground(new Color(26, 72, 93));
         createCustomIngredientButton.addActionListener(e -> createCustomIngredient());
         add("", createCustomIngredientButton);
+
+        // Add instructions area
+        JScrollPane instructionsScrollPane = new JScrollPane(instructionsArea);
+        instructionsScrollPane.setPreferredSize(new Dimension(400, 300)); // Set your desired dimensions
+        add("Instructions:", instructionsScrollPane, "wmin 250lp, grow, gapy 10");
     }
 
     private void createCustomIngredient() {

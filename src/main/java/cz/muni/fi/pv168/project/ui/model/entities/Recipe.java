@@ -8,18 +8,21 @@ import java.util.Objects;
 
 public class Recipe {
     private String name;
+    private String instructions;
     private RecipeCategories category;
     private LocalTime time;
     private int portions;
     private ArrayList<Ingredient> ingredients;
     private int numberOfIngredients = 0;
 
-    public Recipe(String name, RecipeCategories category, LocalTime time, int portions, ArrayList<Ingredient> ingredients) {
+    public Recipe(String name, RecipeCategories category, LocalTime time, int portions,
+                  ArrayList<Ingredient> ingredients, String instructions) {
         this.name = name;
         this.category = category;
         this.time = time;
         this.portions = portions;
         this.ingredients = ingredients;
+        this.instructions = instructions;
     }
 
     public String getName() {
@@ -56,6 +59,13 @@ public class Recipe {
 
     public void setPortions(int portions) {
         this.portions = portions;
+    }
+
+    public String getInstructions() {
+        return this.instructions;
+    }
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
     }
 
     @Override

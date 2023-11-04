@@ -124,7 +124,7 @@ public class RecipeTable extends MyTable {
             if (tabIndex != -1) {
                 recipesInfoTabs.remove(tabIndex);
                 infoTables.remove(tabIndex);
-                recipeInTabs--; // TODO: fix recipe scuffed numbering when removed not last tab
+                recipeInTabs--;
                 if (recipeInTabs == 0) {
                     recipesInfoFrame.dispose();
                 }

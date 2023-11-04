@@ -22,7 +22,12 @@ abstract class EntityDialog<E> {
     void add(String labelText, JComponent component) {
         var label = new JLabel(labelText);
         panel.add(label);
-        panel.add(component, "wmin 250lp, grow");
+        panel.add(component, "wmin 250lp, grow, gapy 5");
+    }
+    void add(String labelText, JComponent component, String constraints) {
+        var label = new JLabel(labelText);
+        panel.add(label);
+        panel.add(component, constraints);
     }
 
     abstract E getEntity();

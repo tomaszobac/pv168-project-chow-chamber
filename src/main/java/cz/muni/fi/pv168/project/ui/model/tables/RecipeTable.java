@@ -95,7 +95,7 @@ public class RecipeTable extends MyTable {
         infoPanel.add(MainWindowUtilities.createLabel(Integer.toString(recipe.getPortions()), 1));
 
         // Add more labels for other recipe attributes here
-        singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
+        singleRecipeInfo.addTab("Basic info", null, infoPanel, "Basic information of the recipe");
 
         // Use GridBagConstraints to control resizing
         GridBagConstraints gbc = new GridBagConstraints();
@@ -110,7 +110,7 @@ public class RecipeTable extends MyTable {
 
         ingredientsTab.add(recipeIngredientsScrollPane, gbc);
 
-        singleRecipeInfo.addTab("Ingredients", null, ingredientsTab, "Second Tab");
+        singleRecipeInfo.addTab("Ingredients", null, ingredientsTab, "Ingredients used in the recipe");
 
 
 
@@ -123,7 +123,7 @@ public class RecipeTable extends MyTable {
         instructionTab.add(instructionsScrollPane, gbc);
 
         gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
-        singleRecipeInfo.addTab("Instructions", null, instructionTab, "Third Tab");
+        singleRecipeInfo.addTab("Instructions", null, instructionTab, "Instructinos on how to make the recipe");
 
 
         // creates and handles tabs of singleRecipeInfo

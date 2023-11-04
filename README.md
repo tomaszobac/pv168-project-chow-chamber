@@ -1,33 +1,28 @@
-# PV168 Project: {{ PROJECT NAME }}
+# PV168 Project: Recipe DB
 
-<!--- FIXME: fill in the PROJECT NAME above and include short description of what the project is about -->
-{{ PROJECT DESCRIPTION }}
+Recipe DB is a database application containing number of recipes.
+
+It contains their ingredients, time difficulty, portions and instructions.
+The recipes can also be created/edited/deleted and filtered by different categories.
 
 ## Team Information
 
 | Seminar Group | Team |
-|-------------- | ---- |
-| PV168/0X      | Y    | <!--- FIXME: fill in the seminar group and team identification -->
+|---------------|---|
+| PV168/03      | 9 | 
 
 ### Members
 
-| Role           | Person               |
-|----------------|----------------------|
-|Team Lead       | [Name Surname](https://is.muni.cz/auth/osoba/UCO) | <!--- FIXME: fill in the name and UCO -->
-|Member          | [Name Surname](https://is.muni.cz/auth/osoba/UCO) | <!--- FIXME: fill in the name and UCO -->
-|Member          | [Name Surname](https://is.muni.cz/auth/osoba/UCO) | <!--- FIXME: fill in the name and UCO -->
-|Member          | [Name Surname](https://is.muni.cz/auth/osoba/UCO) | <!--- FIXME: fill in the name and UCO -->
+| Role           | Person                                                |
+|----------------|-------------------------------------------------------|
+|Team Lead       | [Michal Pataky](https://is.muni.cz/auth/osoba/536592) | 
+|Member          | [Albert Koziar](https://is.muni.cz/auth/osoba/509501) | 
+|Member          | [Roman Kotrč](https://is.muni.cz/auth/osoba/524778)   | 
+|Member          | [Tomáš Zobač](https://is.muni.cz/auth/osoba/492601)   | 
 
 ### Evaluators
 
-| Role           | Person               |
-|----------------|----------------------|
-|Customer        | [Name Surname](https://is.muni.cz/auth/osoba/UCO) | <!--- FIXME: fill in the name and UCO -->
-|Technical Coach | [Name Surname](https://is.muni.cz/auth/osoba/UCO) | <!--- FIXME: fill in the name and UCO -->
-
-## TODO
-
-- Update the [`README.md`](#) - fill in the project and team details (resolve all the `FIXME` comments and remove them).
-- Update the [`pom.xml`](pom.xml) - fill in the project and team details (resolve all the `FIXME` comments and remove them).
-- Start with [`Main.java`](src/main/java/cz/muni/fi/pv168/project/Main.java) as the _main class_ for your application.
-- Get rid of this TODO section. 😉
+| Role           | Person                                                 |
+|----------------|--------------------------------------------------------|
+|Customer        | [Samuel Kulíšek](https://is.muni.cz/auth/osoba/485087) | 
+|Technical Coach | [Tereza Tesařová](https://is.muni.cz/auth/osoba/446930)|

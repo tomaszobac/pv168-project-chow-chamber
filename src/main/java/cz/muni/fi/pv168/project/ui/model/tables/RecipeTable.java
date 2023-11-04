@@ -119,10 +119,11 @@ public class RecipeTable extends MyTable {
         JTextArea textArea = new JTextArea(recipe.getInstructions());
         textArea.setEnabled(false);
         textArea.setDisabledTextColor(new Color(255, 255, 255));
+        textArea.setPreferredSize(new Dimension(200, 300));
         JScrollPane instructionsScrollPane = new JScrollPane(textArea);
+        gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
         instructionTab.add(instructionsScrollPane, gbc);
 
-        gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
         singleRecipeInfo.addTab("Instructions", null, instructionTab, "Instructions on how to make the recipe");
 
 

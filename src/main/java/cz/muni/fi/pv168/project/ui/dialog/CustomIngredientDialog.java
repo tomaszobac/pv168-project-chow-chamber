@@ -23,14 +23,15 @@ public class CustomIngredientDialog extends JDialog {
     private final Action editAction;
     private final Action deleteAction;
 
-    public CustomIngredientDialog(JFrame parentFrame, Recipe recipe) {
+    public CustomIngredientDialog(JFrame parentFrame, Recipe recipe, JTable ingredientTable, JTable unitTable) {
         super(parentFrame, "Recipe ingredients", true);
         setLayout(new BorderLayout());
-        for (Ingredient ingredient : TestTable.getTableThree()) {
-            ingredientComboBox.addItem(ingredient);
+
+        for (int i = 0; i < ingredientTable.getRowCount(); i++) {
+            ingredientComboBox.addItem((Ingredient) ingredientTable.getValueAt(i, 0));
         }
-        for (Unit unit : TestTable.getTableTwo()) {
-            unitComboBox.addItem(unit);
+        for (int i = 0; i < unitTable.getRowCount(); i++) {
+            unitComboBox.addItem((Unit) unitTable.getValueAt(i, 0));
         }
 
         JPanel topPanel = new JPanel();
@@ -51,7 +52,7 @@ public class CustomIngredientDialog extends JDialog {
         recipeIngredientsTableModel = new RecipeIngredientsTableModel(recipe.getIngredients());
         RecipeIngredientsTable recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(recipeIngredientsTableModel, 2, this::rowSelectionChanged);
         // recipeIngredientsTable.setMouseListener(recipeIngredientsTable);
-        editAction = new EditIngredientAction(recipeIngredientsTable);
+        editAction = new EditIngredientAction(recipeIngredientsTable, unitTable);
         deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
         add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
         addButton.addActionListener(e -> {

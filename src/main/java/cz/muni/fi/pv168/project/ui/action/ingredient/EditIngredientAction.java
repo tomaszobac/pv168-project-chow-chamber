@@ -10,10 +10,12 @@ import java.awt.event.KeyEvent;
 
 public class EditIngredientAction extends AbstractAction {
     private final JTable ingredientTable;
+    private final JTable unitTable;
 
-    public EditIngredientAction(JTable ingredientTable) {
+    public EditIngredientAction(JTable ingredientTable, JTable unitTable) {
         super("Edit", Icons.EDIT_ICON);
         this.ingredientTable = ingredientTable;
+        this.unitTable = unitTable;
         putValue(SHORT_DESCRIPTION, "Edits selected ingredient");
         putValue(MNEMONIC_KEY, KeyEvent.VK_E);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl E"));
@@ -31,7 +33,7 @@ public class EditIngredientAction extends AbstractAction {
         var ingredientTableModel = (IngredientTableModel) ingredientTable.getModel();
         int modelRow = ingredientTable.convertRowIndexToModel(selectedRows[0]);
         var ingredient = ingredientTableModel.getEntity(modelRow);
-        var dialog = new IngredientDialog(ingredient, null);
+        var dialog = new IngredientDialog(ingredient, unitTable);
         dialog.show(ingredientTable, "Edit ingredient")
                 .ifPresent(ingredientTableModel::updateRow);
     }

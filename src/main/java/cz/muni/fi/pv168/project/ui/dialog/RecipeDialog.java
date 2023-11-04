@@ -16,10 +16,10 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     private final JTextArea instructionsArea = new JTextArea();
     private final Recipe recipe;
 
-    public RecipeDialog(Recipe recipe) {
+    public RecipeDialog(Recipe recipe, JTable ingredientTable, JTable unitTable) {
         this.recipe = recipe;
         setValues();
-        addFields();
+        addFields(ingredientTable, unitTable);
     }
 
     private void setValues() {
@@ -30,7 +30,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         instructionsArea.setText("Instructions go here!");
     }
 
-    private void addFields() {
+    private void addFields(JTable ingredientTable, JTable unitTable) {
         var categoryComboBox = new JComboBox<>(categoryField);
         add("Name:", nameField);
         add("Category:", categoryComboBox);
@@ -44,7 +44,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         Font buttonFont = createCustomIngredientButton.getFont();
         createCustomIngredientButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize())); // Make the text bold
         createCustomIngredientButton.setBackground(new Color(26, 72, 93));
-        createCustomIngredientButton.addActionListener(e -> createCustomIngredient());
+        createCustomIngredientButton.addActionListener(e -> createCustomIngredient(ingredientTable, unitTable));
         add("", createCustomIngredientButton);
 
         // Add instructions area
@@ -53,9 +53,9 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         add("Instructions:", instructionsScrollPane, "wmin 250lp, grow, gapy 10");
     }
 
-    private void createCustomIngredient() {
+    private void createCustomIngredient(JTable ingredientTable, JTable unitTable) {
         JFrame addIngredientsFrame = new JFrame();
-        CustomIngredientDialog customIngredientDialog = new CustomIngredientDialog(addIngredientsFrame, recipe);
+        CustomIngredientDialog customIngredientDialog = new CustomIngredientDialog(addIngredientsFrame, recipe, ingredientTable, unitTable);
         customIngredientDialog.setVisible(true);
     }
 

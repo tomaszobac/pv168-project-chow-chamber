@@ -54,8 +54,8 @@ public class MainWindow {
         MainWindowUtilities.hideFirstColumn(unitTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
 
-        addAction = new AddRecipeAction(recipeTable);
-        editAction = new EditRecipeAction(recipeTable);
+        addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
+        editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
         importAction = new ImportAction();
         exportAction = new ExportAction();
@@ -88,8 +88,8 @@ public class MainWindow {
 
         switch (selectedIndex) {
             case 0:  // Recipes tab
-                addAction = new AddRecipeAction(recipeTable);
-                editAction = new EditRecipeAction(recipeTable);
+                addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
+                editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
                 deleteAction = new DeleteRecipeAction(recipeTable);
                 filterAction = new FilterRecipeAction();
                 break;
@@ -101,7 +101,7 @@ public class MainWindow {
                 break;
             case 2:  // Ingredients tab
                 addAction = new AddIngredientAction(ingredientTable, unitTable);
-                editAction = new EditIngredientAction(ingredientTable);
+                editAction = new EditIngredientAction(ingredientTable, unitTable);
                 deleteAction = new DeleteIngredientAction(ingredientTable);
                 filterAction = new FilterIngredientAction();
                 break;

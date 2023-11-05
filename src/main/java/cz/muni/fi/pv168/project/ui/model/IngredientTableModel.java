@@ -6,7 +6,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientTableModel extends AbstractTableModel {
+public class IngredientTableModel extends AbstractTableModel implements EntityTableModel<Ingredient> {
     private final List<Ingredient> ingredients;
     private final List<Column<Ingredient, ?>> columns = List.of(
             Column.readonly("Ingredient", Ingredient.class, Ingredient -> Ingredient),

@@ -4,6 +4,7 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatchers;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeCategoryMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeLocalTimeMatcher;
+import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeNameMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipePortionsMatcher;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 import cz.muni.fi.pv168.project.ui.model.EntityTableModel;
@@ -23,6 +24,7 @@ public class RecipeTableFilter {
     private Integer portionsTo = Integer.MAX_VALUE;
     private LocalTime timeFrom = LocalTime.of(0,0);
     private LocalTime timeTo = LocalTime.of(23,59);
+    private String name = "";
 
     public RecipeTableFilter(TableRowSorter<RecipeTableModel> rowSorter) {
         recipeCompoundMatcher = new RecipeCompoundMatcher(rowSorter);
@@ -46,6 +48,10 @@ public class RecipeTableFilter {
         this.timeTo = to;
         recipeCompoundMatcher.setTimeMatcher(new RecipeLocalTimeMatcher(from, to));
     }
+    public void filterName(String name) {
+        this.name = name;
+        recipeCompoundMatcher.setNameMatcher(new RecipeNameMatcher(name));
+    }
 
     public Either<SpecialFilterCategoryValues, RecipeCategories> getSelectedCategoryValue() {
         return selectedCategoryValue;
@@ -67,6 +73,10 @@ public class RecipeTableFilter {
         return timeTo;
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
      * Container class for all matchers for the RecipeTable.
      *
@@ -79,6 +89,7 @@ public class RecipeTableFilter {
         private EntityMatcher<Recipe> categoryMatcher = EntityMatchers.all();
         private EntityMatcher<Recipe> portionsMatcher = EntityMatchers.all();
         private EntityMatcher<Recipe> timeMatcher = EntityMatchers.all();
+        private EntityMatcher<Recipe> nameMatcher = EntityMatchers.all();
 
         private RecipeCompoundMatcher(TableRowSorter<RecipeTableModel> rowSorter) {
             this.rowSorter = rowSorter;
@@ -96,10 +107,14 @@ public class RecipeTableFilter {
             this.timeMatcher = timeMatcher;
             rowSorter.sort();
         }
+        private  void setNameMatcher(EntityMatcher<Recipe> nameMatcher) {
+            this.nameMatcher = nameMatcher;
+            rowSorter.sort();
+        }
 
         @Override
         public boolean evaluate(Recipe recipe) {
-            return Stream.of(categoryMatcher, portionsMatcher, timeMatcher)
+            return Stream.of(categoryMatcher, portionsMatcher, timeMatcher, nameMatcher)
                     .allMatch(m -> m.evaluate(recipe));
         }
     }

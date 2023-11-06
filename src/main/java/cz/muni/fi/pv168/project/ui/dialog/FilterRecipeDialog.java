@@ -29,7 +29,7 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     }
 
     private void setValues() {
-        nameField.setText("");
+        nameField.setText(recipeTableFilter.getName());
         categoryComboBox.setSelectedItem(recipeTableFilter.getSelectedCategoryValue());
         fromTimeField.setText(recipeTableFilter.getTimeFrom().toString());
         toTimeField.setText(recipeTableFilter.getTimeTo().toString());
@@ -57,20 +57,22 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
 
     @Override
     RecipeTableFilter getEntity() {
-        // Get Portions
+        // Portions
         String fromPortions = fromPortionsField.getText();
         String toPortions = toPortionsField.getText();
         recipeTableFilter.filterPortions(Integer.parseInt(fromPortions), Integer.parseInt(toPortions));
 
-        // Get Times
+        // Times
         String fromTimeString = fromTimeField.getText();
         String toTimeString = toTimeField.getText();
-        // Set up formatter for time
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         LocalTime fromTime = LocalTime.parse(fromTimeString, formatter);
         LocalTime toTime = LocalTime.parse(toTimeString, formatter);
         recipeTableFilter.filterTime(fromTime, toTime);
+
+        // Name
+        recipeTableFilter.filterName(nameField.getText());
 
         return this.recipeTableFilter;
     }

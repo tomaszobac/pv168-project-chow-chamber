@@ -1,0 +1,20 @@
+package cz.muni.fi.pv168.project.ui.filters.matchers.unit;
+
+import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
+import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+
+public class UnitNameMatcher extends EntityMatcher<Unit> {
+    String name;
+
+    public UnitNameMatcher(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean evaluate(Unit unit) {
+        if (name.equals("")) {
+            return true;
+        }
+        return unit.getName().toLowerCase().contains(this.name.toLowerCase());
+    }
+}

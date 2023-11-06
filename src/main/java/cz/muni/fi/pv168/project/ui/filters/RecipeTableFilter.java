@@ -7,7 +7,6 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeLocalTimeMatche
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeNameMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipePortionsMatcher;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
-import cz.muni.fi.pv168.project.ui.model.EntityTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;

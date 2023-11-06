@@ -17,6 +17,7 @@ import cz.muni.fi.pv168.project.ui.action.unit.DeleteUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.EditUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.FilterUnitAction;
 import cz.muni.fi.pv168.project.ui.filters.RecipeTableFilter;
+import cz.muni.fi.pv168.project.ui.filters.UnitTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.components.FilterComboboxBuilder;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
@@ -52,15 +53,14 @@ public class MainWindow {
     private final UnitTable unitTable;
     private final IngredientsTable ingredientTable;
     private final RecipeTableFilter recipeTableFilter;
+    private final UnitTableFilter unitTableFilter;
 
     public MainWindow() {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
 
-        RecipeTableModel recipeTableModel = new RecipeTableModel(TestTable.getTableOne());
-
         // tables
-        recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(recipeTableModel, 0, this::rowSelectionChanged);
+        recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(TestTable.getTableOne()), 0, this::rowSelectionChanged);
         unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(TestTable.getTableTwo()), 3, this::rowSelectionChanged);
         ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(TestTable.getTableThree()), 1, this::rowSelectionChanged);
 
@@ -69,11 +69,16 @@ public class MainWindow {
         MainWindowUtilities.hideFirstColumn(unitTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
 
-        // Filters TODO: I think this should be put into the filter dialog
-        TableRowSorter<RecipeTableModel> rowSorter = new TableRowSorter<>(recipeTableModel);
-        RecipeTableFilter filter = new RecipeTableFilter(rowSorter);
-        recipeTable.setRowSorter(rowSorter);
-        this.recipeTableFilter = filter;
+        // Filters
+        TableRowSorter<RecipeTableModel> recipeRowSorter = new TableRowSorter<>((RecipeTableModel) recipeTable.getModel());
+        RecipeTableFilter recipeFilter = new RecipeTableFilter(recipeRowSorter);
+        recipeTable.setRowSorter(recipeRowSorter);
+        this.recipeTableFilter = recipeFilter;
+
+        TableRowSorter<UnitTableModel> unitRowSorter = new TableRowSorter<>((UnitTableModel) unitTable.getModel());
+        UnitTableFilter unitFilter = new UnitTableFilter(unitRowSorter);
+        unitTable.setRowSorter(unitRowSorter);
+        this.unitTableFilter = unitFilter;
 
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
@@ -118,7 +123,7 @@ public class MainWindow {
                 addAction = new AddUnitAction(unitTable);
                 editAction = new EditUnitAction(unitTable);
                 deleteAction = new DeleteUnitAction(unitTable);
-                filterAction = new FilterUnitAction();
+                filterAction = new FilterUnitAction(unitTable, unitTableFilter);
                 break;
             case 2:  // Ingredients tab
                 addAction = new AddIngredientAction(ingredientTable, unitTable);

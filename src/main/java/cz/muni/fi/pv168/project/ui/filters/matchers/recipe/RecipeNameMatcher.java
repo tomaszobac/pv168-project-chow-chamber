@@ -3,8 +3,6 @@ package cz.muni.fi.pv168.project.ui.filters.matchers.recipe;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
 
-import java.util.Objects;
-
 public class RecipeNameMatcher extends EntityMatcher<Recipe> {
     String name;
 
@@ -17,6 +15,6 @@ public class RecipeNameMatcher extends EntityMatcher<Recipe> {
         if (name.equals("")) {
             return true;
         }
-        return recipe.getName().contains(this.name);
+        return recipe.getName().toLowerCase().contains(this.name.toLowerCase());
     }
 }

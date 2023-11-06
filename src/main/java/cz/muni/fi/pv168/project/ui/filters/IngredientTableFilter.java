@@ -4,15 +4,8 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatchers;
 import cz.muni.fi.pv168.project.ui.filters.matchers.ingredient.IngredientCaloriesMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.ingredient.IngredientNameMatcher;
-import cz.muni.fi.pv168.project.ui.filters.matchers.unit.UnitNameMatcher;
-import cz.muni.fi.pv168.project.ui.filters.matchers.unit.UnitUnitTypeMatcher;
-import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterUnitTypeValues;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
-import cz.muni.fi.pv168.project.ui.model.UnitTableModel;
 import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
-import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
-import cz.muni.fi.pv168.project.util.Either;
 
 import javax.swing.table.TableRowSorter;
 import java.util.stream.Stream;

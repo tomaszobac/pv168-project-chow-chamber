@@ -8,9 +8,9 @@ import cz.muni.fi.pv168.project.ui.renderers.SpecialFilterUnitTypeValuesRenderer
 import cz.muni.fi.pv168.project.ui.renderers.UnitTypeRenderer;
 import cz.muni.fi.pv168.project.util.Either;
 
-import javax.swing.*;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+
 
 public class FilterUnitDialog extends EntityDialog<UnitTableFilter> {
     private final UnitTableFilter unitTableFilter;

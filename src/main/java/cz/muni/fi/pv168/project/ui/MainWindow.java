@@ -75,8 +75,6 @@ public class MainWindow {
         recipeTable.setRowSorter(rowSorter);
         this.recipeTableFilter = filter;
 
-        var categoryFilter = createCategoryFilter(recipeTableFilter);
-
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
@@ -93,7 +91,7 @@ public class MainWindow {
         mainFrame.add(mainFrameTabs, BorderLayout.CENTER);
 
         // toolbar
-        this.toolbar = createToolbar(categoryFilter);
+        this.toolbar = createToolbar();
         mainFrame.add(this.toolbar, BorderLayout.BEFORE_FIRST_LINE);
         mainFrame.setJMenuBar(createMenuBar());
 
@@ -181,16 +179,6 @@ public class MainWindow {
         menuBar.add(editMenu);
         menuBar.add(dataMenu);
         return menuBar;
-    }
-
-    private static JComboBox<Either<SpecialFilterCategoryValues, RecipeCategories>> createCategoryFilter(
-            RecipeTableFilter recipeTableFilter) {
-        return FilterComboboxBuilder.create(SpecialFilterCategoryValues.class, RecipeCategories.values())
-                .setSelectedItem(SpecialFilterCategoryValues.ALL)
-                .setSpecialValuesRenderer(new SpecialFilterCategoryValuesRenderer())
-                .setValuesRenderer(new CategoryRenderer())
-                .setFilter(recipeTableFilter::filterCategory)
-                .build();
     }
 
     private void rowSelectionChanged(ListSelectionEvent listSelectionEvent) {

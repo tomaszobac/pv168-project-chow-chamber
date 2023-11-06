@@ -43,7 +43,7 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
         add("Time from:", fromTimeField);
         add("Time to:", toTimeField);
         add("Portions from:", fromPortionsField);
-        add("Portions from:", toPortionsField);
+        add("Portions to:", toPortionsField);
     }
 
     private static JComboBox<Either<SpecialFilterCategoryValues, RecipeCategories>> createCategoryFilter(

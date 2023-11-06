@@ -16,21 +16,16 @@ import cz.muni.fi.pv168.project.ui.action.unit.AddUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.DeleteUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.EditUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.FilterUnitAction;
+import cz.muni.fi.pv168.project.ui.filters.IngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.RecipeTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.UnitTableFilter;
-import cz.muni.fi.pv168.project.ui.filters.components.FilterComboboxBuilder;
-import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.model.UnitTableModel;
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 import cz.muni.fi.pv168.project.ui.model.tables.IngredientsTable;
 import cz.muni.fi.pv168.project.ui.model.tables.RecipeTable;
 import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
-import cz.muni.fi.pv168.project.ui.renderers.CategoryRenderer;
 import cz.muni.fi.pv168.project.ui.renderers.MyFrame;
-import cz.muni.fi.pv168.project.ui.renderers.SpecialFilterCategoryValuesRenderer;
-import cz.muni.fi.pv168.project.util.Either;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -54,6 +49,7 @@ public class MainWindow {
     private final IngredientsTable ingredientTable;
     private final RecipeTableFilter recipeTableFilter;
     private final UnitTableFilter unitTableFilter;
+    private final IngredientTableFilter ingredientTableFilter;
 
     public MainWindow() {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
@@ -80,6 +76,12 @@ public class MainWindow {
         unitTable.setRowSorter(unitRowSorter);
         this.unitTableFilter = unitFilter;
 
+        TableRowSorter<IngredientTableModel> ingredientRowSorter = new TableRowSorter<>((IngredientTableModel) ingredientTable.getModel());
+        IngredientTableFilter ingredientFilter = new IngredientTableFilter(ingredientRowSorter);
+        ingredientTable.setRowSorter(ingredientRowSorter);
+        this.ingredientTableFilter = ingredientFilter;
+
+        // Actions
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
@@ -129,7 +131,7 @@ public class MainWindow {
                 addAction = new AddIngredientAction(ingredientTable, unitTable);
                 editAction = new EditIngredientAction(ingredientTable, unitTable);
                 deleteAction = new DeleteIngredientAction(ingredientTable);
-                filterAction = new FilterIngredientAction();
+                filterAction = new FilterIngredientAction(ingredientTable, ingredientTableFilter);
                 break;
         }
 

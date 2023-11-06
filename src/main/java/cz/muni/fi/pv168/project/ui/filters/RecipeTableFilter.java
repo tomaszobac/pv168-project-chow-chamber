@@ -3,6 +3,7 @@ package cz.muni.fi.pv168.project.ui.filters;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatchers;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeCategoryMatcher;
+import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeLocalTimeMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipePortionsMatcher;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 import cz.muni.fi.pv168.project.ui.model.EntityTableModel;
@@ -12,6 +13,7 @@ import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 import cz.muni.fi.pv168.project.util.Either;
 
 import javax.swing.table.TableRowSorter;
+import java.time.LocalTime;
 import java.util.stream.Stream;
 
 public class RecipeTableFilter {
@@ -19,6 +21,8 @@ public class RecipeTableFilter {
     private Either<SpecialFilterCategoryValues, RecipeCategories> selectedCategoryValue = Either.left(SpecialFilterCategoryValues.ALL);
     private Integer portionsFrom = 0;
     private Integer portionsTo = Integer.MAX_VALUE;
+    private LocalTime timeFrom = LocalTime.of(0,0);
+    private LocalTime timeTo = LocalTime.of(23,59);
 
     public RecipeTableFilter(TableRowSorter<RecipeTableModel> rowSorter) {
         recipeCompoundMatcher = new RecipeCompoundMatcher(rowSorter);
@@ -32,11 +36,15 @@ public class RecipeTableFilter {
                 r -> recipeCompoundMatcher.setCategoryMatcher(new RecipeCategoryMatcher(r))
         );
     }
-
     public void filterPortions(Integer from, Integer to) {
         this.portionsFrom = from;
         this.portionsTo = to;
         recipeCompoundMatcher.setPortionsMatcher(new RecipePortionsMatcher(from, to));
+    }
+    public void filterTime(LocalTime from, LocalTime to) {
+        this.timeFrom = from;
+        this.timeTo = to;
+        recipeCompoundMatcher.setTimeMatcher(new RecipeLocalTimeMatcher(from, to));
     }
 
     public Either<SpecialFilterCategoryValues, RecipeCategories> getSelectedCategoryValue() {
@@ -51,6 +59,14 @@ public class RecipeTableFilter {
         return portionsTo;
     }
 
+    public LocalTime getTimeFrom() {
+        return timeFrom;
+    }
+
+    public LocalTime getTimeTo() {
+        return timeTo;
+    }
+
     /**
      * Container class for all matchers for the RecipeTable.
      *
@@ -62,6 +78,7 @@ public class RecipeTableFilter {
         private final TableRowSorter<RecipeTableModel> rowSorter;
         private EntityMatcher<Recipe> categoryMatcher = EntityMatchers.all();
         private EntityMatcher<Recipe> portionsMatcher = EntityMatchers.all();
+        private EntityMatcher<Recipe> timeMatcher = EntityMatchers.all();
 
         private RecipeCompoundMatcher(TableRowSorter<RecipeTableModel> rowSorter) {
             this.rowSorter = rowSorter;
@@ -75,10 +92,14 @@ public class RecipeTableFilter {
             this.portionsMatcher = portionsMatcher;
             rowSorter.sort();
         }
+        private void setTimeMatcher(EntityMatcher<Recipe> timeMatcher) {
+            this.timeMatcher = timeMatcher;
+            rowSorter.sort();
+        }
 
         @Override
         public boolean evaluate(Recipe recipe) {
-            return Stream.of(categoryMatcher, portionsMatcher)
+            return Stream.of(categoryMatcher, portionsMatcher, timeMatcher)
                     .allMatch(m -> m.evaluate(recipe));
         }
     }

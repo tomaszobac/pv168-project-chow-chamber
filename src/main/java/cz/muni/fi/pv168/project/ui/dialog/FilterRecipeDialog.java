@@ -9,6 +9,8 @@ import cz.muni.fi.pv168.project.ui.renderers.SpecialFilterCategoryValuesRenderer
 import cz.muni.fi.pv168.project.util.Either;
 
 import javax.swing.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     private final RecipeTableFilter recipeTableFilter;
@@ -29,8 +31,8 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     private void setValues() {
         nameField.setText("");
         categoryComboBox.setSelectedItem(recipeTableFilter.getSelectedCategoryValue());
-        fromTimeField.setText("00:00");
-        toTimeField.setText("23:59");
+        fromTimeField.setText(recipeTableFilter.getTimeFrom().toString());
+        toTimeField.setText(recipeTableFilter.getTimeTo().toString());
         fromPortionsField.setText(Integer.toString(recipeTableFilter.getPortionsFrom()));
         toPortionsField.setText(Integer.toString(recipeTableFilter.getPortionsTo()));
     }
@@ -55,9 +57,21 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
 
     @Override
     RecipeTableFilter getEntity() {
+        // Get Portions
         String fromPortions = fromPortionsField.getText();
         String toPortions = toPortionsField.getText();
         recipeTableFilter.filterPortions(Integer.parseInt(fromPortions), Integer.parseInt(toPortions));
+
+        // Get Times
+        String fromTimeString = fromTimeField.getText();
+        String toTimeString = toTimeField.getText();
+        // Set up formatter for time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        LocalTime fromTime = LocalTime.parse(fromTimeString, formatter);
+        LocalTime toTime = LocalTime.parse(toTimeString, formatter);
+        recipeTableFilter.filterTime(fromTime, toTime);
+
         return this.recipeTableFilter;
     }
 }

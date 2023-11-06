@@ -9,6 +9,10 @@ import cz.muni.fi.pv168.project.ui.renderers.SpecialFilterCategoryValuesRenderer
 import cz.muni.fi.pv168.project.util.Either;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -24,6 +28,10 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     public FilterRecipeDialog(RecipeTableFilter recipeTableFilter) {
         this.recipeTableFilter = recipeTableFilter;
         this.categoryComboBox = createCategoryFilter(recipeTableFilter);
+        setNumericWithSeparatorFilter(fromPortionsField, false);
+        setNumericWithSeparatorFilter(toPortionsField, false);
+        setNumericWithSeparatorFilter(fromTimeField, true);
+        setNumericWithSeparatorFilter(toTimeField, true);
         setValues();
         addFields();
     }
@@ -65,27 +73,67 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
                 .build();
     }
 
+    // Set a DocumentFilter to allow only numeric input with a configurable decimal point
+    public static void setNumericWithSeparatorFilter(JTextField textField, boolean allowSeparator) {
+        Document doc = new PlainDocument() {
+            @Override
+            public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+                if (str == null) {
+                    return;
+                }
+
+                String currentText = getText(0, getLength());
+                StringBuilder newText = new StringBuilder(currentText);
+                for (int i = 0; i < str.length(); i++) {
+                    char c = str.charAt(i);
+                    if (c == ':' && !allowSeparator) {
+                        return; // Separator not allowed
+                    }
+                    if (!Character.isDigit(c) && c != ':') {
+                        return; // Non-numeric character
+                    }
+                    if (c == ':' && currentText.contains(":")) {
+                        return; // Already contains a decimal point
+                    }
+                    newText.insert(offs + i, c);
+                }
+
+                super.remove(0, getLength());
+                super.insertString(0, newText.toString(), a);
+            }
+        };
+
+        textField.setDocument(doc);
+    }
+
     @Override
     RecipeTableFilter getEntity() {
-        // Portions
-        String fromPortionsString = fromPortionsField.getText();
-        String toPortionsString = toPortionsField.getText();
-        int fromPortions = fromPortionsString.equals("") ? 0 : Integer.parseInt(fromPortionsString);
-        int toPortions = toPortionsString.equals("") ? Integer.MAX_VALUE : Integer.parseInt(toPortionsString);
-        recipeTableFilter.filterPortions(fromPortions, toPortions);
+        try {
+            // Portions
+            String fromPortionsString = fromPortionsField.getText();
+            String toPortionsString = toPortionsField.getText();
+            int fromPortions = fromPortionsString.equals("") ? 0 : Integer.parseInt(fromPortionsString);
+            int toPortions = toPortionsString.equals("") ? Integer.MAX_VALUE : Integer.parseInt(toPortionsString);
+            recipeTableFilter.filterPortions(fromPortions, toPortions);
 
-        // Times
-        String fromTimeString = fromTimeField.getText();
-        String toTimeString = toTimeField.getText();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            // Times
+            String fromTimeString = fromTimeField.getText();
+            String toTimeString = toTimeField.getText();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        LocalTime fromTime = fromTimeString.equals("") ? LocalTime.of(0, 0) : LocalTime.parse(fromTimeString, formatter);
-        LocalTime toTime = fromTimeString.equals("") ? LocalTime.of(23, 59) : LocalTime.parse(toTimeString, formatter);
-        recipeTableFilter.filterTime(fromTime, toTime);
+            LocalTime fromTime = fromTimeString.equals("") ? LocalTime.of(0, 0) : LocalTime.parse(fromTimeString, formatter);
+            LocalTime toTime = fromTimeString.equals("") ? LocalTime.of(23, 59) : LocalTime.parse(toTimeString, formatter);
+            recipeTableFilter.filterTime(fromTime, toTime);
 
-        // Name
-        recipeTableFilter.filterName(nameField.getText());
+            // Name
+            recipeTableFilter.filterName(nameField.getText());
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(FilterRecipeDialog.this,
+                    "Incorrect filter parameters",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
         return this.recipeTableFilter;
     }
 }

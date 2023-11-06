@@ -8,8 +8,7 @@ import cz.muni.fi.pv168.project.ui.renderers.SpecialFilterUnitTypeValuesRenderer
 import cz.muni.fi.pv168.project.ui.renderers.UnitTypeRenderer;
 import cz.muni.fi.pv168.project.util.Either;
 
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 
 public class FilterUnitDialog extends EntityDialog<UnitTableFilter> {
@@ -45,7 +44,14 @@ public class FilterUnitDialog extends EntityDialog<UnitTableFilter> {
 
     @Override
     UnitTableFilter getEntity() {
-        unitTableFilter.filterName(nameField.getText());
+        try {
+            unitTableFilter.filterName(nameField.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(FilterUnitDialog.this,
+                    "Incorrect filter parameters",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
         return this.unitTableFilter;
     }
 }

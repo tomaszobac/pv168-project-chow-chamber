@@ -1,17 +1,12 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.ui.filters.IngredientTableFilter;
-import cz.muni.fi.pv168.project.ui.filters.RecipeTableFilter;
-import cz.muni.fi.pv168.project.ui.filters.components.FilterComboboxBuilder;
-import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
-import cz.muni.fi.pv168.project.ui.renderers.CategoryRenderer;
-import cz.muni.fi.pv168.project.ui.renderers.SpecialFilterCategoryValuesRenderer;
-import cz.muni.fi.pv168.project.util.Either;
 
 import javax.swing.*;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> {
     private final IngredientTableFilter ingredientTableFilter;
@@ -21,6 +16,8 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
 
     public FilterIngredientDialog(IngredientTableFilter ingredientTableFilter) {
         this.ingredientTableFilter = ingredientTableFilter;
+        setNumericWithDecimalFilter(fromCaloriesField);
+        setNumericWithDecimalFilter(toCaloriesField);
         setValues();
         addFields();
     }
@@ -41,18 +38,55 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
         add("Calories to:", toCaloriesField);
     }
 
+    // Set a DocumentFilter to allow only numeric input and a single decimal point
+    public static void setNumericWithDecimalFilter(JTextField textField) {
+        // Set a DocumentFilter to allow only numeric input with a configurable decimal point
+        Document doc = new PlainDocument() {
+            @Override
+            public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+                if (str == null) {
+                    return;
+                }
+
+                String currentText = getText(0, getLength());
+                StringBuilder newText = new StringBuilder(currentText);
+                for (int i = 0; i < str.length(); i++) {
+                    char c = str.charAt(i);
+                    if (!Character.isDigit(c) && c != '.') {
+                        return; // Non-numeric character
+                    }
+                    if (c == '.' && currentText.contains(".")) {
+                        return; // Already contains a decimal point
+                    }
+                    newText.insert(offs + i, c);
+                }
+
+                super.remove(0, getLength());
+                super.insertString(0, newText.toString(), a);
+            }
+        };
+
+        textField.setDocument(doc);
+    }
+
     @Override
     IngredientTableFilter getEntity() {
-        // Portions
-        String fromCaloriesString = fromCaloriesField.getText();
-        String toCaloriesString = toCaloriesField.getText();
-        Double fromCalories = fromCaloriesString.equals("") ? 0.0 : Double.parseDouble(fromCaloriesString);
-        Double toCalories = toCaloriesString.equals("") ? Double.MAX_VALUE : Double.parseDouble(fromCaloriesString);
-        ingredientTableFilter.filterCalories(fromCalories, toCalories);
+        try {
+            // Portions
+            String fromCaloriesString = fromCaloriesField.getText();
+            String toCaloriesString = toCaloriesField.getText();
+            Double fromCalories = fromCaloriesString.equals("") ? 0.0 : Double.parseDouble(fromCaloriesString);
+            Double toCalories = toCaloriesString.equals("") ? Double.MAX_VALUE : Double.parseDouble(fromCaloriesString);
+            ingredientTableFilter.filterCalories(fromCalories, toCalories);
 
-        // Name
-        ingredientTableFilter.filterName(nameField.getText());
-
+            // Name
+            ingredientTableFilter.filterName(nameField.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(FilterIngredientDialog.this,
+                    "Incorrect filter parameters",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
         return this.ingredientTableFilter;
     }
 }

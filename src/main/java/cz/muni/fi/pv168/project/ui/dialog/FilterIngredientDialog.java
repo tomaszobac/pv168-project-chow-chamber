@@ -28,7 +28,11 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
     private void setValues() {
         nameField.setText(ingredientTableFilter.getName());
         fromCaloriesField.setText(Double.toString(ingredientTableFilter.getCaloriesFrom()));
-        toCaloriesField.setText(Double.toString(ingredientTableFilter.getCaloriesTo()));
+        if (ingredientTableFilter.getCaloriesTo() == Double.MAX_VALUE) {
+            toCaloriesField.setText("");
+        } else {
+            toCaloriesField.setText(Double.toString(ingredientTableFilter.getCaloriesTo()));
+        }
     }
 
     private void addFields() {
@@ -40,9 +44,11 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
     @Override
     IngredientTableFilter getEntity() {
         // Portions
-        String fromCalories = fromCaloriesField.getText();
-        String toCalories = toCaloriesField.getText();
-        ingredientTableFilter.filterCalories(Double.parseDouble(fromCalories), Double.parseDouble(toCalories));
+        String fromCaloriesString = fromCaloriesField.getText();
+        String toCaloriesString = toCaloriesField.getText();
+        Double fromCalories = fromCaloriesString.equals("") ? 0.0 : Double.parseDouble(fromCaloriesString);
+        Double toCalories = toCaloriesString.equals("") ? Double.MAX_VALUE : Double.parseDouble(fromCaloriesString);
+        ingredientTableFilter.filterCalories(fromCalories, toCalories);
 
         // Name
         ingredientTableFilter.filterName(nameField.getText());

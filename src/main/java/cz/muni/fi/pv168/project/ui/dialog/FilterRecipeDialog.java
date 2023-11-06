@@ -30,11 +30,21 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
 
     private void setValues() {
         nameField.setText(recipeTableFilter.getName());
+
         categoryComboBox.setSelectedItem(recipeTableFilter.getSelectedCategoryValue());
+
         fromTimeField.setText(recipeTableFilter.getTimeFrom().toString());
-        toTimeField.setText(recipeTableFilter.getTimeTo().toString());
+        if (recipeTableFilter.getTimeTo() == LocalTime.MAX) {
+            toTimeField.setText("");
+        } else {
+            toTimeField.setText(recipeTableFilter.getTimeTo().toString());
+        }
         fromPortionsField.setText(Integer.toString(recipeTableFilter.getPortionsFrom()));
-        toPortionsField.setText(Integer.toString(recipeTableFilter.getPortionsTo()));
+        if (recipeTableFilter.getPortionsTo() == Integer.MAX_VALUE) {
+            toPortionsField.setText("");
+        } else {
+            toPortionsField.setText(Integer.toString(recipeTableFilter.getPortionsTo()));
+        }
     }
 
     private void addFields() {
@@ -58,17 +68,19 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     @Override
     RecipeTableFilter getEntity() {
         // Portions
-        String fromPortions = fromPortionsField.getText();
-        String toPortions = toPortionsField.getText();
-        recipeTableFilter.filterPortions(Integer.parseInt(fromPortions), Integer.parseInt(toPortions));
+        String fromPortionsString = fromPortionsField.getText();
+        String toPortionsString = toPortionsField.getText();
+        int fromPortions = fromPortionsString.equals("") ? 0 : Integer.parseInt(fromPortionsString);
+        int toPortions = toPortionsString.equals("") ? Integer.MAX_VALUE : Integer.parseInt(toPortionsString);
+        recipeTableFilter.filterPortions(fromPortions, toPortions);
 
         // Times
         String fromTimeString = fromTimeField.getText();
         String toTimeString = toTimeField.getText();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        LocalTime fromTime = LocalTime.parse(fromTimeString, formatter);
-        LocalTime toTime = LocalTime.parse(toTimeString, formatter);
+        LocalTime fromTime = fromTimeString.equals("") ? LocalTime.of(0, 0) : LocalTime.parse(fromTimeString, formatter);
+        LocalTime toTime = fromTimeString.equals("") ? LocalTime.of(23, 59) : LocalTime.parse(toTimeString, formatter);
         recipeTableFilter.filterTime(fromTime, toTime);
 
         // Name

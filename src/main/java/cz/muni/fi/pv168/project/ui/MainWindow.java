@@ -51,6 +51,7 @@ public class MainWindow {
     private final RecipeTable recipeTable;
     private final UnitTable unitTable;
     private final IngredientsTable ingredientTable;
+    private final RecipeTableFilter recipeTableFilter;
 
     public MainWindow() {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
@@ -68,12 +69,20 @@ public class MainWindow {
         MainWindowUtilities.hideFirstColumn(unitTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
 
+        // Filters TODO: I think this should be put into the filter dialog
+        TableRowSorter<RecipeTableModel> rowSorter = new TableRowSorter<>(recipeTableModel);
+        RecipeTableFilter filter = new RecipeTableFilter(rowSorter);
+        recipeTable.setRowSorter(rowSorter);
+        this.recipeTableFilter = filter;
+
+        var categoryFilter = createCategoryFilter(recipeTableFilter);
+
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
         importAction = new ImportAction();
         exportAction = new ExportAction();
-        filterAction = new FilterRecipeAction();
+        filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
 
         // tables tabs
         JTabbedPane mainFrameTabs = new JTabbedPane();
@@ -82,13 +91,6 @@ public class MainWindow {
         mainFrameTabs.addTab("<html><b>Units</b></html>", new JScrollPane(unitTable));
         mainFrameTabs.addTab("<html><b>Ingredients</b></html>", new JScrollPane(ingredientTable));
         mainFrame.add(mainFrameTabs, BorderLayout.CENTER);
-
-        // Filters TODO: I think this should be put into the filter dialog
-        TableRowSorter<RecipeTableModel> rowSorter = new TableRowSorter<>(recipeTableModel);
-        RecipeTableFilter employeeTableFilter = new RecipeTableFilter(rowSorter);
-        recipeTable.setRowSorter(rowSorter);
-
-        var categoryFilter = createCategoryFilter(employeeTableFilter);
 
         // toolbar
         this.toolbar = createToolbar(categoryFilter);
@@ -112,7 +114,7 @@ public class MainWindow {
                 addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
                 editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
                 deleteAction = new DeleteRecipeAction(recipeTable);
-                filterAction = new FilterRecipeAction();
+                filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
                 break;
             case 1:  // Units tab
                 addAction = new AddUnitAction(unitTable);

@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeTableModel extends AbstractTableModel {
+public class RecipeTableModel extends AbstractTableModel implements EntityTableModel<Recipe> {
     private final List<Recipe> recipes;
     private final List<Column<Recipe, ?>> columns = List.of(
             Column.readonly("Recipe", Recipe.class, Recipe -> Recipe),

@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnitTableModel extends AbstractTableModel {
+public class UnitTableModel extends AbstractTableModel implements EntityTableModel<Unit> {
     private final List<Unit> units;
     private final List<Column<Unit, ?>> columns = List.of(
             Column.readonly("Unit", Unit.class, Unit -> Unit),

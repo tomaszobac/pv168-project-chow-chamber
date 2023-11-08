@@ -8,12 +8,20 @@ import cz.muni.fi.pv168.project.ui.action.ingredient.AddIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.ingredient.DeleteIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.ingredient.FilterIngredientAction;
-import cz.muni.fi.pv168.project.ui.action.recipe.*;
+import cz.muni.fi.pv168.project.ui.action.recipe.AddRecipeAction;
+import cz.muni.fi.pv168.project.ui.action.recipe.DeleteRecipeAction;
+import cz.muni.fi.pv168.project.ui.action.recipe.EditRecipeAction;
+import cz.muni.fi.pv168.project.ui.action.recipe.FilterRecipeAction;
 import cz.muni.fi.pv168.project.ui.action.unit.AddUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.DeleteUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.EditUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.FilterUnitAction;
-import cz.muni.fi.pv168.project.ui.model.*;
+import cz.muni.fi.pv168.project.ui.filters.IngredientTableFilter;
+import cz.muni.fi.pv168.project.ui.filters.RecipeTableFilter;
+import cz.muni.fi.pv168.project.ui.filters.UnitTableFilter;
+import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
+import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
+import cz.muni.fi.pv168.project.ui.model.UnitTableModel;
 import cz.muni.fi.pv168.project.ui.model.tables.IngredientsTable;
 import cz.muni.fi.pv168.project.ui.model.tables.RecipeTable;
 import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
@@ -21,8 +29,7 @@ import cz.muni.fi.pv168.project.ui.renderers.MyFrame;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
 
@@ -40,10 +47,14 @@ public class MainWindow {
     private final RecipeTable recipeTable;
     private final UnitTable unitTable;
     private final IngredientsTable ingredientTable;
+    private final RecipeTableFilter recipeTableFilter;
+    private final UnitTableFilter unitTableFilter;
+    private final IngredientTableFilter ingredientTableFilter;
 
     public MainWindow() {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
+
         // tables
         recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(TestTable.getTableOne()), 0, this::rowSelectionChanged);
         unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(TestTable.getTableTwo()), 3, this::rowSelectionChanged);
@@ -54,12 +65,29 @@ public class MainWindow {
         MainWindowUtilities.hideFirstColumn(unitTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
 
+        // Filters
+        TableRowSorter<RecipeTableModel> recipeRowSorter = new TableRowSorter<>((RecipeTableModel) recipeTable.getModel());
+        RecipeTableFilter recipeFilter = new RecipeTableFilter(recipeRowSorter);
+        recipeTable.setRowSorter(recipeRowSorter);
+        this.recipeTableFilter = recipeFilter;
+
+        TableRowSorter<UnitTableModel> unitRowSorter = new TableRowSorter<>((UnitTableModel) unitTable.getModel());
+        UnitTableFilter unitFilter = new UnitTableFilter(unitRowSorter);
+        unitTable.setRowSorter(unitRowSorter);
+        this.unitTableFilter = unitFilter;
+
+        TableRowSorter<IngredientTableModel> ingredientRowSorter = new TableRowSorter<>((IngredientTableModel) ingredientTable.getModel());
+        IngredientTableFilter ingredientFilter = new IngredientTableFilter(ingredientRowSorter);
+        ingredientTable.setRowSorter(ingredientRowSorter);
+        this.ingredientTableFilter = ingredientFilter;
+
+        // Actions
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
         importAction = new ImportAction();
         exportAction = new ExportAction();
-        filterAction = new FilterRecipeAction();
+        filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
 
         // tables tabs
         JTabbedPane mainFrameTabs = new JTabbedPane();
@@ -91,19 +119,19 @@ public class MainWindow {
                 addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
                 editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
                 deleteAction = new DeleteRecipeAction(recipeTable);
-                filterAction = new FilterRecipeAction();
+                filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
                 break;
             case 1:  // Units tab
                 addAction = new AddUnitAction(unitTable);
                 editAction = new EditUnitAction(unitTable);
                 deleteAction = new DeleteUnitAction(unitTable);
-                filterAction = new FilterUnitAction();
+                filterAction = new FilterUnitAction(unitTable, unitTableFilter);
                 break;
             case 2:  // Ingredients tab
                 addAction = new AddIngredientAction(ingredientTable, unitTable);
                 editAction = new EditIngredientAction(ingredientTable, unitTable);
                 deleteAction = new DeleteIngredientAction(ingredientTable);
-                filterAction = new FilterIngredientAction();
+                filterAction = new FilterIngredientAction(ingredientTable, ingredientTableFilter);
                 break;
         }
 
@@ -116,7 +144,7 @@ public class MainWindow {
         mainFrame.setVisible(true);
     }
 
-    private JToolBar createToolbar() {
+    private JToolBar createToolbar(Component... components) {
         JToolBar toolbar = new JToolBar();
         toolbar.add(quitAction);
         toolbar.addSeparator();
@@ -128,6 +156,12 @@ public class MainWindow {
         toolbar.add(exportAction);
         toolbar.addSeparator();
         toolbar.add(filterAction);
+        toolbar.addSeparator();
+
+        for (Component comp: components) {
+            toolbar.add(comp);
+        }
+
         return toolbar;
     }
 

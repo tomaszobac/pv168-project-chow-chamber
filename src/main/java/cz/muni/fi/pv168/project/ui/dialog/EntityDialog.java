@@ -2,17 +2,14 @@ package cz.muni.fi.pv168.project.ui.dialog;
 
 import net.miginfocom.swing.MigLayout;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.util.Optional;
 
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 
-abstract class EntityDialog<E> {
+abstract class EntityDialog<E> extends JDialog {
     private final JPanel panel = new JPanel();
 
     EntityDialog() {

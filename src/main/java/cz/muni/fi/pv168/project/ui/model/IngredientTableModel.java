@@ -1,21 +1,24 @@
 package cz.muni.fi.pv168.project.ui.model;
 
 import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientTableModel extends AbstractTableModel {
-    private final List<Ingredient> ingredients;
+public class IngredientTableModel extends AbstractTableModel implements EntityTableModel<Ingredient> {
+    private  List<Ingredient> ingredients;
+    private final IngredientCrudService ingredientCrudService;
     private final List<Column<Ingredient, ?>> columns = List.of(
             Column.readonly("Name", String.class, Ingredient::getName),
             Column.readonly("Calories", Double.class, Ingredient::getCalories),
             Column.readonly("Unit", String.class, Ingredient::getUnitName)
     );
 
-    public IngredientTableModel(List<Ingredient> Ingredients) {
-        this.ingredients = new ArrayList<>(Ingredients);
+    public IngredientTableModel(IngredientCrudService ingredientCrudService) {
+        this.ingredientCrudService = ingredientCrudService;
+        this.ingredients = new ArrayList<>(ingredientCrudService.findAll());
     }
 
     @Override
@@ -64,6 +67,11 @@ public class IngredientTableModel extends AbstractTableModel {
     public void updateRow(Ingredient ingredient) {
         int rowIndex = ingredients.indexOf(ingredient);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void refresh() {
+        this.ingredients = new ArrayList<>(ingredientCrudService.findAll());
+        fireTableDataChanged();
     }
 
     public Ingredient getEntity(int rowIndex) {

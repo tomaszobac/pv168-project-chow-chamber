@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeTableModel extends AbstractTableModel implements EntityTableModel<Recipe> {
-    private final List<Recipe> recipes;
+    private List<Recipe> recipes;
     private final CrudService<Recipe> recipeCrudService;
     private final List<Column<Recipe, ?>> columns = List.of(
             Column.readonly("Recipe", Recipe.class, Recipe -> Recipe),
@@ -81,6 +81,11 @@ public class RecipeTableModel extends AbstractTableModel implements EntityTableM
     public void updateRow(Recipe recipe) {
         int rowIndex = recipes.indexOf(recipe);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void refresh() {
+        this.recipes = new ArrayList<>(recipeCrudService.findAll());
+        fireTableDataChanged();
     }
 
     public Recipe getEntity(int rowIndex) {

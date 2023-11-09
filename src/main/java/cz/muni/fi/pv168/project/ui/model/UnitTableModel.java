@@ -1,22 +1,26 @@
 package cz.muni.fi.pv168.project.ui.model;
 
+import cz.muni.fi.pv168.project.business.model.Entity;
 import cz.muni.fi.pv168.project.business.model.Unit;
+import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnitTableModel extends AbstractTableModel {
-    private final List<Unit> units;
+public class UnitTableModel extends AbstractTableModel implements EntityTableModel<Unit> {
+    private List<Unit> units;
+    private final UnitCrudService unitCrudService;
     private final List<Column<Unit, ?>> columns = List.of(
             Column.readonly("Name", String.class, Unit::getName),
             Column.readonly("Type", UnitType.class, Unit::getType),
             Column.readonly("Conversion to base", Double.class, Unit::getConversionToBase)
     );
 
-    public UnitTableModel(List<Unit> units) {
-        this.units = new ArrayList<>(units);
+    public UnitTableModel(UnitCrudService unitCrudService) {
+        this.unitCrudService = unitCrudService;
+        this.units = new ArrayList<>(unitCrudService.findAll());
     }
 
     @Override
@@ -65,6 +69,11 @@ public class UnitTableModel extends AbstractTableModel {
     public void updateRow(Unit ingredient) {
         int rowIndex = units.indexOf(ingredient);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void refresh() {
+        this.units = new ArrayList<>(unitCrudService.findAll());
+        fireTableDataChanged();
     }
 
     public Unit getEntity(int rowIndex) {

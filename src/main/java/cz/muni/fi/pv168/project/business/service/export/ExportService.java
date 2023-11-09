@@ -8,7 +8,6 @@ import java.util.Collection;
 /**
  * Generic mechanism, allowing to export data to a file.
  */
-// TODO: ADD IT TO EXPORT ACTION
 public interface ExportService {
 
     /**

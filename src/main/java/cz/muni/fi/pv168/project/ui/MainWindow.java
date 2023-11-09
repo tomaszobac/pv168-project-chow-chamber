@@ -6,6 +6,8 @@ import cz.muni.fi.pv168.project.business.model.UuidGuidProvider;
 import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
+import cz.muni.fi.pv168.project.business.service.export.GenericExportService;
+import cz.muni.fi.pv168.project.business.service.export.GenericImportService;
 import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
@@ -57,20 +59,32 @@ public class MainWindow {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
 
+        // Storage
         InMemoryRepository<Recipe> recipeRepository = new InMemoryRepository<>(TestTable.getTableOne());
         InMemoryRepository<Unit> unitRepository = new InMemoryRepository<>(TestTable.getTableTwo());
         InMemoryRepository<Ingredient> ingredientRepository = new InMemoryRepository<>(TestTable.getTableThree());
 
+        // Validators
         RecipeValidator recipeValidator = new RecipeValidator();
         UnitValidator unitValidator = new UnitValidator();
         IngredientValidator ingredientValidator = new IngredientValidator();
 
+        // GUID
         UuidGuidProvider guidProvider = new UuidGuidProvider();
 
+        // Services
         RecipeCrudService recipeCrudService = new RecipeCrudService(recipeRepository, recipeValidator, guidProvider);
         UnitCrudService unitCrudService = new UnitCrudService(unitRepository, unitValidator, guidProvider);
         IngredientCrudService ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator, guidProvider);
 
+        /*
+        GenericExportService exportService = new GenericExportService(recipeCrudService,
+                                                                    unitCrudService,
+                                                                    ingredientCrudService, ) // TODO: Add fourth argument which is our export service
+        GenericImportService importService = new GenericImportService(recipeCrudService,
+                                                                    unitCrudService,
+                                                                    ingredientCrudService, ) // TODO: Add fourth argument which is our import service
+        */
 
         // tables
         recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(recipeCrudService), 0, this::rowSelectionChanged);
@@ -87,8 +101,8 @@ public class MainWindow {
         addAction = new AddRecipeAction(recipeTable);
         editAction = new EditRecipeAction(recipeTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
-        importAction = new ImportAction();
-        exportAction = new ExportAction();
+        importAction = new ImportAction(); // TODO: When we get exportService add it here
+        exportAction = new ExportAction(); // TODO: When we get importService add it here
         filterAction = new FilterRecipeAction();
 
         // tables tabs

@@ -1,11 +1,17 @@
-package cz.muni.fi.pv168.project.ui.model.entities;
+package cz.muni.fi.pv168.project.business.model;
 
-public class Ingredient {
+public class Ingredient extends Entity {
     private String name;
     private double calories;
     private Unit unit;
     private double amount = 0;
 
+    public Ingredient(String guid, String name, double calories, Unit unit) {
+        super(guid);
+        this.name = name;
+        this.calories = calories;
+        this.unit = unit;
+    }
     public Ingredient(String name, double calories, Unit unit) {
         this.name = name;
         this.calories = calories;

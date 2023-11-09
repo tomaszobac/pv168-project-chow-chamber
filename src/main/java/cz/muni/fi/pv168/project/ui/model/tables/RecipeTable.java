@@ -1,13 +1,8 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
-import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
-import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
-import cz.muni.fi.pv168.project.ui.dialog.CustomIngredientDialog;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
 import javax.swing.*;

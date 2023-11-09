@@ -1,8 +1,8 @@
 package cz.muni.fi.pv168.project.testGen;
 
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import java.time.LocalTime;

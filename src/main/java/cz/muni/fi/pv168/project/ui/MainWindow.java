@@ -1,5 +1,16 @@
 package cz.muni.fi.pv168.project.ui;
 
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Unit;
+import cz.muni.fi.pv168.project.business.model.UuidGuidProvider;
+import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
+import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
+import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
+import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
+import cz.muni.fi.pv168.project.business.service.validation.Validator;
+import cz.muni.fi.pv168.project.storage.InMemoryRepository;
 import cz.muni.fi.pv168.project.testGen.TestTable;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
@@ -14,6 +25,7 @@ import cz.muni.fi.pv168.project.ui.action.unit.DeleteUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.EditUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.FilterUnitAction;
 import cz.muni.fi.pv168.project.ui.model.*;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.model.tables.IngredientsTable;
 import cz.muni.fi.pv168.project.ui.model.tables.RecipeTable;
 import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
@@ -44,6 +56,22 @@ public class MainWindow {
     public MainWindow() {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
+
+        InMemoryRepository<Recipe> recipeRepository = new InMemoryRepository<>(TestTable.getTableOne());
+        InMemoryRepository<Unit> unitRepository = new InMemoryRepository<>(TestTable.getTableTwo());
+        InMemoryRepository<Ingredient> ingredientRepository = new InMemoryRepository<>(TestTable.getTableThree());
+
+        RecipeValidator recipeValidator = new RecipeValidator();
+        UnitValidator unitValidator = new UnitValidator();
+        IngredientValidator ingredientValidator = new IngredientValidator();
+
+        UuidGuidProvider guidProvider = new UuidGuidProvider();
+
+        RecipeCrudService recipeCrudService = new RecipeCrudService(recipeRepository, recipeValidator, guidProvider);
+        UnitCrudService unitCrudService = new UnitCrudService(unitRepository, unitValidator, guidProvider);
+        IngredientCrudService ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator, guidProvider);
+
+
         // tables
         recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(TestTable.getTableOne()), 0, this::rowSelectionChanged);
         unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(TestTable.getTableTwo()), 3, this::rowSelectionChanged);

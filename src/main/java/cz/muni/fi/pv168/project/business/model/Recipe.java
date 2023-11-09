@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.ui.model.entities;
+package cz.muni.fi.pv168.project.business.model;
 
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 
@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Recipe {
+public class Recipe extends Entity {
     private String name;
     private String instructions;
     private RecipeCategories category;
@@ -15,6 +15,18 @@ public class Recipe {
     private ArrayList<Ingredient> ingredients;
     private int numberOfIngredients = 0;
 
+    public Recipe(String guid, String name, RecipeCategories category, LocalTime time, int portions,
+                  ArrayList<Ingredient> ingredients, String instructions) {
+        super(guid);
+        this.name = name;
+        this.category = category;
+        this.time = time;
+        this.portions = portions;
+        this.ingredients = ingredients;
+        this.numberOfIngredients = ingredients.size();
+        this.instructions = instructions;
+    }
+
     public Recipe(String name, RecipeCategories category, LocalTime time, int portions,
                   ArrayList<Ingredient> ingredients, String instructions) {
         this.name = name;
@@ -22,6 +34,7 @@ public class Recipe {
         this.time = time;
         this.portions = portions;
         this.ingredients = ingredients;
+        this.numberOfIngredients = ingredients.size();
         this.instructions = instructions;
     }
 
@@ -82,6 +95,7 @@ public class Recipe {
 
     public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
+        this.numberOfIngredients = ingredients.size();
     }
     public void addIngredient(Ingredient ingredient) {
         ingredients.add(ingredient);

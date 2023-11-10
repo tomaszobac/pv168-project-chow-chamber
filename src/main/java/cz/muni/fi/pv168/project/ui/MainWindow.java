@@ -8,6 +8,7 @@ import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
 import cz.muni.fi.pv168.project.business.service.export.GenericExportService;
 import cz.muni.fi.pv168.project.business.service.export.GenericImportService;
+import cz.muni.fi.pv168.project.business.service.export.format.BatchJsonExporter;
 import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
@@ -39,6 +40,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import java.awt.*;
+import java.util.List;
 
 
 public class MainWindow {
@@ -47,7 +49,7 @@ public class MainWindow {
     private Action addAction;
     private Action editAction;
     private Action deleteAction;
-    private final Action importAction;
+    //private final Action importAction;
     private final Action exportAction;
     private Action filterAction;
     private JToolBar toolbar;
@@ -77,10 +79,10 @@ public class MainWindow {
         UnitCrudService unitCrudService = new UnitCrudService(unitRepository, unitValidator, guidProvider);
         IngredientCrudService ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator, guidProvider);
 
-        /*
         GenericExportService exportService = new GenericExportService(recipeCrudService,
                                                                     unitCrudService,
-                                                                    ingredientCrudService, ) // TODO: Add fourth argument which is our export service
+                                                                    ingredientCrudService, List.of(new BatchJsonExporter()));
+        /*
         GenericImportService importService = new GenericImportService(recipeCrudService,
                                                                     unitCrudService,
                                                                     ingredientCrudService, ) // TODO: Add fourth argument which is our import service
@@ -101,8 +103,8 @@ public class MainWindow {
         addAction = new AddRecipeAction(recipeTable);
         editAction = new EditRecipeAction(recipeTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
-        importAction = new ImportAction(); // TODO: When we get exportService add it here
-        exportAction = new ExportAction(); // TODO: When we get importService add it here
+        //importAction = new ImportAction(); // TODO: When we get exportService add it here
+        exportAction = new ExportAction(recipeTable, exportService); // TODO: When we get importService add it here
         filterAction = new FilterRecipeAction();
 
         // tables tabs
@@ -168,7 +170,7 @@ public class MainWindow {
         toolbar.add(editAction);
         toolbar.add(deleteAction);
         toolbar.addSeparator();
-        toolbar.add(importAction);
+        //toolbar.add(importAction);
         toolbar.add(exportAction);
         toolbar.addSeparator();
         toolbar.add(filterAction);
@@ -188,7 +190,7 @@ public class MainWindow {
 
         JMenu dataMenu = new JMenu("Data");
         dataMenu.setMnemonic('d');
-        dataMenu.add(importAction);
+        //dataMenu.add(importAction);
         dataMenu.add(exportAction);
         dataMenu.addSeparator();
         dataMenu.add(filterAction);

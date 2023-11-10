@@ -101,4 +101,8 @@ public class Recipe extends Entity {
         ingredients.add(ingredient);
         numberOfIngredients++;
     }
+
+    public int getNumberOfIngredients() {
+        return numberOfIngredients;
+    }
 }

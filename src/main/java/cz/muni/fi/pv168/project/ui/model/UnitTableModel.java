@@ -61,6 +61,7 @@ public class UnitTableModel extends AbstractTableModel implements EntityTableMod
     }
 
     public void addRow(Unit ingredient) {
+        unitCrudService.create(ingredient).intoException();
         int newRowIndex = units.size();
         units.add(ingredient);
         fireTableRowsInserted(newRowIndex, newRowIndex);

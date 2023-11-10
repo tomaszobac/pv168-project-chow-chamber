@@ -2,6 +2,7 @@ package cz.muni.fi.pv168.project.ui.action;
 
 import cz.muni.fi.pv168.project.business.service.export.ImportService;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
+import cz.muni.fi.pv168.project.util.Filter;
 
 import javax.swing.*;
 import java.awt.Component;

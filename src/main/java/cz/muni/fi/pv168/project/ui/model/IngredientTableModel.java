@@ -59,6 +59,7 @@ public class IngredientTableModel extends AbstractTableModel implements EntityTa
     }
 
     public void addRow(Ingredient ingredient) {
+        ingredientCrudService.create(ingredient).intoException();
         int newRowIndex = ingredients.size();
         ingredients.add(ingredient);
         fireTableRowsInserted(newRowIndex, newRowIndex);

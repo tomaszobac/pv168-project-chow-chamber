@@ -15,6 +15,9 @@ public class Recipe extends Entity {
     private ArrayList<Ingredient> ingredients;
     private int numberOfIngredients = 0;
 
+    public Recipe() {
+    }
+
     public Recipe(String guid, String name, RecipeCategories category, LocalTime time, int portions,
                   ArrayList<Ingredient> ingredients, String instructions) {
         super(guid);

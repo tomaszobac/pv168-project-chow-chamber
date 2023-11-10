@@ -26,7 +26,7 @@ public class BatchJsonExporter implements BatchExporter {
         try (var writer = Files.newBufferedWriter(Path.of(filePath), StandardCharsets.UTF_8)) {
             String data = "{";
             writer.write(data);
-            String recipes = "\"Recipes\":[";
+            String recipes = "\"recipes\":[";
             writer.write(recipes);
             boolean start = true;
 
@@ -43,7 +43,7 @@ public class BatchJsonExporter implements BatchExporter {
             writer.write(ending);
             writer.newLine();
 
-            String units = "\"Units\":[";
+            String units = "\"units\":[";
             writer.write(units);
             start = true;
 
@@ -59,7 +59,7 @@ public class BatchJsonExporter implements BatchExporter {
             writer.write(ending);
             writer.newLine();
 
-            String ingredients = "\"Ingredients\":[";
+            String ingredients = "\"ingredients\":[";
             writer.write(ingredients);
             start = true;
 
@@ -86,7 +86,7 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"instructions\":");
         line.append("\"" + recipe.getInstructions() + "\",");
         line.append("\"category\":");
-        line.append("\"" + recipe.getCategoryName() + "\",");
+        line.append("\"" + recipe.getCategory() + "\",");
         line.append("\"time\":");
         line.append("\"" + recipe.getTime().toString() + "\",");
         line.append("\"portions\":");
@@ -97,6 +97,19 @@ public class BatchJsonExporter implements BatchExporter {
             line.append("{");
             line.append("\"name\":");
             line.append("\"" + i.getName() + "\",");
+            line.append("\"calories\":");
+            line.append("\"" + i.getCalories() + "\",");
+            line.append("\"unit\":");
+            line.append("{");
+            line.append("\"name\":");
+            line.append("\"" + i.getUnit().getName() + "\",");
+            line.append("\"type\":");
+            line.append("\"" + i.getUnit().getType().toString() + "\",");
+            line.append("\"conversionToBase\":");
+            line.append("\"" + i.getUnit().getConversionToBase() + "\"");
+            line.append("},");
+            line.append("\"amount\":");
+            line.append("\"" + i.getAmount() + "\"");
             line.append("},");
             flag = false;
         }
@@ -125,7 +138,14 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"calories\":");
         line.append("\"" + ingredient.getCalories() + "\",");
         line.append("\"unit\":");
-        line.append("\"" + ingredient.getUnitName() + "\",");
+        line.append("{");
+        line.append("\"name\":");
+        line.append("\"" + ingredient.getUnit().getName() + "\",");
+        line.append("\"type\":");
+        line.append("\"" + ingredient.getUnit().getType().toString() + "\",");
+        line.append("\"conversionToBase\":");
+        line.append("\"" + ingredient.getUnit().getConversionToBase() + "\"");
+        line.append("},");
         line.append("\"amount\":");
         line.append("\"" + ingredient.getAmount() + "\"");
         line.append("}");

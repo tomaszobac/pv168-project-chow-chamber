@@ -54,6 +54,7 @@ public class IngredientTableModel extends AbstractTableModel implements EntityTa
     }
 
     public void deleteRow(int rowIndex) {
+        ingredientCrudService.deleteByGuid(ingredients.get(rowIndex).getGuid());
         ingredients.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
@@ -66,8 +67,14 @@ public class IngredientTableModel extends AbstractTableModel implements EntityTa
     }
 
     public void updateRow(Ingredient ingredient) {
+        ingredientCrudService.update(ingredient);
         int rowIndex = ingredients.indexOf(ingredient);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void deleteAll() {
+        ingredientCrudService.deleteAll();
+        refresh();
     }
 
     public void refresh() {

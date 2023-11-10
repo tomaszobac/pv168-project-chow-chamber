@@ -11,16 +11,11 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class ImportAction extends AbstractAction {
-
-    private final Component parent;
     private final ImportService importService;
-    private final Runnable callback;
 
-    public ImportAction(Component parent, ImportService importService, Runnable callback) {
+    public ImportAction(ImportService importService) {
         super("Import", Icons.IMPORT_ICON);
-        this.parent = parent;
         this.importService = importService;
-        this.callback = callback;
 
         putValue(SHORT_DESCRIPTION, "Imports data");
         putValue(MNEMONIC_KEY, KeyEvent.VK_I);
@@ -33,15 +28,14 @@ public class ImportAction extends AbstractAction {
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         importService.getFormats().forEach(f -> fileChooser.addChoosableFileFilter(new Filter(f)));
 
-        int dialogResult = fileChooser.showOpenDialog(parent);
+        int dialogResult = fileChooser.showOpenDialog(null);
 
         if (dialogResult == JFileChooser.APPROVE_OPTION) {
             File importFile = fileChooser.getSelectedFile();
 
             importService.importData(importFile.getAbsolutePath());
 
-            callback.run();
-            JOptionPane.showMessageDialog(parent, "Import was done");
+            JOptionPane.showMessageDialog(null, "Import was done");
         }
     }
 }

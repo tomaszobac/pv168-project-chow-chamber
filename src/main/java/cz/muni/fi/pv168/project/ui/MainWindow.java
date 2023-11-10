@@ -9,12 +9,11 @@ import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
 import cz.muni.fi.pv168.project.business.service.export.GenericExportService;
 import cz.muni.fi.pv168.project.business.service.export.GenericImportService;
 import cz.muni.fi.pv168.project.business.service.export.format.BatchJsonExporter;
+import cz.muni.fi.pv168.project.business.service.export.format.BatchJsonImporter;
 import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
-import cz.muni.fi.pv168.project.business.service.validation.Validator;
 import cz.muni.fi.pv168.project.storage.InMemoryRepository;
-import cz.muni.fi.pv168.project.testGen.TestTable;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
 import cz.muni.fi.pv168.project.ui.action.QuitAction;
@@ -45,11 +44,11 @@ import java.util.List;
 
 public class MainWindow {
     private final MyFrame mainFrame;
-    private final Action quitAction = new QuitAction();
+    private final Action quitAction;
     private Action addAction;
     private Action editAction;
     private Action deleteAction;
-    //private final Action importAction;
+    private final Action importAction;
     private final Action exportAction;
     private Action filterAction;
     private JToolBar toolbar;
@@ -62,9 +61,9 @@ public class MainWindow {
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
 
         // Storage
-        InMemoryRepository<Recipe> recipeRepository = new InMemoryRepository<>(TestTable.getTableOne());
-        InMemoryRepository<Unit> unitRepository = new InMemoryRepository<>(TestTable.getTableTwo());
-        InMemoryRepository<Ingredient> ingredientRepository = new InMemoryRepository<>(TestTable.getTableThree());
+        InMemoryRepository<Recipe> recipeRepository = new InMemoryRepository<>(List.of());
+        InMemoryRepository<Unit> unitRepository = new InMemoryRepository<>(List.of());
+        InMemoryRepository<Ingredient> ingredientRepository = new InMemoryRepository<>(List.of());
 
         // Validators
         RecipeValidator recipeValidator = new RecipeValidator();
@@ -79,33 +78,10 @@ public class MainWindow {
         UnitCrudService unitCrudService = new UnitCrudService(unitRepository, unitValidator, guidProvider);
         IngredientCrudService ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator, guidProvider);
 
-        GenericExportService exportService = new GenericExportService(recipeCrudService,
-                                                                    unitCrudService,
-                                                                    ingredientCrudService, List.of(new BatchJsonExporter()));
-        /*
-        GenericImportService importService = new GenericImportService(recipeCrudService,
-                                                                    unitCrudService,
-                                                                    ingredientCrudService, ) // TODO: Add fourth argument which is our import service
-        */
-
         // tables
         recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(recipeCrudService), 0, this::rowSelectionChanged);
         unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(unitCrudService), 3, this::rowSelectionChanged);
         ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(ingredientCrudService), 1, this::rowSelectionChanged);
-
-        TableColumnModel columnModel = recipeTable.getColumnModel();
-        TableColumn column = columnModel.getColumn(0);
-        column.setMinWidth(0);
-        column.setMaxWidth(0);
-        column.setPreferredWidth(0);
-        column.setWidth(0);
-
-        addAction = new AddRecipeAction(recipeTable);
-        editAction = new EditRecipeAction(recipeTable);
-        deleteAction = new DeleteRecipeAction(recipeTable);
-        //importAction = new ImportAction(); // TODO: When we get exportService add it here
-        exportAction = new ExportAction(recipeTable, exportService); // TODO: When we get importService add it here
-        filterAction = new FilterRecipeAction();
 
         // tables tabs
         JTabbedPane mainFrameTabs = new JTabbedPane();
@@ -114,6 +90,33 @@ public class MainWindow {
         mainFrameTabs.addTab("<html><b>Units</b></html>", new JScrollPane(unitTable));
         mainFrameTabs.addTab("<html><b>Ingredients</b></html>", new JScrollPane(ingredientTable));
         mainFrame.add(mainFrameTabs, BorderLayout.CENTER);
+
+        TableColumnModel columnModel = recipeTable.getColumnModel();
+        TableColumn column = columnModel.getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setPreferredWidth(0);
+        column.setWidth(0);
+
+        GenericExportService exportService = new GenericExportService(recipeCrudService,
+                unitCrudService,
+                ingredientCrudService,
+                List.of(new BatchJsonExporter()));
+
+        GenericImportService importService = new GenericImportService((RecipeTableModel) recipeTable.getModel(),
+                (UnitTableModel) unitTable.getModel(),
+                (IngredientTableModel) ingredientTable.getModel(),
+                List.of(new BatchJsonImporter()));
+
+        importService.importData(null);
+
+        addAction = new AddRecipeAction(recipeTable);
+        editAction = new EditRecipeAction(recipeTable);
+        deleteAction = new DeleteRecipeAction(recipeTable);
+        importAction = new ImportAction(importService);
+        exportAction = new ExportAction(exportService);
+        filterAction = new FilterRecipeAction();
+        quitAction = new QuitAction(exportService);
 
         // toolbar
         this.toolbar = createToolbar();
@@ -155,6 +158,7 @@ public class MainWindow {
 
         toolbar = createToolbar();
         mainFrame.add(toolbar, BorderLayout.BEFORE_FIRST_LINE);
+        mainFrame.setJMenuBar(createMenuBar());
         mainFrame.validate();
     }
 
@@ -170,7 +174,7 @@ public class MainWindow {
         toolbar.add(editAction);
         toolbar.add(deleteAction);
         toolbar.addSeparator();
-        //toolbar.add(importAction);
+        toolbar.add(importAction);
         toolbar.add(exportAction);
         toolbar.addSeparator();
         toolbar.add(filterAction);
@@ -190,7 +194,7 @@ public class MainWindow {
 
         JMenu dataMenu = new JMenu("Data");
         dataMenu.setMnemonic('d');
-        //dataMenu.add(importAction);
+        dataMenu.add(importAction);
         dataMenu.add(exportAction);
         dataMenu.addSeparator();
         dataMenu.add(filterAction);

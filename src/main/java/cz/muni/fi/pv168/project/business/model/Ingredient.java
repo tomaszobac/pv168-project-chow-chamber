@@ -6,6 +6,9 @@ public class Ingredient extends Entity {
     private Unit unit;
     private double amount = 0;
 
+    public Ingredient() {
+    }
+
     public Ingredient(String guid, String name, double calories, Unit unit) {
         super(guid);
         this.name = name;

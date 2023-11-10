@@ -12,12 +12,10 @@ import java.io.File;
 
 public class ExportAction extends AbstractAction {
 
-    private final Component parent;
     private final ExportService exportService;
 
-    public ExportAction(Component parent, ExportService exportService) {
+    public ExportAction(ExportService exportService) {
         super("Export", Icons.EXPORT_ICON);
-        this.parent = parent;
         this.exportService = exportService;
 
         putValue(SHORT_DESCRIPTION, "Exports data");
@@ -31,7 +29,7 @@ public class ExportAction extends AbstractAction {
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         exportService.getFormats().forEach(f -> fileChooser.addChoosableFileFilter(new Filter(f)));
 
-        int dialogResult = fileChooser.showSaveDialog(parent);
+        int dialogResult = fileChooser.showSaveDialog(null);
         if (dialogResult == JFileChooser.APPROVE_OPTION) {
             String exportFile = fileChooser.getSelectedFile().getAbsolutePath();
             var filter = fileChooser.getFileFilter();
@@ -41,7 +39,7 @@ public class ExportAction extends AbstractAction {
 
             exportService.exportData(exportFile);
 
-            JOptionPane.showMessageDialog(parent, "Export has successfully finished.");
+            JOptionPane.showMessageDialog(null, "Export has successfully finished.");
         }
     }
 }

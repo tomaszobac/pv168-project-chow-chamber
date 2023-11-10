@@ -7,6 +7,9 @@ public class Unit extends Entity {
     private UnitType type;
     private double conversionToBase; // Conversion factor to a base unit (e.g., liters)
 
+    public Unit() {
+    }
+
     public Unit(String guid, String name, UnitType type, double conversionToBase) {
         super(guid);
         this.name = name;

@@ -68,6 +68,7 @@ public class RecipeTableModel extends AbstractTableModel implements EntityTableM
     }
 
     public void deleteRow(int rowIndex) {
+        recipeCrudService.deleteByGuid(recipes.get(rowIndex).getGuid());
         recipes.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
@@ -80,8 +81,14 @@ public class RecipeTableModel extends AbstractTableModel implements EntityTableM
     }
 
     public void updateRow(Recipe recipe) {
+        recipeCrudService.update(recipe);
         int rowIndex = recipes.indexOf(recipe);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void deleteAll() {
+        recipeCrudService.deleteAll();
+        refresh();
     }
 
     public void refresh() {

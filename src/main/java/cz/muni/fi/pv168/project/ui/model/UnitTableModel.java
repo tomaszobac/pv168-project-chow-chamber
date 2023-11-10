@@ -45,31 +45,38 @@ public class UnitTableModel extends AbstractTableModel implements EntityTableMod
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        var ingredient = getEntity(rowIndex);
-        return columns.get(columnIndex).getValue(ingredient);
+        var unit = getEntity(rowIndex);
+        return columns.get(columnIndex).getValue(unit);
     }
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
-        var ingredient = getEntity(rowIndex);
-        columns.get(columnIndex).setValue(value, ingredient);
+        var unit = getEntity(rowIndex);
+        columns.get(columnIndex).setValue(value, unit);
     }
 
     public void deleteRow(int rowIndex) {
+        unitCrudService.deleteByGuid(units.get(rowIndex).getGuid());
         units.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
 
-    public void addRow(Unit ingredient) {
-        unitCrudService.create(ingredient).intoException();
+    public void addRow(Unit unit) {
+        unitCrudService.create(unit).intoException();
         int newRowIndex = units.size();
-        units.add(ingredient);
+        units.add(unit);
         fireTableRowsInserted(newRowIndex, newRowIndex);
     }
 
-    public void updateRow(Unit ingredient) {
-        int rowIndex = units.indexOf(ingredient);
+    public void updateRow(Unit unit) {
+        unitCrudService.update(unit);
+        int rowIndex = units.indexOf(unit);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void deleteAll() {
+        unitCrudService.deleteAll();
+        refresh();
     }
 
     public void refresh() {

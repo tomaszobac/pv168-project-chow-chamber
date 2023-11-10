@@ -3,62 +3,56 @@ package cz.muni.fi.pv168.project.business.service.export;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
-import cz.muni.fi.pv168.project.business.service.crud.CrudService;
+import cz.muni.fi.pv168.project.business.service.export.batch.Batch;
 import cz.muni.fi.pv168.project.business.service.export.batch.BatchImporter;
-import cz.muni.fi.pv168.project.business.service.export.batch.BatchOperationException;
+import cz.muni.fi.pv168.project.business.service.export.format.BatchJsonImporter;
 import cz.muni.fi.pv168.project.business.service.export.format.Format;
 import cz.muni.fi.pv168.project.business.service.export.format.FormatMapping;
+import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
+import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
+import cz.muni.fi.pv168.project.ui.model.UnitTableModel;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Generic synchronous implementation of the {@link ImportService}.
  */
 public class GenericImportService implements ImportService {
 
-    private final CrudService<Recipe> recipeCrudService;
-    private final CrudService<Unit> unitCrudService;
-    private final CrudService<Ingredient> ingredientCrudService;
+    private final RecipeTableModel recipeTableModel;
+    private final UnitTableModel unitTableModel;
+    private final IngredientTableModel ingredientTableModel;
     private final FormatMapping<BatchImporter> importers;
 
     public GenericImportService(
-            CrudService<Recipe> recipeCrudService,
-            CrudService<Unit> unitCrudService,
-            CrudService<Ingredient> ingredientCrudService,
-            Collection<BatchImporter> importers
-    ) {
-        this.recipeCrudService = recipeCrudService;
-        this.unitCrudService = unitCrudService;
-        this.ingredientCrudService = ingredientCrudService;
+            RecipeTableModel recipeTableModel,
+            UnitTableModel unitTableModel,
+            IngredientTableModel ingredientTableModel,
+            Collection<BatchImporter> importers) {
+        this.recipeTableModel = recipeTableModel;
+        this.unitTableModel = unitTableModel;
+        this.ingredientTableModel = ingredientTableModel;
         this.importers = new FormatMapping<>(importers);
     }
 
     @Override
     public void importData(String filePath) {
-        recipeCrudService.deleteAll();
-        ingredientCrudService.deleteAll();
-        unitCrudService.deleteAll();
+        recipeTableModel.deleteAll();
+        ingredientTableModel.deleteAll();
+        unitTableModel.deleteAll();
 
-        var batch = getImporter(filePath).importBatch(filePath);
+        BatchJsonImporter batchJsonImporter = new BatchJsonImporter();
+        Batch batch = batchJsonImporter.importBatch(
+                Objects.requireNonNullElse(filePath, "src/main/resources/database.json"));
 
         batch.units().forEach(this::createUnit);
         batch.ingredients().forEach(this::createIngredients);
         batch.recipes().forEach(this::createRecipe);
-    }
 
-    private void createUnit(Unit unit) {
-        unitCrudService.create(unit)
-                .intoException();
-    }
-
-    private void createIngredients(Ingredient ingredient) {
-        ingredientCrudService.create(ingredient)
-                .intoException();
-    }
-
-    private void createRecipe(Recipe recipe) {
-        recipeCrudService.create(recipe)
-                .intoException();
+        recipeTableModel.refresh();
+        ingredientTableModel.refresh();
+        unitTableModel.refresh();
     }
 
     @Override
@@ -66,13 +60,15 @@ public class GenericImportService implements ImportService {
         return importers.getFormats();
     }
 
-    private BatchImporter getImporter(String filePath) {
-        var extension = filePath.substring(filePath.lastIndexOf('.') + 1);
-        var importer = importers.findByExtension(extension);
-        if (importer == null) {
-            throw new BatchOperationException("Extension %s has no registered formatter".formatted(extension));
-        }
+    private void createUnit(Unit unit) {
+        unitTableModel.addRow(unit);
+    }
 
-        return importer;
+    private void createIngredients(Ingredient ingredient) {
+        ingredientTableModel.addRow(ingredient);
+    }
+
+    private void createRecipe(Recipe recipe) {
+        recipeTableModel.addRow(recipe);
     }
 }

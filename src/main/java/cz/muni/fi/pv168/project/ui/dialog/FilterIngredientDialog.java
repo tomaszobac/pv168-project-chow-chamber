@@ -76,8 +76,8 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
             // Portions
             String fromCaloriesString = fromCaloriesField.getText();
             String toCaloriesString = toCaloriesField.getText();
-            Double fromCalories = fromCaloriesString.equals("") ? 0.0 : Double.parseDouble(fromCaloriesString);
-            Double toCalories = toCaloriesString.equals("") ? Double.MAX_VALUE : Double.parseDouble(fromCaloriesString);
+            Double fromCalories = fromCaloriesString.isEmpty() ? 0.0 : Double.parseDouble(fromCaloriesString);
+            Double toCalories = toCaloriesString.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(toCaloriesString);
             ingredientTableFilter.filterCalories(fromCalories, toCalories);
 
             // Name

@@ -12,7 +12,7 @@ public class UnitNameMatcher extends EntityMatcher<Unit> {
 
     @Override
     public boolean evaluate(Unit unit) {
-        if (name.equals("")) {
+        if (name.isEmpty()) {
             return true;
         }
         return unit.getName().toLowerCase().contains(this.name.toLowerCase());

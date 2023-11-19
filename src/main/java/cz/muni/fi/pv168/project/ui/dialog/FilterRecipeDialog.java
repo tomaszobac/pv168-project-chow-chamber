@@ -114,8 +114,8 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
             // Portions
             String fromPortionsString = fromPortionsField.getText();
             String toPortionsString = toPortionsField.getText();
-            int fromPortions = fromPortionsString.equals("") ? 0 : Integer.parseInt(fromPortionsString);
-            int toPortions = toPortionsString.equals("") ? Integer.MAX_VALUE : Integer.parseInt(toPortionsString);
+            int fromPortions = fromPortionsString.isEmpty() ? 0 : Integer.parseInt(fromPortionsString);
+            int toPortions = toPortionsString.isEmpty() ? Integer.MAX_VALUE : Integer.parseInt(toPortionsString);
             recipeTableFilter.filterPortions(fromPortions, toPortions);
 
             // Times
@@ -123,8 +123,8 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
             String toTimeString = toTimeField.getText();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            LocalTime fromTime = fromTimeString.equals("") ? LocalTime.of(0, 0) : LocalTime.parse(fromTimeString, formatter);
-            LocalTime toTime = fromTimeString.equals("") ? LocalTime.of(23, 59) : LocalTime.parse(toTimeString, formatter);
+            LocalTime fromTime = fromTimeString.isEmpty() ? LocalTime.of(0, 0) : LocalTime.parse(fromTimeString, formatter);
+            LocalTime toTime = fromTimeString.isEmpty() ? LocalTime.of(23, 59) : LocalTime.parse(toTimeString, formatter);
             recipeTableFilter.filterTime(fromTime, toTime);
 
             // Name

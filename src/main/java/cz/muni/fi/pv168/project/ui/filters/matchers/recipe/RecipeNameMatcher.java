@@ -12,7 +12,7 @@ public class RecipeNameMatcher extends EntityMatcher<Recipe> {
 
     @Override
     public boolean evaluate(Recipe recipe) {
-        if (name.equals("")) {
+        if (name.isEmpty()) {
             return true;
         }
         return recipe.getName().toLowerCase().contains(this.name.toLowerCase());

@@ -47,20 +47,32 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         add("Time:", timeField);
         add("Portions:", portionsField);
 
-        // Add a button to create a custom ingredient
-        JButton createCustomIngredientButton = new JButton("Add ingredient(s) to recipe");
-        createCustomIngredientButton.setOpaque(true);
-        createCustomIngredientButton.setForeground(Color.WHITE);
-        Font buttonFont = createCustomIngredientButton.getFont();
-        createCustomIngredientButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
-        createCustomIngredientButton.setBackground(new Color(26, 72, 93));
-        createCustomIngredientButton.addActionListener(e -> createCustomIngredient(ingredientTable, unitTable));
-        add("", createCustomIngredientButton);
+        JButton customIngredientButton = createCustomIngredientButton(ingredientTable, unitTable);
+        add("", customIngredientButton);
 
         // Add instructions area
         JScrollPane instructionsScrollPane = new JScrollPane(instructionsArea);
         instructionsScrollPane.setPreferredSize(new Dimension(400, 300));
         add("Instructions:", instructionsScrollPane, "wmin 250lp, grow, gapy 10");
+    }
+
+    /**
+     * Creates a JButton for adding ingredient(s) to a recipe.
+     *
+     * @param ingredientTable The JTable displaying existing ingredients.
+     * @param unitTable       The JTable displaying available units for ingredients.
+     *
+     * @return A styled JButton configured for adding ingredient(s) to a recipe.
+     */
+    private JButton createCustomIngredientButton(JTable ingredientTable, JTable unitTable) {
+        JButton customIngredientButton = new JButton("Add ingredient(s) to recipe");
+        customIngredientButton.setOpaque(true);
+        customIngredientButton.setForeground(Color.WHITE);
+        Font buttonFont = customIngredientButton.getFont();
+        customIngredientButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
+        customIngredientButton.setBackground(new Color(26, 72, 93));
+        customIngredientButton.addActionListener(e -> createCustomIngredient(ingredientTable, unitTable));
+        return customIngredientButton;
     }
 
     private void createCustomIngredient(JTable ingredientTable, JTable unitTable) {

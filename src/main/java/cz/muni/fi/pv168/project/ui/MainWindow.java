@@ -52,6 +52,7 @@ public class MainWindow {
     private final Action exportAction;
     private Action filterAction;
     private JToolBar toolbar;
+    private JMenuBar menubar;
     private final RecipeTable recipeTable;
     private final UnitTable unitTable;
     private final IngredientsTable ingredientTable;
@@ -108,19 +109,23 @@ public class MainWindow {
         // toolbar
         this.toolbar = createToolbar();
         mainFrame.add(this.toolbar, BorderLayout.BEFORE_FIRST_LINE);
-        mainFrame.setJMenuBar(createMenuBar());
+
+        // menubar
+        this.menubar = createMenuBar();
+        mainFrame.setJMenuBar(this.menubar);
 
         recipeTable.setMouseListener(recipeTable);
         unitTable.setMouseListener(unitTable);
         ingredientTable.setMouseListener(ingredientTable);
 
-        mainFrameTabs.addChangeListener(e -> updateToolbar(mainFrameTabs.getSelectedIndex()));
+        mainFrameTabs.addChangeListener(e -> updateActions(mainFrameTabs.getSelectedIndex()));
 
         mainFrame.pack();
     }
 
-    private void updateToolbar(int selectedIndex) {
+    private void updateActions(int selectedIndex) {
         mainFrame.remove(this.toolbar);
+        mainFrame.remove(this.menubar);
 
         switch (selectedIndex) {
             case 0:  // Recipes tab
@@ -144,7 +149,10 @@ public class MainWindow {
         }
 
         toolbar = createToolbar();
+        menubar = createMenuBar();
+
         mainFrame.add(toolbar, BorderLayout.BEFORE_FIRST_LINE);
+        mainFrame.setJMenuBar(menubar);
         mainFrame.validate();
     }
 
@@ -154,8 +162,6 @@ public class MainWindow {
 
     private JToolBar createToolbar(Component... components) {
         JToolBar toolbar = new JToolBar();
-        toolbar.add(quitAction);
-        toolbar.addSeparator();
         toolbar.add(addAction);
         toolbar.add(editAction);
         toolbar.add(deleteAction);

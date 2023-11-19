@@ -84,14 +84,7 @@ public class IngredientsTable extends MyTable {
         Ingredient ingredient = (Ingredient) ingredientTable.getValueAt(ingredientTable.getSelectedRow(), 0);
 
         // Create a JPanel to display the Ingredient information
-        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(ingredient.getName(), 0));
-        infoPanel.add(MainWindowUtilities.createLabel("Calories:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(Double.toString(ingredient.getCalories()), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Unit:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(ingredient.getUnit().toString(), 1));
+        JPanel infoPanel = createInfoPanel(ingredient);
 
         // Add more labels for other Ingredient attributes here
         singleIngredientInfo.addTab("Basic info", null, infoPanel, "First Tab");
@@ -116,6 +109,18 @@ public class IngredientsTable extends MyTable {
         ingredientInfoTabs.setTabComponentAt(tabIndex, customTabComponent);
         // Set the selected tab
         ingredientInfoTabs.setSelectedIndex(tabIndex);
+    }
+
+    private JPanel createInfoPanel(Ingredient ingredient) {
+        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(ingredient.getName(), 0));
+        infoPanel.add(MainWindowUtilities.createLabel("Calories:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(Double.toString(ingredient.getCalories()), 1));
+        infoPanel.add(MainWindowUtilities.createLabel("Unit:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(ingredient.getUnit().toString(), 1));
+        return infoPanel;
     }
 
     private JButton getJButton(JTabbedPane singleIngredientInfo) {

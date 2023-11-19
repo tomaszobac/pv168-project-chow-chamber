@@ -92,16 +92,7 @@ public class RecipeTable extends MyTable {
         Recipe recipe = (Recipe) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0);
 
         // Create a JPanel to display the recipe information
-        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipe.getName(), 0), 1);
-        infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipe.getCategoryName(), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipe.getTime().toString(), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(Integer.toString(recipe.getPortions()), 1));
+        JPanel infoPanel = createInfoPanel(recipe);
 
         // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "Basic information of the recipe");
@@ -142,6 +133,20 @@ public class RecipeTable extends MyTable {
         recipesInfoFrame.add(recipesInfoTabs);
         recipesInfoFrame.pack();
         recipesInfoFrame.setVisible(true);
+    }
+
+    private JPanel createInfoPanel(Recipe recipe) {
+        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getName(), 0), 1);
+        infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getCategoryName(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getTime().toString(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(Integer.toString(recipe.getPortions()), 1));
+        return infoPanel;
     }
 
     private void createNewRecipeTab(JTabbedPane singleRecipeInfo, String name) {

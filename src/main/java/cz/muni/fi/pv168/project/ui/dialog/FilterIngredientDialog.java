@@ -87,7 +87,7 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
 
             // Name
             ingredientTableFilter.filterName(nameField.getText());
-        } catch (Exception e) {
+        } catch (NumberFormatException numberFormatException) {
             JOptionPane.showMessageDialog(FilterIngredientDialog.this,
                     "Incorrect filter parameters",
                     "Error",

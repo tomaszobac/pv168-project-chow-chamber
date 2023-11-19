@@ -11,8 +11,8 @@ public class RecipeIngredientsTableModel extends AbstractTableModel {
     private final List<Column<Ingredient, ?>> columns = List.of(
             Column.readonly("Name", String.class, Ingredient::getName),
             Column.readonly("Amount", Double.class, Ingredient::getAmount),
-            Column.readonly("Unit", String.class, Ingredient::getUnitName),
-            Column.readonly("Calories", Double.class, Ingredient::getCaloriesPerSetAmount)
+            Column.readonly("Unit", String.class, ingredient -> ingredient.getUnit().getName()),
+            Column.readonly("Calories", Double.class, Ingredient::getCaloriesPerSetAmount)  
     );
 
     @Override

@@ -27,10 +27,6 @@ public class Ingredient {
         return unit;
     }
 
-    public String getUnitName() {
-        return unit.getName();
-    }
-
     public void setName(String name) {
         this.name = name;
     }

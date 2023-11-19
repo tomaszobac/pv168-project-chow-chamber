@@ -17,6 +17,7 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     private final RecipeTableFilter recipeTableFilter;
@@ -130,7 +131,7 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
             // Name
             recipeTableFilter.filterName(nameField.getText());
 
-        } catch (Exception e) {
+        } catch (NumberFormatException | DateTimeParseException e) {
             JOptionPane.showMessageDialog(FilterRecipeDialog.this,
                     "Incorrect filter parameters",
                     "Error",

@@ -1,9 +1,8 @@
 package cz.muni.fi.pv168.project.ui.renderers;
 
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 
 public class UnitTypeRenderer extends AbstractRenderer<UnitType> {
     public UnitTypeRenderer() {

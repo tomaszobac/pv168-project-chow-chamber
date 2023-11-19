@@ -3,7 +3,10 @@ package cz.muni.fi.pv168.project.ui.dialog;
 import cz.muni.fi.pv168.project.ui.model.entities.Unit;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
-import javax.swing.*;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import java.time.DateTimeException;
 
 public class UnitDialog extends EntityDialog<Unit> {

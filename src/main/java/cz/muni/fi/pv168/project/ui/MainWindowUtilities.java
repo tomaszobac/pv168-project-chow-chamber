@@ -8,13 +8,17 @@ import cz.muni.fi.pv168.project.ui.renderers.MyFrame;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 import cz.muni.fi.pv168.project.ui.renderers.UnifiedTableCellRenderer;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.time.LocalTime;
 
 public class MainWindowUtilities {

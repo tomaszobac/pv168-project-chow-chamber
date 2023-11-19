@@ -2,8 +2,7 @@ package cz.muni.fi.pv168.project.ui.renderers;
 
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
 
-import javax.swing.*;
-import java.util.Map;
+import javax.swing.JLabel;
 
 public class CategoryRenderer extends AbstractRenderer<RecipeCategories> {
     public CategoryRenderer() {

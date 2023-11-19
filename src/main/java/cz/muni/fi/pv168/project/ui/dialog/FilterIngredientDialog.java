@@ -2,7 +2,8 @@ package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.ui.filters.IngredientTableFilter;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;

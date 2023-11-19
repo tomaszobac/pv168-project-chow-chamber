@@ -2,13 +2,11 @@ package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
 import cz.muni.fi.pv168.project.ui.model.entities.Unit;
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
-import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
-import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import java.time.DateTimeException;
-import java.util.ArrayList;
 
 public class IngredientDialog extends EntityDialog<Ingredient> {
     private final JTextField nameField = new JTextField();

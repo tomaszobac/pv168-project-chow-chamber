@@ -1,5 +1,6 @@
 package cz.muni.fi.pv168.project.ui;
 
+
 import cz.muni.fi.pv168.project.testGen.TestTable;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
@@ -27,11 +28,18 @@ import cz.muni.fi.pv168.project.ui.model.tables.RecipeTable;
 import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
 import cz.muni.fi.pv168.project.ui.renderers.MyFrame;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
 
 
 public class MainWindow {

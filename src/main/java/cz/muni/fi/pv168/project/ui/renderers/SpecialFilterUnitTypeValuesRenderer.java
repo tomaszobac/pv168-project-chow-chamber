@@ -1,10 +1,9 @@
 package cz.muni.fi.pv168.project.ui.renderers;
 
-import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterUnitTypeValues;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class SpecialFilterUnitTypeValuesRenderer extends AbstractRenderer<SpecialFilterUnitTypeValues> {
     public SpecialFilterUnitTypeValuesRenderer() {

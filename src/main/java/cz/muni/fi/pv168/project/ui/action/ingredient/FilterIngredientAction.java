@@ -1,12 +1,12 @@
 package cz.muni.fi.pv168.project.ui.action.ingredient;
 
 import cz.muni.fi.pv168.project.ui.dialog.FilterIngredientDialog;
-import cz.muni.fi.pv168.project.ui.dialog.FilterRecipeDialog;
 import cz.muni.fi.pv168.project.ui.filters.IngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.tables.IngredientsTable;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 

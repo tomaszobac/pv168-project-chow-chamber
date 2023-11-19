@@ -12,7 +12,7 @@ public class RecipeTableModel extends AbstractTableModel implements EntityTableM
     private final List<Column<Recipe, ?>> columns = List.of(
             Column.readonly("Recipe", Recipe.class, Recipe -> Recipe),
             Column.readonly("Name", String.class, Recipe::getName),
-            Column.readonly("Category", String.class, Recipe::getCategoryName),
+            Column.readonly("Category", String.class, recipe -> recipe.getCategory().getCategory()),
             Column.readonly("Time", LocalTime.class, Recipe::getTime),
             Column.readonly("Portions", Integer.class, Recipe::getPortions)
     );

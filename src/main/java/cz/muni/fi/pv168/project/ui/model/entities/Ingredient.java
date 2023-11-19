@@ -1,5 +1,7 @@
 package cz.muni.fi.pv168.project.ui.model.entities;
 
+import java.util.Objects;
+
 public class Ingredient {
     private String name;
     private double calories;
@@ -7,15 +9,13 @@ public class Ingredient {
     private double amount = 0;
 
     public Ingredient(String name, double calories, Unit unit) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "Name must not be null");
         this.calories = calories;
-        this.unit = unit;
+        this.unit = Objects.requireNonNull(unit, "Unit must not be null");
     }
 
     public Ingredient(String name, double calories, Unit unit, double amount) {
-        this.name = name;
-        this.calories = calories;
-        this.unit = unit;
+        this(name, calories, unit);
         this.amount = amount;
     }
 
@@ -28,17 +28,11 @@ public class Ingredient {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name must not be null");
     }
-
 
     public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
-    @Override
-    public String toString() {
-        return name;
+        this.unit = Objects.requireNonNull(unit, "unit must not be null");
     }
 
     public double getCalories() {
@@ -55,5 +49,11 @@ public class Ingredient {
 
     public double getCaloriesPerSetAmount() {
         return amount * calories;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Ingredient{name: %s; calories: %.2f; unit: %s; amount: %.2f}",
+                name, calories, unit.getName(), amount);
     }
 }

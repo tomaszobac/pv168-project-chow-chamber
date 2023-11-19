@@ -3,7 +3,7 @@ package cz.muni.fi.pv168.project.ui.dialog;
 import cz.muni.fi.pv168.project.ui.filters.RecipeTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.components.FilterComboboxBuilder;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 import cz.muni.fi.pv168.project.ui.renderers.CategoryRenderer;
 import cz.muni.fi.pv168.project.ui.renderers.SpecialFilterCategoryValuesRenderer;
 import cz.muni.fi.pv168.project.util.Either;
@@ -22,7 +22,7 @@ import java.time.format.DateTimeParseException;
 public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     private final RecipeTableFilter recipeTableFilter;
     private final JTextField nameField = new JTextField();
-    private final JComboBox<Either<SpecialFilterCategoryValues, RecipeCategories>> categoryComboBox;
+    private final JComboBox<Either<SpecialFilterCategoryValues, RecipeCategory>> categoryComboBox;
     private final JTextField fromTimeField = new JTextField();
     private final JTextField toTimeField = new JTextField();
     private final JTextField fromPortionsField = new JTextField();
@@ -67,9 +67,9 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
         add("Portions to:", toPortionsField);
     }
 
-    private static JComboBox<Either<SpecialFilterCategoryValues, RecipeCategories>> createCategoryFilter(
+    private static JComboBox<Either<SpecialFilterCategoryValues, RecipeCategory>> createCategoryFilter(
             RecipeTableFilter recipeTableFilter) {
-        return FilterComboboxBuilder.create(SpecialFilterCategoryValues.class, RecipeCategories.values())
+        return FilterComboboxBuilder.create(SpecialFilterCategoryValues.class, RecipeCategory.values())
                 .setSpecialValuesRenderer(new SpecialFilterCategoryValuesRenderer())
                 .setValuesRenderer(new CategoryRenderer())
                 .setFilter(recipeTableFilter::filterCategory)

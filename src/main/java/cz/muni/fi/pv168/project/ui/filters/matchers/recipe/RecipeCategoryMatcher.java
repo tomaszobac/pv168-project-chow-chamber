@@ -2,12 +2,12 @@ package cz.muni.fi.pv168.project.ui.filters.matchers.recipe;
 
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 public class RecipeCategoryMatcher extends EntityMatcher<Recipe> {
-    private final RecipeCategories category;
+    private final RecipeCategory category;
 
-    public RecipeCategoryMatcher(RecipeCategories category) {
+    public RecipeCategoryMatcher(RecipeCategory category) {
         this.category = category;
     }
 

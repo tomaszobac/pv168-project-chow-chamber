@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories.PRILOHA;
+import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory.PRILOHA;
 
 public class AddRecipeAction extends AbstractAction {
     private final JTable recipeTable;

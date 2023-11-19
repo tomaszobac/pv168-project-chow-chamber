@@ -1,7 +1,7 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -20,7 +20,7 @@ import java.time.LocalTime;
 
 public class RecipeDialog extends EntityDialog<Recipe> {
     private final JTextField nameField = new JTextField();
-    private final ComboBoxModel<RecipeCategories> categoryField = new DefaultComboBoxModel<>(RecipeCategories.values());
+    private final ComboBoxModel<RecipeCategory> categoryField = new DefaultComboBoxModel<>(RecipeCategory.values());
     private final JTextField timeField = new JTextField();
     private final JTextField portionsField = new JTextField();
     private final JTextArea instructionsArea = new JTextArea();
@@ -84,7 +84,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     @Override
     Recipe getEntity() {
         recipe.setName(nameField.getText());
-        recipe.setCategory((RecipeCategories) categoryField.getSelectedItem());
+        recipe.setCategory((RecipeCategory) categoryField.getSelectedItem());
         recipe.setInstructions(instructionsArea.getText());
         try {
             recipe.setTime(LocalTime.parse(timeField.getText()));

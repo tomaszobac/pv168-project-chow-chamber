@@ -9,7 +9,7 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipePortionsMatcher
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 import cz.muni.fi.pv168.project.util.Either;
 
 import javax.swing.table.TableRowSorter;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 public class RecipeTableFilter {
     private final RecipeCompoundMatcher recipeCompoundMatcher;
-    private Either<SpecialFilterCategoryValues, RecipeCategories> selectedCategoryValue = Either.left(SpecialFilterCategoryValues.ALL);
+    private Either<SpecialFilterCategoryValues, RecipeCategory> selectedCategoryValue = Either.left(SpecialFilterCategoryValues.ALL);
     private Integer portionsFrom = 0;
     private Integer portionsTo = Integer.MAX_VALUE;
     private LocalTime timeFrom = LocalTime.of(0,0);
@@ -30,7 +30,7 @@ public class RecipeTableFilter {
         rowSorter.setRowFilter(recipeCompoundMatcher);
     }
 
-    public void filterCategory(Either<SpecialFilterCategoryValues, RecipeCategories> selectedItem) {
+    public void filterCategory(Either<SpecialFilterCategoryValues, RecipeCategory> selectedItem) {
         selectedCategoryValue = selectedItem;
         selectedItem.apply(
                 l -> recipeCompoundMatcher.setCategoryMatcher(l.getMatcher()),
@@ -55,7 +55,7 @@ public class RecipeTableFilter {
         recipeCompoundMatcher.setNameMatcher(new RecipeNameMatcher(name));
     }
 
-    public Either<SpecialFilterCategoryValues, RecipeCategories> getSelectedCategoryValue() {
+    public Either<SpecialFilterCategoryValues, RecipeCategory> getSelectedCategoryValue() {
         return selectedCategoryValue;
     }
 

@@ -9,7 +9,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories.*;
+import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory.HLAVNI_JIDLO;
+import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory.NONE;
+import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory.PRILOHA;
+
 
 /**
  *

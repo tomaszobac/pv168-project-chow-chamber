@@ -141,7 +141,7 @@ public class RecipeTable extends MyTable {
         infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
         infoPanel.add(MainWindowUtilities.createLabel(recipe.getName(), 0), 1);
         infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipe.getCategoryName(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getCategory().getCategory(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
         infoPanel.add(MainWindowUtilities.createLabel(recipe.getTime().toString(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));

@@ -37,16 +37,19 @@ public class RecipeTableFilter {
                 r -> recipeCompoundMatcher.setCategoryMatcher(new RecipeCategoryMatcher(r))
         );
     }
+
     public void filterPortions(Integer from, Integer to) {
         this.portionsFrom = from;
         this.portionsTo = to;
         recipeCompoundMatcher.setPortionsMatcher(new RecipePortionsMatcher(from, to));
     }
+
     public void filterTime(LocalTime from, LocalTime to) {
         this.timeFrom = from;
         this.timeTo = to;
         recipeCompoundMatcher.setTimeMatcher(new RecipeLocalTimeMatcher(from, to));
     }
+
     public void filterName(String name) {
         this.name = name;
         recipeCompoundMatcher.setNameMatcher(new RecipeNameMatcher(name));
@@ -98,14 +101,17 @@ public class RecipeTableFilter {
             this.categoryMatcher = categoryMatcher;
             rowSorter.sort();
         }
+
         private void setPortionsMatcher(EntityMatcher<Recipe> portionsMatcher) {
             this.portionsMatcher = portionsMatcher;
             rowSorter.sort();
         }
+
         private void setTimeMatcher(EntityMatcher<Recipe> timeMatcher) {
             this.timeMatcher = timeMatcher;
             rowSorter.sort();
         }
+
         private  void setNameMatcher(EntityMatcher<Recipe> nameMatcher) {
             this.nameMatcher = nameMatcher;
             rowSorter.sort();

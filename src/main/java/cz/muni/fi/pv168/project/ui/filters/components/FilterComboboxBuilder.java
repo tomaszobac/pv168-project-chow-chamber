@@ -18,8 +18,7 @@ import java.util.function.Consumer;
  * @param <L> Enum with special selectable values.
  * @param <R> Type of ordinary selectable values (entities).
  */
-public class FilterComboboxBuilder<L extends Enum<L>, R>
-{
+public class FilterComboboxBuilder<L extends Enum<L>, R> {
     private final Class<L> clazz;
     private final ComboBoxModel<R> values;
     private AbstractRenderer<L> specialValuesRenderer;
@@ -27,8 +26,7 @@ public class FilterComboboxBuilder<L extends Enum<L>, R>
     private Either<L, R> selectedItem;
     private Consumer<Either<L, R>> filter;
 
-    private FilterComboboxBuilder(Class<L> clazz, ComboBoxModel<R> values)
-    {
+    private FilterComboboxBuilder(Class<L> clazz, ComboBoxModel<R> values) {
         this.clazz = clazz;
         this.values = values;
     }
@@ -52,32 +50,27 @@ public class FilterComboboxBuilder<L extends Enum<L>, R>
         return comboBox;
     }
 
-    public FilterComboboxBuilder<L, R> setSpecialValuesRenderer(AbstractRenderer<L> specialValuesRenderer)
-    {
+    public FilterComboboxBuilder<L, R> setSpecialValuesRenderer(AbstractRenderer<L> specialValuesRenderer) {
         this.specialValuesRenderer = specialValuesRenderer;
         return this;
     }
 
-    public FilterComboboxBuilder<L, R> setValuesRenderer(AbstractRenderer<R> valuesRenderer)
-    {
+    public FilterComboboxBuilder<L, R> setValuesRenderer(AbstractRenderer<R> valuesRenderer) {
         this.valuesRenderer = valuesRenderer;
         return this;
     }
 
-    public FilterComboboxBuilder<L, R> setSelectedItem(L selectedItem)
-    {
+    public FilterComboboxBuilder<L, R> setSelectedItem(L selectedItem) {
         this.selectedItem = Either.left(selectedItem);
         return this;
     }
 
-    public FilterComboboxBuilder<L, R> setSelectedItem(R selectedItem)
-    {
+    public FilterComboboxBuilder<L, R> setSelectedItem(R selectedItem) {
         this.selectedItem = Either.right(selectedItem);
         return this;
     }
 
-    public FilterComboboxBuilder<L, R> setFilter(Consumer<Either<L, R>> filter)
-    {
+    public FilterComboboxBuilder<L, R> setFilter(Consumer<Either<L, R>> filter) {
         this.filter = filter;
         return this;
     }

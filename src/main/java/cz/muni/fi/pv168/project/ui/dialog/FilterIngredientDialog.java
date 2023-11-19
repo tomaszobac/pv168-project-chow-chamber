@@ -39,9 +39,14 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
         add("Calories to:", toCaloriesField);
     }
 
-    // Set a DocumentFilter to allow only numeric input and a single decimal point
+    /**
+     * Sets a DocumentFilter on the provided JTextField to allow only numeric input with a single decimal point.
+     * The DocumentFilter ensures that only valid numeric characters (0-9) and a single decimal point are allowed.
+     * If the input contains non-numeric characters or more than one decimal point, the insertion is rejected.
+     *
+     * @param textField The JTextField to which the DocumentFilter will be applied.
+     */
     public static void setNumericWithDecimalFilter(JTextField textField) {
-        // Set a DocumentFilter to allow only numeric input with a configurable decimal point
         Document doc = new PlainDocument() {
             @Override
             public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {

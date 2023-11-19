@@ -50,16 +50,16 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         // Add a button to create a custom ingredient
         JButton createCustomIngredientButton = new JButton("Add ingredient(s) to recipe");
         createCustomIngredientButton.setOpaque(true);
-        createCustomIngredientButton.setForeground(Color.WHITE); // Set the text color to white
+        createCustomIngredientButton.setForeground(Color.WHITE);
         Font buttonFont = createCustomIngredientButton.getFont();
-        createCustomIngredientButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize())); // Make the text bold
+        createCustomIngredientButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
         createCustomIngredientButton.setBackground(new Color(26, 72, 93));
         createCustomIngredientButton.addActionListener(e -> createCustomIngredient(ingredientTable, unitTable));
         add("", createCustomIngredientButton);
 
         // Add instructions area
         JScrollPane instructionsScrollPane = new JScrollPane(instructionsArea);
-        instructionsScrollPane.setPreferredSize(new Dimension(400, 300)); // Set your desired dimensions
+        instructionsScrollPane.setPreferredSize(new Dimension(400, 300));
         add("Instructions:", instructionsScrollPane, "wmin 250lp, grow, gapy 10");
     }
 

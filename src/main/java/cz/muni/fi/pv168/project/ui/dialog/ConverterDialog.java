@@ -3,6 +3,7 @@ package cz.muni.fi.pv168.project.ui.dialog;
 import cz.muni.fi.pv168.project.ui.model.entities.Unit;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
+import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -37,6 +38,8 @@ public class ConverterDialog extends EntityDialog<UnitTable> {
 
         this.fromUnitComboBox = new JComboBox<>();
         this.toUnitComboBox = new JComboBox<>();
+        this.fromUnitComboBox.setRenderer(new UnitComboBoxRenderer());
+        this.toUnitComboBox.setRenderer(new UnitComboBoxRenderer());
         updateUnitComboBoxes();
         this.fromUnit = (Unit) fromUnitComboBox.getSelectedItem();
         this.toUnit = (Unit) toUnitComboBox.getSelectedItem();
@@ -134,16 +137,16 @@ public class ConverterDialog extends EntityDialog<UnitTable> {
     private void addFields() {
         JLabel typeLabel = new JLabel("Type: ");
         add("", typeLabel, "Cell 0 0");
-        add("", unitTypeComboBox, "cell 1 0, span 2, wrap");
+        add("", unitTypeComboBox, "cell 1 0, span 2, wmin 150lp, wrap");
 
         JLabel fromLabel = new JLabel("From: ");
         add("", fromLabel, "Cell 0 1");
-        add("", fromAmountField, "cell 1 1, wmin 100lp, gapy 10, gapx 10");
-        add("", fromUnitComboBox, "cell 1 1");
+        add("", fromAmountField, "cell 1 1, wmin 100lp, gapy 10");
+        add("", fromUnitComboBox, "cell 1 1, wmin 100lp");
 
         JLabel toLabel = new JLabel("To: ");
         add("", toLabel, "Cell 0 2");
-        add("", toUnitComboBox, "cell 1 2, span 2");
+        add("", toUnitComboBox, "cell 1 2, span 2, wmin 150lp");
 
         JLabel resultLabel = new JLabel("Result: ");
         add("", resultLabel, "Cell 0 3");

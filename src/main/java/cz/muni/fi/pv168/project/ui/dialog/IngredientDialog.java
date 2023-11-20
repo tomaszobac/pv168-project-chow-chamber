@@ -2,6 +2,7 @@ package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
 import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -21,6 +22,7 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
         for (int i = 0; i < unitTable.getRowCount(); i++) {
             unitComboBox.addItem((Unit) unitTable.getValueAt(i, 0));
         }
+        unitComboBox.setRenderer(new UnitComboBoxRenderer());
         setValues();
         addFields();
     }

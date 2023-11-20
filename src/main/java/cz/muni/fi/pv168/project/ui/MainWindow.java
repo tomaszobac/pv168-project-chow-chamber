@@ -2,6 +2,7 @@ package cz.muni.fi.pv168.project.ui;
 
 
 import cz.muni.fi.pv168.project.testGen.TestTable;
+import cz.muni.fi.pv168.project.ui.action.ConvertAction;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
 import cz.muni.fi.pv168.project.ui.action.QuitAction;
@@ -50,6 +51,7 @@ public class MainWindow {
     private Action deleteAction;
     private final Action importAction;
     private final Action exportAction;
+    private final Action convertAction;
     private Action filterAction;
     private JToolBar toolbar;
     private JMenuBar menubar;
@@ -97,6 +99,8 @@ public class MainWindow {
         importAction = new ImportAction();
         exportAction = new ExportAction();
         filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
+        convertAction = new ConvertAction(unitTable);
+
 
         // tables tabs
         JTabbedPane mainFrameTabs = new JTabbedPane();
@@ -171,6 +175,7 @@ public class MainWindow {
         toolbar.addSeparator();
         toolbar.add(filterAction);
         toolbar.addSeparator();
+        toolbar.add(convertAction);
 
         for (Component comp: components) {
             toolbar.add(comp);

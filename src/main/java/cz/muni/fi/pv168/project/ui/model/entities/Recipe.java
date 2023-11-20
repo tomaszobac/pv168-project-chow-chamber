@@ -12,11 +12,11 @@ public class Recipe {
     private RecipeCategory category;
     private LocalTime time;
     private int portions;
-    private ArrayList<Ingredient> ingredients;
+    private ArrayList<RecipeIngredient> ingredients;
     private int numberOfIngredients = 0;
 
     public Recipe(String name, RecipeCategory category, LocalTime time, int portions,
-                  ArrayList<Ingredient> ingredients, String instructions) {
+                  ArrayList<RecipeIngredient> ingredients, String instructions) {
         this.name = Objects.requireNonNull(name, "name must not be null");
         this.category = Objects.requireNonNull(category, "category must not be null");
         this.time = Objects.requireNonNull(time, "time must not be null");
@@ -65,16 +65,29 @@ public class Recipe {
         this.instructions = Objects.requireNonNull(instructions, "Instructions must not be null");
     }
 
-    public ArrayList<Ingredient> getIngredients() {
+    public ArrayList<RecipeIngredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
+    public void setIngredients(ArrayList<RecipeIngredient> ingredients) {
         this.ingredients = Objects.requireNonNull(ingredients, "Ingredients must not be null");
     }
-    public void addIngredient(Ingredient ingredient) {
+
+    public void addIngredient(RecipeIngredient ingredient) {
         ingredients.add(ingredient);
         numberOfIngredients++;
+    }
+
+    public Double getCalories() {
+        if (ingredients == null || ingredients.isEmpty()) {
+            return 0.0;
+        }
+        double calories = 0.0;
+
+        for (RecipeIngredient recipeIngredient: ingredients) {
+            calories += recipeIngredient.getCaloriesPerSetAmount();
+        }
+        return calories;
     }
 
     @Override

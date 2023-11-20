@@ -1,18 +1,18 @@
 package cz.muni.fi.pv168.project.ui.model;
 
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
+import cz.muni.fi.pv168.project.ui.model.entities.RecipeIngredient;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeIngredientsTableModel extends AbstractTableModel {
-    private final List<Ingredient> ingredients;
-    private final List<Column<Ingredient, ?>> columns = List.of(
-            Column.readonly("Name", String.class, Ingredient::getName),
-            Column.readonly("Amount", Double.class, Ingredient::getAmount),
-            Column.readonly("Unit", String.class, ingredient -> ingredient.getUnit().getName()),
-            Column.readonly("Calories", Double.class, Ingredient::getCaloriesPerSetAmount)
+    private final List<RecipeIngredient> ingredients;
+    private final List<Column<RecipeIngredient, ?>> columns = List.of(
+            Column.readonly("Name", String.class, RecipeIngredient::getName),
+            Column.readonly("Amount", Double.class, RecipeIngredient::getAmount),
+            Column.readonly("Unit", String.class, recipeIngredient -> recipeIngredient.getUnit().getName()),
+            Column.readonly("Calories", Double.class, RecipeIngredient::getCaloriesPerSetAmount)
     );
 
     @Override
@@ -24,7 +24,7 @@ public class RecipeIngredientsTableModel extends AbstractTableModel {
         };
     }
 
-    public RecipeIngredientsTableModel(List<Ingredient> ingredients) {
+    public RecipeIngredientsTableModel(List<RecipeIngredient> ingredients) {
         this.ingredients = new ArrayList<>(ingredients);
     }
 
@@ -65,13 +65,13 @@ public class RecipeIngredientsTableModel extends AbstractTableModel {
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
 
-    public void addRow(Ingredient ingredient) {
+    public void addRow(RecipeIngredient ingredient) {
         int newRowIndex = ingredients.size();
         ingredients.add(ingredient);
         fireTableRowsInserted(newRowIndex, newRowIndex);
     }
 
-    public Ingredient getEntity(int rowIndex) {
+    public RecipeIngredient getEntity(int rowIndex) {
         return ingredients.get(rowIndex);
     }
 }

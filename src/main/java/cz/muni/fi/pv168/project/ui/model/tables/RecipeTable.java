@@ -146,6 +146,8 @@ public class RecipeTable extends MyTable {
         infoPanel.add(MainWindowUtilities.createLabel(recipe.getTime().toString(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
         infoPanel.add(MainWindowUtilities.createLabel(Integer.toString(recipe.getPortions()), 1));
+        infoPanel.add(MainWindowUtilities.createLabel("Calories:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(Double.toString(recipe.getCalories()), 1));
         return infoPanel;
     }
 

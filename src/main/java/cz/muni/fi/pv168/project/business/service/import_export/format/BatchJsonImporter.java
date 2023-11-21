@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.business.service.export.format;
+package cz.muni.fi.pv168.project.business.service.import_export.format;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import cz.muni.fi.pv168.project.business.service.export.batch.Batch;
-import cz.muni.fi.pv168.project.business.service.export.batch.BatchImporter;
+import cz.muni.fi.pv168.project.business.service.import_export.batch.Batch;
+import cz.muni.fi.pv168.project.business.service.import_export.batch.BatchImporter;
 
 public class BatchJsonImporter implements BatchImporter {
     private static final Format FORMAT = new Format("JSON", List.of("json"));

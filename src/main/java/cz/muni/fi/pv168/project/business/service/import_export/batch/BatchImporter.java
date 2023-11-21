@@ -1,7 +1,7 @@
-package cz.muni.fi.pv168.project.business.service.export.batch;
+package cz.muni.fi.pv168.project.business.service.import_export.batch;
 
-import cz.muni.fi.pv168.project.business.service.export.DataManipulationException;
-import cz.muni.fi.pv168.project.business.service.export.format.FileFormat;
+import cz.muni.fi.pv168.project.business.service.import_export.DataManipulationException;
+import cz.muni.fi.pv168.project.business.service.import_export.format.FileFormat;
 
 import java.util.Collection;
 

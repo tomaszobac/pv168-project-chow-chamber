@@ -1,6 +1,6 @@
 package cz.muni.fi.pv168.project.util;
 
-import cz.muni.fi.pv168.project.business.service.export.format.Format;
+import cz.muni.fi.pv168.project.business.service.import_export.format.Format;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;

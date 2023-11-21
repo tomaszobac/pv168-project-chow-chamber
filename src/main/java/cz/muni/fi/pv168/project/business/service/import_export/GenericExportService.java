@@ -1,14 +1,14 @@
-package cz.muni.fi.pv168.project.business.service.export;
+package cz.muni.fi.pv168.project.business.service.import_export;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.service.crud.CrudService;
-import cz.muni.fi.pv168.project.business.service.export.batch.Batch;
-import cz.muni.fi.pv168.project.business.service.export.batch.BatchExporter;
-import cz.muni.fi.pv168.project.business.service.export.batch.BatchOperationException;
-import cz.muni.fi.pv168.project.business.service.export.format.Format;
-import cz.muni.fi.pv168.project.business.service.export.format.FormatMapping;
+import cz.muni.fi.pv168.project.business.service.import_export.batch.Batch;
+import cz.muni.fi.pv168.project.business.service.import_export.batch.BatchExporter;
+import cz.muni.fi.pv168.project.business.service.import_export.batch.BatchOperationException;
+import cz.muni.fi.pv168.project.business.service.import_export.format.Format;
+import cz.muni.fi.pv168.project.business.service.import_export.format.FormatMapping;
 
 import java.util.Collection;
 

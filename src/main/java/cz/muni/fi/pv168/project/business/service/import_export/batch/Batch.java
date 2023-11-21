@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.business.service.export.batch;
+package cz.muni.fi.pv168.project.business.service.import_export.batch;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Unit;

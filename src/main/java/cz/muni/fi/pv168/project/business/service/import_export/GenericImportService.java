@@ -1,13 +1,13 @@
-package cz.muni.fi.pv168.project.business.service.export;
+package cz.muni.fi.pv168.project.business.service.import_export;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
-import cz.muni.fi.pv168.project.business.service.export.batch.Batch;
-import cz.muni.fi.pv168.project.business.service.export.batch.BatchImporter;
-import cz.muni.fi.pv168.project.business.service.export.format.BatchJsonImporter;
-import cz.muni.fi.pv168.project.business.service.export.format.Format;
-import cz.muni.fi.pv168.project.business.service.export.format.FormatMapping;
+import cz.muni.fi.pv168.project.business.service.import_export.batch.Batch;
+import cz.muni.fi.pv168.project.business.service.import_export.batch.BatchImporter;
+import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonImporter;
+import cz.muni.fi.pv168.project.business.service.import_export.format.Format;
+import cz.muni.fi.pv168.project.business.service.import_export.format.FormatMapping;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.model.UnitTableModel;

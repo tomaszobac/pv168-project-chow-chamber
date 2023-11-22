@@ -16,6 +16,7 @@ import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
 import cz.muni.fi.pv168.project.storage.InMemoryRepository;
 import cz.muni.fi.pv168.project.testGen.TestTable;
+import cz.muni.fi.pv168.project.ui.action.ConvertAction;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
 import cz.muni.fi.pv168.project.ui.action.QuitAction;
@@ -65,6 +66,7 @@ public class MainWindow {
     private Action deleteAction;
     private final Action importAction;
     private final Action exportAction;
+    private final Action convertAction;
     private Action filterAction;
     private JToolBar toolbar;
     private JMenuBar menubar;
@@ -142,6 +144,7 @@ public class MainWindow {
         importAction = new ImportAction(importService);
         exportAction = new ExportAction(exportService);
         filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
+        convertAction = new ConvertAction(unitTable);
         quitAction = new QuitAction(exportService);
 
         // tables tabs
@@ -217,6 +220,7 @@ public class MainWindow {
         toolbar.addSeparator();
         toolbar.add(filterAction);
         toolbar.addSeparator();
+        toolbar.add(convertAction);
 
         for (Component comp: components) {
             toolbar.add(comp);

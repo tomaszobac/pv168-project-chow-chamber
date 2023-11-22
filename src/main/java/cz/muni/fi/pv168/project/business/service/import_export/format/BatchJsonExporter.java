@@ -2,6 +2,7 @@ package cz.muni.fi.pv168.project.business.service.import_export.format;
 
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.service.import_export.DataManipulationException;
 import cz.muni.fi.pv168.project.business.service.import_export.batch.Batch;
@@ -93,7 +94,7 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"" + recipe.getPortions() + "\",");
         line.append("\"ingredients\":[");
         boolean flag = true;
-        for(Ingredient i: recipe.getIngredients()){
+        for(RecipeIngredient i: recipe.getIngredients()){
             line.append("{");
             line.append("\"name\":");
             line.append("\"" + i.getName() + "\",");
@@ -145,9 +146,7 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"" + ingredient.getUnit().getType().toString() + "\",");
         line.append("\"conversionToBase\":");
         line.append("\"" + ingredient.getUnit().getConversionToBase() + "\"");
-        line.append("},");
-        line.append("\"amount\":");
-        line.append("\"" + ingredient.getAmount() + "\"");
+        line.append("}");
         line.append("}");
     }
 }

@@ -7,6 +7,7 @@ import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Unit;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.ui.model.tables.RecipeIngredientsTable;
 import cz.muni.fi.pv168.project.ui.renderers.IngredientComboBoxRenderer;
 import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
@@ -77,8 +78,8 @@ public class CustomIngredientDialog extends JDialog {
             Ingredient selectedIngredient = (Ingredient) ingredientComboBox.getSelectedItem();
             Unit selectedUnit = (Unit) unitComboBox.getSelectedItem();
             String amount = amountTextField.getText();
-            if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getName().equals(selectedUnit.getName()))) {
-                Ingredient newIngredient = new Ingredient(selectedIngredient.getName(), selectedIngredient.getCalories(), selectedIngredient.getUnit(), Double.parseDouble(amountTextField.getText()));
+            if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getType().equals(selectedUnit.getType()))) {
+                RecipeIngredient newIngredient = new RecipeIngredient(selectedIngredient.getName(), selectedIngredient.getCalories(), selectedUnit, Double.parseDouble(amountTextField.getText()), selectedIngredient);
                 recipeIngredientsTableModel.addRow(newIngredient);
                 recipe.addIngredient(newIngredient);
             } else {

@@ -1,31 +1,29 @@
 package cz.muni.fi.pv168.project.business.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Objects;
+
 public class Ingredient extends Entity {
     private String name;
     private double calories;
     private Unit unit;
-    private double amount = 0;
-
-    public Ingredient() {
-    }
 
     public Ingredient(String guid, String name, double calories, Unit unit) {
         super(guid);
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "Name must not be null");
         this.calories = calories;
-        this.unit = unit;
-    }
-    public Ingredient(String name, double calories, Unit unit) {
-        this.name = name;
-        this.calories = calories;
-        this.unit = unit;
+        this.unit = Objects.requireNonNull(unit, "Unit must not be null");
     }
 
-    public Ingredient(String name, double calories, Unit unit, double amount) {
-        this.name = name;
+    @JsonCreator
+    public Ingredient(@JsonProperty("name") String name,
+                      @JsonProperty("calories") double calories,
+                      @JsonProperty("unit") Unit unit) {
+        this.name = Objects.requireNonNull(name, "Name must not be null");
         this.calories = calories;
-        this.unit = unit;
-        this.amount = amount;
+        this.unit = Objects.requireNonNull(unit, "Unit must not be null");
     }
 
     public String getName() {
@@ -41,17 +39,11 @@ public class Ingredient extends Entity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name, "name must not be null");
     }
-
 
     public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
-    @Override
-    public String toString() {
-        return name;
+        this.unit = Objects.requireNonNull(unit, "unit must not be null");
     }
 
     public double getCalories() {
@@ -62,11 +54,10 @@ public class Ingredient extends Entity {
         this.calories = calories;
     }
 
-    public double getAmount() {
-        return amount;
-    }
 
-    public double getCaloriesPerSetAmount() {
-        return amount * calories;
+    @Override
+    public String toString() {
+        return String.format("Ingredient{name: %s; calories: %.2f; unit: %s}",
+                name, calories, unit.getName());
     }
 }

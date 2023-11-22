@@ -1,6 +1,7 @@
 package cz.muni.fi.pv168.project.ui.model;
 
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
+import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 
 import javax.swing.table.AbstractTableModel;
 import java.time.LocalTime;
@@ -8,11 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeTableModel extends AbstractTableModel implements EntityTableModel<Recipe> {
-    private final List<Recipe> recipes;
+    private List<Recipe> recipes;
+    private final CrudService<Recipe> recipeCrudService;
     private final List<Column<Recipe, ?>> columns = List.of(
             Column.readonly("Recipe", Recipe.class, Recipe -> Recipe),
             Column.readonly("Name", String.class, Recipe::getName),
-            Column.readonly("Category", String.class, recipe -> recipe.getCategory().getCategory()),
+            Column.readonly("Category", String.class, Recipe::getCategoryName),
             Column.readonly("Time", LocalTime.class, Recipe::getTime),
             Column.readonly("Portions", Integer.class, Recipe::getPortions)
     );
@@ -28,8 +30,9 @@ public class RecipeTableModel extends AbstractTableModel implements EntityTableM
         };
     }
 
-    public RecipeTableModel(List<Recipe> recipes) {
-        this.recipes = new ArrayList<>(recipes);
+    public RecipeTableModel(CrudService<Recipe> recipeCrudService) {
+        this.recipeCrudService = recipeCrudService;
+        this.recipes = new ArrayList<>(recipeCrudService.findAll());
     }
 
     @Override
@@ -65,19 +68,32 @@ public class RecipeTableModel extends AbstractTableModel implements EntityTableM
     }
 
     public void deleteRow(int rowIndex) {
+        recipeCrudService.deleteByGuid(recipes.get(rowIndex).getGuid());
         recipes.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
 
     public void addRow(Recipe recipe) {
+        recipeCrudService.create(recipe).intoException();
         int newRowIndex = recipes.size();
         recipes.add(recipe);
         fireTableRowsInserted(newRowIndex, newRowIndex);
     }
 
     public void updateRow(Recipe recipe) {
+        recipeCrudService.update(recipe);
         int rowIndex = recipes.indexOf(recipe);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void deleteAll() {
+        recipeCrudService.deleteAll();
+        refresh();
+    }
+
+    public void refresh() {
+        this.recipes = new ArrayList<>(recipeCrudService.findAll());
+        fireTableDataChanged();
     }
 
     public Recipe getEntity(int rowIndex) {

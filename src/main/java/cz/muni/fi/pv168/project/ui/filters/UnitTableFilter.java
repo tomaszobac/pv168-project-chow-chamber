@@ -6,7 +6,7 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.unit.UnitNameMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.unit.UnitUnitTypeMatcher;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterUnitTypeValues;
 import cz.muni.fi.pv168.project.ui.model.UnitTableModel;
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 import cz.muni.fi.pv168.project.util.Either;
 

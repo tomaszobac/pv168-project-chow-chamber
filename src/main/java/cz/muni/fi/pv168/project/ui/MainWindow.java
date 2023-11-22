@@ -1,6 +1,20 @@
 package cz.muni.fi.pv168.project.ui;
 
-
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.Unit;
+import cz.muni.fi.pv168.project.business.model.UuidGuidProvider;
+import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
+import cz.muni.fi.pv168.project.business.service.import_export.GenericExportService;
+import cz.muni.fi.pv168.project.business.service.import_export.GenericImportService;
+import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonExporter;
+import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonImporter;
+import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
+import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
+import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
+import cz.muni.fi.pv168.project.storage.InMemoryRepository;
 import cz.muni.fi.pv168.project.testGen.TestTable;
 import cz.muni.fi.pv168.project.ui.action.ConvertAction;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
@@ -41,11 +55,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.List;
 
 
 public class MainWindow {
     private final MyFrame mainFrame;
-    private final Action quitAction = new QuitAction();
+    private final Action quitAction;
     private Action addAction;
     private Action editAction;
     private Action deleteAction;
@@ -66,15 +81,33 @@ public class MainWindow {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
 
+        // Storage
+        InMemoryRepository<Recipe> recipeRepository = new InMemoryRepository<>(List.of());
+        InMemoryRepository<Unit> unitRepository = new InMemoryRepository<>(List.of());
+        InMemoryRepository<Ingredient> ingredientRepository = new InMemoryRepository<>(List.of());
+
+        // Validators
+        RecipeValidator recipeValidator = new RecipeValidator();
+        UnitValidator unitValidator = new UnitValidator();
+        IngredientValidator ingredientValidator = new IngredientValidator();
+
+        // GUID
+        UuidGuidProvider guidProvider = new UuidGuidProvider();
+
+        // Services
+        RecipeCrudService recipeCrudService = new RecipeCrudService(recipeRepository, recipeValidator, guidProvider);
+        UnitCrudService unitCrudService = new UnitCrudService(unitRepository, unitValidator, guidProvider);
+        IngredientCrudService ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator, guidProvider);
+
         // tables
-        recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(TestTable.getTableOne()), 0, this::rowSelectionChanged);
-        unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(TestTable.getTableTwo()), 3, this::rowSelectionChanged);
-        ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(TestTable.getTableThree()), 1, this::rowSelectionChanged);
+        recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(recipeCrudService), 0, this::rowSelectionChanged);
+        unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(unitCrudService), 3, this::rowSelectionChanged);
+        ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(ingredientCrudService), 1, this::rowSelectionChanged);
 
         // Hide the first columns with their respective classes
         MainWindowUtilities.hideFirstColumn(recipeTable);
-        MainWindowUtilities.hideFirstColumn(unitTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
+        MainWindowUtilities.hideFirstColumn(unitTable);
 
         // Filters
         TableRowSorter<RecipeTableModel> recipeRowSorter = new TableRowSorter<>((RecipeTableModel) recipeTable.getModel());
@@ -92,15 +125,27 @@ public class MainWindow {
         ingredientTable.setRowSorter(ingredientRowSorter);
         this.ingredientTableFilter = ingredientFilter;
 
+        GenericExportService exportService = new GenericExportService(recipeCrudService,
+                unitCrudService,
+                ingredientCrudService,
+                List.of(new BatchJsonExporter()));
+
+        GenericImportService importService = new GenericImportService((RecipeTableModel) recipeTable.getModel(),
+                (UnitTableModel) unitTable.getModel(),
+                (IngredientTableModel) ingredientTable.getModel(),
+                List.of(new BatchJsonImporter()));
+
+        importService.importData(null);
+
         // Actions
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
-        importAction = new ImportAction();
-        exportAction = new ExportAction();
+        importAction = new ImportAction(importService);
+        exportAction = new ExportAction(exportService);
         filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
         convertAction = new ConvertAction(unitTable);
-
+        quitAction = new QuitAction(exportService);
 
         // tables tabs
         JTabbedPane mainFrameTabs = new JTabbedPane();

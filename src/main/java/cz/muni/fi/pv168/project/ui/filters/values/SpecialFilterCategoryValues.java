@@ -2,7 +2,7 @@ package cz.muni.fi.pv168.project.ui.filters.values;
 
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatchers;
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 
 import java.util.Objects;
 

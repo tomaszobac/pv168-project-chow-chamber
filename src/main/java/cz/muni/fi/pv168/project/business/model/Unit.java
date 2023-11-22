@@ -1,13 +1,21 @@
-package cz.muni.fi.pv168.project.ui.model.entities;
+package cz.muni.fi.pv168.project.business.model;
 
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
-import java.util.Objects;
-
-public class Unit {
+public class Unit extends Entity {
     private String name;
     private UnitType type;
     private double conversionToBase; // Conversion factor to a base unit (e.g., liters)
+
+    public Unit() {
+    }
+
+    public Unit(String guid, String name, UnitType type, double conversionToBase) {
+        super(guid);
+        this.name = name;
+        this.conversionToBase = conversionToBase;
+        this.type = type;
+    }
 
     public Unit(String name, UnitType type, double conversionToBase) {
         this.name = Objects.requireNonNull(name, "name must not be null");

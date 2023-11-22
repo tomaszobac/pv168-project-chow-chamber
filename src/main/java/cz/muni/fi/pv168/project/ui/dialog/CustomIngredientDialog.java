@@ -4,10 +4,12 @@ import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
 import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.ui.model.tables.RecipeIngredientsTable;
+import cz.muni.fi.pv168.project.ui.renderers.IngredientComboBoxRenderer;
+import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -44,9 +46,11 @@ public class CustomIngredientDialog extends JDialog {
         for (int i = 0; i < ingredientTable.getRowCount(); i++) {
             ingredientComboBox.addItem((Ingredient) ingredientTable.getValueAt(i, 0));
         }
+        ingredientComboBox.setRenderer(new IngredientComboBoxRenderer());
         for (int i = 0; i < unitTable.getRowCount(); i++) {
             unitComboBox.addItem((Unit) unitTable.getValueAt(i, 0));
         }
+        unitComboBox.setRenderer(new UnitComboBoxRenderer());
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout());

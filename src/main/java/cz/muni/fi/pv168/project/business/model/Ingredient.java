@@ -1,21 +1,30 @@
-package cz.muni.fi.pv168.project.ui.model.entities;
+package cz.muni.fi.pv168.project.business.model;
 
-import java.util.Objects;
-
-public class Ingredient {
+public class Ingredient extends Entity {
     private String name;
     private double calories;
     private Unit unit;
     private double amount = 0;
 
-    public Ingredient(String name, double calories, Unit unit) {
-        this.name = Objects.requireNonNull(name, "Name must not be null");
+    public Ingredient() {
+    }
+
+    public Ingredient(String guid, String name, double calories, Unit unit) {
+        super(guid);
+        this.name = name;
         this.calories = calories;
-        this.unit = Objects.requireNonNull(unit, "Unit must not be null");
+        this.unit = unit;
+    }
+    public Ingredient(String name, double calories, Unit unit) {
+        this.name = name;
+        this.calories = calories;
+        this.unit = unit;
     }
 
     public Ingredient(String name, double calories, Unit unit, double amount) {
-        this(name, calories, unit);
+        this.name = name;
+        this.calories = calories;
+        this.unit = unit;
         this.amount = amount;
     }
 
@@ -27,12 +36,22 @@ public class Ingredient {
         return unit;
     }
 
-    public void setName(String name) {
-        this.name = Objects.requireNonNull(name, "name must not be null");
+    public String getUnitName() {
+        return unit.getName();
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
     public void setUnit(Unit unit) {
-        this.unit = Objects.requireNonNull(unit, "unit must not be null");
+        this.unit = unit;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     public double getCalories() {
@@ -49,11 +68,5 @@ public class Ingredient {
 
     public double getCaloriesPerSetAmount() {
         return amount * calories;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Ingredient{name: %s; calories: %.2f; unit: %s; amount: %.2f}",
-                name, calories, unit.getName(), amount);
     }
 }

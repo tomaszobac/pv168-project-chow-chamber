@@ -1,6 +1,6 @@
 package cz.muni.fi.pv168.project.ui.renderers;
 
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.business.model.Unit;
 
 import javax.swing.JLabel;
 

@@ -2,7 +2,7 @@ package cz.muni.fi.pv168.project;
 
 import cz.muni.fi.pv168.project.ui.MainWindow;
 
-import java.awt.*;
+import java.awt.EventQueue;
 
 /**
  * The entry point of the application.

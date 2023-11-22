@@ -2,7 +2,8 @@ package cz.muni.fi.pv168.project.ui.renderers;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 public class MyFrame extends JFrame {
     public MyFrame() {

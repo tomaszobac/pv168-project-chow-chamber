@@ -1,8 +1,13 @@
 package cz.muni.fi.pv168.project.ui.renderers;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 
 public class UnifiedTableCellRenderer extends DefaultTableCellRenderer {
 

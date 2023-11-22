@@ -1,11 +1,20 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
+import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -72,21 +81,15 @@ public class IngredientsTable extends MyTable {
             ingredientInfoTabs = new JTabbedPane();
         }
         JTabbedPane singleIngredientInfo = new JTabbedPane();
+        Ingredient ingredient = (Ingredient) ingredientTable.getValueAt(ingredientTable.getSelectedRow(), 0);
 
         // Create a JPanel to display the Ingredient information
-        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((String) ingredientTable.getValueAt(ingredientTable.getSelectedRow(), 0), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Calories:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(ingredientTable.getValueAt(ingredientTable.getSelectedRow(), 1).toString(), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Unit:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(ingredientTable.getValueAt(ingredientTable.getSelectedRow(), 2).toString(), 1));
+        JPanel infoPanel = createInfoPanel(ingredient);
 
         // Add more labels for other Ingredient attributes here
         singleIngredientInfo.addTab("Basic info", null, infoPanel, "First Tab");
         // creates and handles tabs of singleIngredientInfo
-        createNewTab(singleIngredientInfo, ingredientTable.getValueAt(ingredientTable.getSelectedRow(), 0).toString());
+        createNewTab(singleIngredientInfo, ingredient.getName());
         MainWindowUtilities.switchToTab(ingredientInTabs - 1, ingredientInfoTabs);
         ingredientInfoFrame.add(ingredientInfoTabs);
         ingredientInfoFrame.pack();
@@ -106,6 +109,18 @@ public class IngredientsTable extends MyTable {
         ingredientInfoTabs.setTabComponentAt(tabIndex, customTabComponent);
         // Set the selected tab
         ingredientInfoTabs.setSelectedIndex(tabIndex);
+    }
+
+    private JPanel createInfoPanel(Ingredient ingredient) {
+        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(ingredient.getName(), 0));
+        infoPanel.add(MainWindowUtilities.createLabel("Calories:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(Double.toString(ingredient.getCalories()), 1));
+        infoPanel.add(MainWindowUtilities.createLabel("Unit:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(ingredient.getUnit().toString(), 1));
+        return infoPanel;
     }
 
     private JButton getJButton(JTabbedPane singleIngredientInfo) {

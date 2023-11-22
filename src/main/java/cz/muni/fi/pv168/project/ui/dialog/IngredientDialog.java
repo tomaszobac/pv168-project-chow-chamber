@@ -2,19 +2,27 @@ package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
-import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
+import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import java.time.DateTimeException;
 
 public class IngredientDialog extends EntityDialog<Ingredient> {
     private final JTextField nameField = new JTextField();
     private final JTextField caloryField = new JTextField();
     private final JTextField unitField = new JTextField();
+    private final JComboBox<Unit> unitComboBox;
     private final Ingredient ingredient;
 
-    public IngredientDialog(Ingredient ingredient) {
+    public IngredientDialog(Ingredient ingredient, JTable unitTable) {
         this.ingredient = ingredient;
+        unitComboBox = new JComboBox<>();
+        for (int i = 0; i < unitTable.getRowCount(); i++) {
+            unitComboBox.addItem((Unit) unitTable.getValueAt(i, 0));
+        }
+        unitComboBox.setRenderer(new UnitComboBoxRenderer());
         setValues();
         addFields();
     }
@@ -22,13 +30,13 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
     private void setValues() {
         nameField.setText(ingredient.getName());
         caloryField.setText(Double.toString(ingredient.getCalories()));
-        unitField.setText(ingredient.getUnitName());
+        unitField.setText(ingredient.getUnit().getName());
     }
 
     private void addFields() {
         add("Name:", nameField);
         add("Calories:", caloryField);
-        add("Unit:", unitField);
+        add("Unit:", unitComboBox);
     }
 
     @Override
@@ -36,7 +44,7 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
         try{
             ingredient.setName(nameField.getText());
             ingredient.setCalories(Double.parseDouble(caloryField.getText()));
-            ingredient.setUnit(new Unit(unitField.getName(), UnitType.Volume, 1.0)); // TODO: keep units somewhere so we can show created units here in combobox for example, alternatively we can compare entered value with existing units and call a new unit creation window to add new unit
+            ingredient.setUnit((Unit) unitComboBox.getSelectedItem());
         } catch (DateTimeException | NumberFormatException e){
             return null;
         }

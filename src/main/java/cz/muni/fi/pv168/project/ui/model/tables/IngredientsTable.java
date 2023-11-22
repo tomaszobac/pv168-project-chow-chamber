@@ -1,7 +1,7 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
 import javax.swing.BorderFactory;

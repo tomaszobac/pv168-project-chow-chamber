@@ -1,6 +1,6 @@
 package cz.muni.fi.pv168.project.business.model;
 
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategories;
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Recipe extends Entity {
     private String name;
     private String instructions;
-    private RecipeCategories category;
+    private RecipeCategory category;
     private LocalTime time;
     private int portions;
     private ArrayList<Ingredient> ingredients;
@@ -18,7 +18,7 @@ public class Recipe extends Entity {
     public Recipe() {
     }
 
-    public Recipe(String guid, String name, RecipeCategories category, LocalTime time, int portions,
+    public Recipe(String guid, String name, RecipeCategory category, LocalTime time, int portions,
                   ArrayList<Ingredient> ingredients, String instructions) {
         super(guid);
         this.name = name;
@@ -30,7 +30,7 @@ public class Recipe extends Entity {
         this.instructions = instructions;
     }
 
-    public Recipe(String name, RecipeCategories category, LocalTime time, int portions,
+    public Recipe(String name, RecipeCategory category, LocalTime time, int portions,
                   ArrayList<Ingredient> ingredients, String instructions) {
         this.name = name;
         this.category = category;
@@ -49,7 +49,7 @@ public class Recipe extends Entity {
         this.name = Objects.requireNonNull(name,"name must not be null");
     }
 
-    public RecipeCategories getCategory() {
+    public RecipeCategory getCategory() {
         return category;
     }
 
@@ -57,7 +57,7 @@ public class Recipe extends Entity {
         return category.getCategory();
     }
 
-    public void setCategory(RecipeCategories category) {
+    public void setCategory(RecipeCategory category) {
         this.category = Objects.requireNonNull(category,"name must not be null");
     }
 

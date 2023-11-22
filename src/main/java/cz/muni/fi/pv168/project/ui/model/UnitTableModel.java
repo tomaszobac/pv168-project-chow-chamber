@@ -13,10 +13,22 @@ public class UnitTableModel extends AbstractTableModel implements EntityTableMod
     private List<Unit> units;
     private final UnitCrudService unitCrudService;
     private final List<Column<Unit, ?>> columns = List.of(
+            Column.readonly("Unit", Unit.class, Unit -> Unit),
             Column.readonly("Name", String.class, Unit::getName),
             Column.readonly("Type", UnitType.class, Unit::getType),
             Column.readonly("Conversion to base", Double.class, Unit::getConversionToBase)
     );
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> Unit.class;
+            case 1 -> String.class;
+            case 2 -> UnitType.class;
+            case 3 -> Double.class;
+            default -> super.getColumnClass(columnIndex);
+        };
+    }
 
     public UnitTableModel(UnitCrudService unitCrudService) {
         this.unitCrudService = unitCrudService;

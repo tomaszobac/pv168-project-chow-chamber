@@ -11,10 +11,20 @@ public class IngredientTableModel extends AbstractTableModel implements EntityTa
     private  List<Ingredient> ingredients;
     private final IngredientCrudService ingredientCrudService;
     private final List<Column<Ingredient, ?>> columns = List.of(
+            Column.readonly("Ingredient", Ingredient.class, Ingredient -> Ingredient),
             Column.readonly("Name", String.class, Ingredient::getName),
-            Column.readonly("Calories", Double.class, Ingredient::getCalories),
-            Column.readonly("Unit", String.class, Ingredient::getUnitName)
+            Column.readonly("Calories", Double.class, Ingredient::getCalories)
     );
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> Ingredient.class;
+            case 1 -> String.class;
+            case 2 -> Double.class;
+            default -> super.getColumnClass(columnIndex);
+        };
+    }
 
     public IngredientTableModel(IngredientCrudService ingredientCrudService) {
         this.ingredientCrudService = ingredientCrudService;

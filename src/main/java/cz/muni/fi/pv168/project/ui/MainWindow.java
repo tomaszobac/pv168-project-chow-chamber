@@ -104,6 +104,8 @@ public class MainWindow {
 
         // Hide the first columns with their respective classes
         MainWindowUtilities.hideFirstColumn(recipeTable);
+        MainWindowUtilities.hideFirstColumn(ingredientTable);
+        MainWindowUtilities.hideFirstColumn(unitTable);
 
         // Filters
         TableRowSorter<RecipeTableModel> recipeRowSorter = new TableRowSorter<>((RecipeTableModel) recipeTable.getModel());

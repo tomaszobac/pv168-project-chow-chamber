@@ -2,6 +2,8 @@ package cz.muni.fi.pv168.project.business.model;
 
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
+import java.util.Objects;
+
 public class Unit extends Entity {
     private String name;
     private UnitType type;

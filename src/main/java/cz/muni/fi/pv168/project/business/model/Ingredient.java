@@ -1,12 +1,21 @@
-package cz.muni.fi.pv168.project.ui.model.entities;
+package cz.muni.fi.pv168.project.business.model;
 
 import java.util.Objects;
 
-public class Ingredient {
+public class Ingredient extends Entity {
     private String name;
     private double calories;
     private Unit unit;
 
+    public Ingredient() {
+    }
+
+    public Ingredient(String guid, String name, double calories, Unit unit) {
+        super(guid);
+        this.name = Objects.requireNonNull(name, "Name must not be null");
+        this.calories = calories;
+        this.unit = Objects.requireNonNull(unit, "Unit must not be null");
+    }
     public Ingredient(String name, double calories, Unit unit) {
         this.name = Objects.requireNonNull(name, "Name must not be null");
         this.calories = calories;
@@ -19,6 +28,10 @@ public class Ingredient {
 
     public Unit getUnit() {
         return unit;
+    }
+
+    public String getUnitName() {
+        return unit.getName();
     }
 
     public void setName(String name) {

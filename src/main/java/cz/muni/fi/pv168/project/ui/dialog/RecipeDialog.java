@@ -1,6 +1,6 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 import javax.swing.ComboBoxModel;
@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.time.DateTimeException;
 import java.time.LocalTime;
 
@@ -23,7 +25,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     private final ComboBoxModel<RecipeCategory> categoryField = new DefaultComboBoxModel<>(RecipeCategory.values());
     private final JTextField timeField = new JTextField();
     private final JTextField portionsField = new JTextField();
-    private final JTextArea instructionsArea = new JTextArea();
+    private final JTextArea instructionsArea = new JTextArea("Instructions go here!");
     private final Recipe recipe;
 
     public RecipeDialog(Recipe recipe, JTable ingredientTable, JTable unitTable) {
@@ -37,7 +39,22 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         categoryField.setSelectedItem(recipe.getCategory());
         timeField.setText(recipe.getTime().toString());
         portionsField.setText(Integer.toString(recipe.getPortions()));
-        instructionsArea.setText("Instructions go here!");
+        instructionsArea.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (instructionsArea.getText().equals("Instructions go here!")) {
+                    instructionsArea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (instructionsArea.getText().isEmpty()) {
+                    instructionsArea.setText("Instructions go here!");
+                }
+            }
+        });
+        instructionsArea.setLineWrap(true);
     }
 
     private void addFields(JTable ingredientTable, JTable unitTable) {

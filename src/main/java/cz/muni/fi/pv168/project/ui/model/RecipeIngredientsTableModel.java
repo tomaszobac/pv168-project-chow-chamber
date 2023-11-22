@@ -6,6 +6,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: I don't know if we should implement EntityTableModel and method refresh here as well
 public class RecipeIngredientsTableModel extends AbstractTableModel {
     private final List<RecipeIngredient> ingredients;
     private final List<Column<RecipeIngredient, ?>> columns = List.of(

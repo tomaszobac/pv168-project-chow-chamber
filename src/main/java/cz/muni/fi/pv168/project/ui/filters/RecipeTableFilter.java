@@ -8,7 +8,7 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeNameMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipePortionsMatcher;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 import cz.muni.fi.pv168.project.util.Either;
 

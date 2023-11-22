@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.project.ui.model.entities;
+package cz.muni.fi.pv168.project.business.model;
 
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Recipe {
+public class Recipe extends Entity {
     private String name;
     private String instructions;
     private RecipeCategory category;
@@ -15,6 +15,21 @@ public class Recipe {
     private ArrayList<RecipeIngredient> ingredients;
     private int numberOfIngredients = 0;
 
+    public Recipe() {
+    }
+
+    public Recipe(String guid, String name, RecipeCategory category, LocalTime time, int portions,
+                  ArrayList<Ingredient> ingredients, String instructions) {
+        super(guid);
+        this.name = name;
+        this.category = category;
+        this.time = time;
+        this.portions = portions;
+        this.ingredients = ingredients;
+        this.numberOfIngredients = ingredients.size();
+        this.instructions = instructions;
+    }
+
     public Recipe(String name, RecipeCategory category, LocalTime time, int portions,
                   ArrayList<RecipeIngredient> ingredients, String instructions) {
         this.name = Objects.requireNonNull(name, "name must not be null");
@@ -22,6 +37,7 @@ public class Recipe {
         this.time = Objects.requireNonNull(time, "time must not be null");
         this.portions = portions;
         this.ingredients = Objects.requireNonNull(ingredients, "ingredients must not be null");
+        this.numberOfIngredients = ingredients.size();
         this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
     }
 
@@ -35,6 +51,10 @@ public class Recipe {
 
     public RecipeCategory getCategory() {
         return category;
+    }
+
+    public String getCategoryName() {
+        return category.getCategory();
     }
 
     public void setCategory(RecipeCategory category) {
@@ -71,11 +91,16 @@ public class Recipe {
 
     public void setIngredients(ArrayList<RecipeIngredient> ingredients) {
         this.ingredients = Objects.requireNonNull(ingredients, "Ingredients must not be null");
+        this.numberOfIngredients = ingredients.size();
     }
 
     public void addIngredient(RecipeIngredient ingredient) {
         ingredients.add(ingredient);
         numberOfIngredients++;
+    }
+
+    public int getNumberOfIngredients() {
+        return numberOfIngredients;
     }
 
     public Double getCalories() {

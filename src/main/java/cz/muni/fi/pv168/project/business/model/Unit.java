@@ -1,13 +1,23 @@
-package cz.muni.fi.pv168.project.ui.model.entities;
+package cz.muni.fi.pv168.project.business.model;
 
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import java.util.Objects;
 
-public class Unit {
+public class Unit extends Entity {
     private String name;
     private UnitType type;
     private double conversionToBase; // Conversion factor to a base unit (e.g., liters)
+
+    public Unit() {
+    }
+
+    public Unit(String guid, String name, UnitType type, double conversionToBase) {
+        super(guid);
+        this.name = name;
+        this.conversionToBase = conversionToBase;
+        this.type = type;
+    }
 
     public Unit(String name, UnitType type, double conversionToBase) {
         this.name = Objects.requireNonNull(name, "name must not be null");
@@ -48,12 +58,12 @@ public class Unit {
     }
 
     public double calculateDifference(double value1, double value2) {
-        return Math.abs(value1 - value2);
+        return Math.abs(value1 - value2); //TODO: Discuss the need of this function
     }
 
     @Override
     public String toString() {
-        return String.format("Unit{name: %s; type: %s; toBase: %.2f}",
+        return String.format("Unit{name: %s; type: %s; toBase: %.3f}",
                 name, type.name(), conversionToBase);
     }
 }

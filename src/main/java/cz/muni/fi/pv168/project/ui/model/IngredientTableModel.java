@@ -1,21 +1,34 @@
 package cz.muni.fi.pv168.project.ui.model;
 
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientTableModel extends AbstractTableModel implements EntityTableModel<Ingredient> {
-    private final List<Ingredient> ingredients;
+    private  List<Ingredient> ingredients;
+    private final IngredientCrudService ingredientCrudService;
     private final List<Column<Ingredient, ?>> columns = List.of(
             Column.readonly("Ingredient", Ingredient.class, Ingredient -> Ingredient),
             Column.readonly("Name", String.class, Ingredient::getName),
             Column.readonly("Calories", Double.class, Ingredient::getCalories)
     );
 
-    public IngredientTableModel(List<Ingredient> Ingredients) {
-        this.ingredients = new ArrayList<>(Ingredients);
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> Ingredient.class;
+            case 1 -> String.class;
+            case 2 -> Double.class;
+            default -> super.getColumnClass(columnIndex);
+        };
+    }
+
+    public IngredientTableModel(IngredientCrudService ingredientCrudService) {
+        this.ingredientCrudService = ingredientCrudService;
+        this.ingredients = new ArrayList<>(ingredientCrudService.findAll());
     }
 
     @Override
@@ -51,19 +64,32 @@ public class IngredientTableModel extends AbstractTableModel implements EntityTa
     }
 
     public void deleteRow(int rowIndex) {
+        ingredientCrudService.deleteByGuid(ingredients.get(rowIndex).getGuid());
         ingredients.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
 
     public void addRow(Ingredient ingredient) {
+        ingredientCrudService.create(ingredient).intoException();
         int newRowIndex = ingredients.size();
         ingredients.add(ingredient);
         fireTableRowsInserted(newRowIndex, newRowIndex);
     }
 
     public void updateRow(Ingredient ingredient) {
+        ingredientCrudService.update(ingredient);
         int rowIndex = ingredients.indexOf(ingredient);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void deleteAll() {
+        ingredientCrudService.deleteAll();
+        refresh();
+    }
+
+    public void refresh() {
+        this.ingredients = new ArrayList<>(ingredientCrudService.findAll());
+        fireTableDataChanged();
     }
 
     public Ingredient getEntity(int rowIndex) {

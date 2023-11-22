@@ -1,15 +1,21 @@
 package cz.muni.fi.pv168.project.ui.action;
 
+import cz.muni.fi.pv168.project.business.service.import_export.ImportService;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
+import cz.muni.fi.pv168.project.util.Filter;
 
-import javax.swing.AbstractAction;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 public class ImportAction extends AbstractAction {
-    public ImportAction() {
+    private final ImportService importService;
+
+    public ImportAction(ImportService importService) {
         super("Import", Icons.IMPORT_ICON);
+        this.importService = importService;
+
         putValue(SHORT_DESCRIPTION, "Imports data");
         putValue(MNEMONIC_KEY, KeyEvent.VK_I);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl I"));
@@ -17,6 +23,18 @@ public class ImportAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO: Add actual performance to the exportAction
+        var fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        importService.getFormats().forEach(f -> fileChooser.addChoosableFileFilter(new Filter(f)));
+
+        int dialogResult = fileChooser.showOpenDialog(null);
+
+        if (dialogResult == JFileChooser.APPROVE_OPTION) {
+            File importFile = fileChooser.getSelectedFile();
+
+            importService.importData(importFile.getAbsolutePath());
+
+            JOptionPane.showMessageDialog(null, "Import was done");
+        }
     }
 }

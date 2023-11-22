@@ -1,13 +1,11 @@
 package cz.muni.fi.pv168.project.ui.action.recipe;
 
 import cz.muni.fi.pv168.project.ui.dialog.RecipeDialog;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
 
-import javax.swing.AbstractAction;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.time.LocalTime;
@@ -33,8 +31,19 @@ public class AddRecipeAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         var recipeTableModel = (RecipeTableModel) this.recipeTable.getModel();
-        var dialog = new RecipeDialog(new Recipe("vomáčka", PRILOHA, LocalTime.parse("00:10"),4, new ArrayList<>(), "The missile knows where it is at all times. It knows this because it knows where it isn't."), ingredientTable, unitTable);
+        var dialog = new RecipeDialog(createPrefilledRecipe(), ingredientTable, unitTable);
         dialog.show(recipeTable, "Add recipe")
                 .ifPresent(recipeTableModel::addRow);
+    }
+
+    private Recipe createPrefilledRecipe() {
+        return new Recipe(
+                "Vomáčka",
+                PRILOHA,
+                LocalTime.parse("00:10"),
+                4,
+                new ArrayList<>(),
+                "Uvaříme vodu"
+        );
     }
 }

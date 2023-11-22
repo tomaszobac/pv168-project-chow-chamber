@@ -5,7 +5,7 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatchers;
 import cz.muni.fi.pv168.project.ui.filters.matchers.ingredient.IngredientCaloriesMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.ingredient.IngredientNameMatcher;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Ingredient;
 
 import javax.swing.table.TableRowSorter;
 import java.util.stream.Stream;

@@ -1,8 +1,10 @@
 package cz.muni.fi.pv168.project.ui.model;
 
 import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
+import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
 
 import javax.swing.table.AbstractTableModel;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,16 @@ public class IngredientTableModel extends AbstractTableModel implements EntityTa
             Column.readonly("Name", String.class, Ingredient::getName),
             Column.readonly("Calories", Double.class, Ingredient::getCalories)
     );
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> Recipe.class;
+            case 1 -> String.class;
+            case 2 -> Double.class;
+            default -> super.getColumnClass(columnIndex);
+        };
+    }
 
     public IngredientTableModel(List<Ingredient> Ingredients) {
         this.ingredients = new ArrayList<>(Ingredients);

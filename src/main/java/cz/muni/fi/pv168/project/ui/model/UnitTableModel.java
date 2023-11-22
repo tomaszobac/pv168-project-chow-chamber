@@ -1,9 +1,11 @@
 package cz.muni.fi.pv168.project.ui.model;
 
+import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
 import cz.muni.fi.pv168.project.ui.model.entities.Unit;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import javax.swing.table.AbstractTableModel;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,17 @@ public class UnitTableModel extends AbstractTableModel implements EntityTableMod
             Column.readonly("Type", UnitType.class, Unit::getType),
             Column.readonly("Conversion to base", Double.class, Unit::getConversionToBase)
     );
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> Unit.class;
+            case 1 -> String.class;
+            case 2 -> UnitType.class;
+            case 3 -> Double.class;
+            default -> super.getColumnClass(columnIndex);
+        };
+    }
 
     public UnitTableModel(List<Unit> units) {
         this.units = new ArrayList<>(units);

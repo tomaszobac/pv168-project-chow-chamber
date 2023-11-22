@@ -41,6 +41,7 @@ public class MainWindowUtilities {
         MTable.setDefaultRenderer(Object.class, renderer);
         MTable.setDefaultRenderer(Integer.class, renderer);
         MTable.setDefaultRenderer(LocalTime.class, renderer);
+        MTable.setDefaultRenderer(Double.class, renderer);
         MTable.setRowSorter(new TableRowSorter<>(MTable.getModel()));
         return MTable;
     }

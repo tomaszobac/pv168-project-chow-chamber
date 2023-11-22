@@ -1,5 +1,7 @@
 package cz.muni.fi.pv168.project.business.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import java.util.Objects;
@@ -7,10 +9,7 @@ import java.util.Objects;
 public class Unit extends Entity {
     private String name;
     private UnitType type;
-    private double conversionToBase; // Conversion factor to a base unit (e.g., liters)
-
-    public Unit() {
-    }
+    private double conversionToBase;
 
     public Unit(String guid, String name, UnitType type, double conversionToBase) {
         super(guid);
@@ -19,7 +18,10 @@ public class Unit extends Entity {
         this.type = type;
     }
 
-    public Unit(String name, UnitType type, double conversionToBase) {
+    @JsonCreator
+    public Unit(@JsonProperty("name") String name,
+                @JsonProperty("type") UnitType type,
+                @JsonProperty("conversionToBase") double conversionToBase) {
         this.name = Objects.requireNonNull(name, "name must not be null");
         this.conversionToBase = conversionToBase;
         this.type = Objects.requireNonNull(type, "type must not be null");

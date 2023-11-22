@@ -7,7 +7,7 @@ import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Unit;
-import cz.muni.fi.pv168.project.ui.model.entities.RecipeIngredient;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.ui.model.tables.RecipeIngredientsTable;
 import cz.muni.fi.pv168.project.ui.renderers.IngredientComboBoxRenderer;
 import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;

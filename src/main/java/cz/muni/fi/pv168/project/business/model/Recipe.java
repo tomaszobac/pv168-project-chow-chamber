@@ -1,5 +1,7 @@
 package cz.muni.fi.pv168.project.business.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 import java.time.LocalTime;
@@ -15,11 +17,8 @@ public class Recipe extends Entity {
     private ArrayList<RecipeIngredient> ingredients;
     private int numberOfIngredients = 0;
 
-    public Recipe() {
-    }
-
     public Recipe(String guid, String name, RecipeCategory category, LocalTime time, int portions,
-                  ArrayList<Ingredient> ingredients, String instructions) {
+                  ArrayList<RecipeIngredient> ingredients, String instructions) {
         super(guid);
         this.name = name;
         this.category = category;
@@ -39,6 +38,18 @@ public class Recipe extends Entity {
         this.ingredients = Objects.requireNonNull(ingredients, "ingredients must not be null");
         this.numberOfIngredients = ingredients.size();
         this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
+    }
+
+    @JsonCreator
+    public Recipe(@JsonProperty("name") String name,
+                  @JsonProperty("instructions") String instructions,
+                  @JsonProperty("category") RecipeCategory category,
+                  @JsonProperty("time") LocalTime time,
+                  @JsonProperty("portions") int portions,
+                  @JsonProperty("ingredients") ArrayList<RecipeIngredient> ingredients,
+                  @JsonProperty("numberOfIngredients") int numberOfIngredients) {
+        this(name, category, time, portions, ingredients, instructions);
+        this.numberOfIngredients = numberOfIngredients;
     }
 
     public String getName() {

@@ -4,9 +4,11 @@ package cz.muni.fi.pv168.project.business.service.crud;
 import cz.muni.fi.pv168.project.business.model.GuidProvider;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.repository.Repository;
-import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 import cz.muni.fi.pv168.project.business.service.validation.ValidationResult;
 import cz.muni.fi.pv168.project.business.service.validation.Validator;
+
+import org.tinylog.Logger;
+
 
 import java.util.List;
 
@@ -41,6 +43,8 @@ public final class RecipeCrudService implements CrudService<Recipe> {
         }
         if (validationResult.isValid()) {
             recipeRepository.create(newEntity);
+
+            Logger.info("Created new recipe: {}", newEntity);
         }
 
         return validationResult;
@@ -51,6 +55,8 @@ public final class RecipeCrudService implements CrudService<Recipe> {
         var validationResult = recipeValidator.validate(entity);
         if (validationResult.isValid()) {
             recipeRepository.update(entity);
+
+            Logger.info("Updated recipe: {}", entity);
         }
 
         return validationResult;

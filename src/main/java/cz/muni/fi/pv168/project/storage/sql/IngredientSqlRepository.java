@@ -1,33 +1,33 @@
 package cz.muni.fi.pv168.project.storage.sql;
 
-import cz.muni.fi.pv168.employees.business.model.Department;
-import cz.muni.fi.pv168.employees.business.repository.Repository;
-import cz.muni.fi.pv168.employees.storage.sql.dao.DataAccessObject;
-import cz.muni.fi.pv168.employees.storage.sql.dao.DataStorageException;
-import cz.muni.fi.pv168.employees.storage.sql.entity.DepartmentEntity;
-import cz.muni.fi.pv168.employees.storage.sql.entity.mapper.EntityMapper;
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.repository.Repository;
+import cz.muni.fi.pv168.project.storage.sql.dao.DataAccessObject;
+import cz.muni.fi.pv168.project.storage.sql.dao.DataStorageException;
+import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
+import cz.muni.fi.pv168.project.storage.sql.entity.mapper.EntityMapper;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementation of {@link Repository} for {@link Department} entity using SQL database.
+ * Implementation of {@link Repository} for {@link Ingredient} entity using SQL database.
  *
  * @author Vojtech Sassmann
  */
-public class DepartmentSqlRepository implements Repository<Department> {
+public class IngredientSqlRepository implements Repository<Ingredient> {
 
-    private final DataAccessObject<DepartmentEntity> departmentDao;
-    private final EntityMapper<DepartmentEntity, Department> departmentMapper;
+    private final DataAccessObject<IngredientEntity> departmentDao;
+    private final EntityMapper<IngredientEntity, Ingredient> departmentMapper;
 
-    public DepartmentSqlRepository(
-            DataAccessObject<DepartmentEntity> departmentDao, 
-            EntityMapper<DepartmentEntity, Department> departmentMapper) {
+    public IngredientSqlRepository(
+            DataAccessObject<IngredientEntity> departmentDao,
+            EntityMapper<IngredientEntity, Ingredient> departmentMapper) {
         this.departmentDao = departmentDao;
         this.departmentMapper = departmentMapper;
     }
 
     @Override
-    public List<Department> findAll() {
+    public List<Ingredient> findAll() {
         return departmentDao
                 .findAll()
                 .stream()
@@ -36,12 +36,12 @@ public class DepartmentSqlRepository implements Repository<Department> {
     }
 
     @Override
-    public void create(Department newEntity) {
+    public void create(Ingredient newEntity) {
         departmentDao.create(departmentMapper.mapNewEntityToDatabase(newEntity));
     }
 
     @Override
-    public void update(Department entity) {
+    public void update(Ingredient entity) {
         var existingDepartment = departmentDao.findByGuid(entity.getGuid())
                 .orElseThrow(() -> new DataStorageException("Department not found, guid: " + entity.getGuid()));
         var updatedDepartment = departmentMapper.mapExistingEntityToDatabase(entity, existingDepartment.id());
@@ -65,7 +65,7 @@ public class DepartmentSqlRepository implements Repository<Department> {
     }
 
     @Override
-    public Optional<Department> findByGuid(String guid) {
+    public Optional<Ingredient> findByGuid(String guid) {
         return departmentDao
                 .findByGuid(guid)
                 .map(departmentMapper::mapToBusiness);

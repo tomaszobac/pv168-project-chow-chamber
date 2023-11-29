@@ -16,7 +16,7 @@ import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
 import cz.muni.fi.pv168.project.business.service.validation.ValidationException;
-import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
+import cz.muni.fi.pv168.project.storage.InMemoryRepository;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.model.UnitTableModel;

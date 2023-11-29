@@ -14,7 +14,8 @@ import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonI
 import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
-import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
+import cz.muni.fi.pv168.project.storage.InMemoryRepository;
+import cz.muni.fi.pv168.project.testGen.TestTable;
 import cz.muni.fi.pv168.project.ui.action.ConvertAction;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;

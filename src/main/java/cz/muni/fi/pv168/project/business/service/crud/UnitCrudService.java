@@ -1,14 +1,13 @@
 package cz.muni.fi.pv168.project.business.service.crud;
 
-
 import cz.muni.fi.pv168.project.business.model.GuidProvider;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.repository.Repository;
-import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 import cz.muni.fi.pv168.project.business.service.validation.ValidationResult;
 import cz.muni.fi.pv168.project.business.service.validation.Validator;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Crud operations for the {@link Unit} entity.
@@ -21,9 +20,9 @@ public final class UnitCrudService implements CrudService<Unit> {
 
     public UnitCrudService(Repository<Unit> unitRepository, Validator<Unit> unitValidator,
                              GuidProvider guidProvider) {
-        this.unitRepository = unitRepository;
-        this.unitValidator = unitValidator;
-        this.guidProvider = guidProvider;
+        this.unitRepository = Objects.requireNonNull(unitRepository);
+        this.unitValidator = Objects.requireNonNull(unitValidator);
+        this.guidProvider = Objects.requireNonNull(guidProvider);
     }
 
     @Override

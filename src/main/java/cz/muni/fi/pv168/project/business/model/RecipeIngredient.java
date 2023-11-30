@@ -3,23 +3,26 @@ package cz.muni.fi.pv168.project.business.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RecipeIngredient extends Ingredient {
+import java.util.Objects;
+
+public class RecipeIngredient{
     Ingredient originalIngredient;
-    Double amount;
+    double amount;
+    Ingredient newIngredient;
 
     @JsonCreator
     public RecipeIngredient(@JsonProperty("name") String name,
                             @JsonProperty("calories") double calories,
                             @JsonProperty("unit") Unit unit,
                             @JsonProperty("amount") double amount) {
-        super(name, calories, unit);
         this.originalIngredient = new Ingredient(name, calories, unit);
+        this.newIngredient = this.originalIngredient;
         this.amount = amount;
     }
 
     public RecipeIngredient(String name, double calories, Unit unit, double amount, Ingredient originalIngredient) {
-        super(name, calories, unit);
-        this.originalIngredient = originalIngredient;
+        this.newIngredient = new Ingredient(name, calories, unit);
+        this.originalIngredient = Objects.requireNonNull(originalIngredient) ;
         this.amount = amount;
     }
 
@@ -28,12 +31,24 @@ public class RecipeIngredient extends Ingredient {
     }
 
     public double getCaloriesPerSetAmount() {
-        return getCalories() * (getUnit().convertToBase(amount) / originalIngredient.getUnit().convertToBase(1));
+        return newIngredient.getCalories() * (amount * newIngredient.getUnit().getConversionToBase()) / newIngredient.getUnit().getConversionToBase();
     }
 
     @Override
     public String toString() {
         return String.format("RecipeIngredient{name: %s; caloriesPerSet: %.2f; unit: %s; amount: %.2f}",
-                this.getName(), this.getCaloriesPerSetAmount(), this.getUnit().getName(), amount);
+                newIngredient.getName(), this.getCaloriesPerSetAmount(), newIngredient.getUnit().getName(), amount);
+    }
+
+    public String getName() {
+        return newIngredient.getName();
+    }
+
+    public double getCalories() {
+        return newIngredient.getCalories();
+    }
+
+    public Unit getUnit() {
+        return newIngredient.getUnit();
     }
 }

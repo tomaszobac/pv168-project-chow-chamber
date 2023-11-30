@@ -114,18 +114,6 @@ public class Recipe extends Entity {
         return numberOfIngredients;
     }
 
-    public Double getCalories() {
-        if (ingredients == null || ingredients.isEmpty()) {
-            return 0.0;
-        }
-        double calories = 0.0;
-
-        for (RecipeIngredient recipeIngredient: ingredients) {
-            calories += recipeIngredient.getCaloriesPerSetAmount();
-        }
-        return calories;
-    }
-
     @Override
     public String toString() {
         return String.format("Recipe{category: %s; name: %s; time: %s; portions: %d, numberOfIngredients: %d}",

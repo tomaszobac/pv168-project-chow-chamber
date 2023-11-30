@@ -112,7 +112,7 @@ public class ConverterDialog extends EntityDialog<UnitTable> {
         try {
             fromUnit = (Unit) Objects.requireNonNull(fromUnitComboBox.getSelectedItem());
             toUnit = (Unit) Objects.requireNonNull(toUnitComboBox.getSelectedItem());
-            result = toUnit.convertFromBase(fromUnit.convertToBase(fromAmount));
+            result = (fromAmount * fromUnit.getConversionToBase()) / (toUnit.getConversionToBase());
             resultField.setText(Double.toString(result));
         } catch (NullPointerException e) {
             resultField.setText("From or To Unit is empty");

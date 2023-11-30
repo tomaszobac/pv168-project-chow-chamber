@@ -1,6 +1,5 @@
 package cz.muni.fi.pv168.project.business.service.crud;
 
-
 import cz.muni.fi.pv168.project.business.model.GuidProvider;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.repository.Repository;
@@ -9,8 +8,8 @@ import cz.muni.fi.pv168.project.business.service.validation.Validator;
 
 import org.tinylog.Logger;
 
-
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Crud operations for the {@link Recipe} entity.
@@ -23,9 +22,9 @@ public final class RecipeCrudService implements CrudService<Recipe> {
 
     public RecipeCrudService(Repository<Recipe> recipeRepository, Validator<Recipe> recipeValidator,
                                GuidProvider guidProvider) {
-        this.recipeRepository = recipeRepository;
-        this.recipeValidator = recipeValidator;
-        this.guidProvider = guidProvider;
+        this.recipeRepository = Objects.requireNonNull(recipeRepository);
+        this.recipeValidator = Objects.requireNonNull(recipeValidator);
+        this.guidProvider = Objects.requireNonNull(guidProvider);
     }
 
     @Override

@@ -51,18 +51,6 @@ public class Unit extends Entity {
         this.conversionToBase = conversionToBase;
     }
 
-    public double convertToBase(double value) {
-        return value * conversionToBase;
-    }
-
-    public double convertFromBase(double value) {
-        return value / conversionToBase;
-    }
-
-    public double calculateDifference(double value1, double value2) {
-        return Math.abs(value1 - value2); //TODO: Discuss the need of this function
-    }
-
     @Override
     public String toString() {
         return String.format("Unit{name: %s; type: %s; toBase: %.3f}",

@@ -98,7 +98,7 @@ public class CustomIngredientDialog extends JDialog {
         deleteButton.addActionListener(e -> {
             int selectedRow = recipeIngredientsTable.getSelectedRow();
             if (selectedRow >= 0) {
-                Ingredient ingredientToDelete = recipeIngredientsTableModel.getEntity(selectedRow);
+                RecipeIngredient ingredientToDelete = recipeIngredientsTableModel.getEntity(selectedRow);
                 if (ingredientToDelete != null) {
                     recipeIngredientsTableModel.deleteRow(selectedRow);
                     recipe.getIngredients().remove(ingredientToDelete);

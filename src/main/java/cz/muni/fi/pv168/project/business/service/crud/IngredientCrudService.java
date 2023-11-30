@@ -1,14 +1,13 @@
 package cz.muni.fi.pv168.project.business.service.crud;
 
-
 import cz.muni.fi.pv168.project.business.model.GuidProvider;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.repository.Repository;
-import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 import cz.muni.fi.pv168.project.business.service.validation.ValidationResult;
 import cz.muni.fi.pv168.project.business.service.validation.Validator;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Crud operations for the {@link Ingredient} entity.
@@ -19,11 +18,10 @@ public final class IngredientCrudService implements CrudService<Ingredient> {
     private final Validator<Ingredient> ingredientValidator;
     private final GuidProvider guidProvider;
 
-    public IngredientCrudService(Repository<Ingredient> ingredientRepository, Validator<Ingredient> ingredientValidator,
-                             GuidProvider guidProvider) {
-        this.ingredientRepository = ingredientRepository;
-        this.ingredientValidator = ingredientValidator;
-        this.guidProvider = guidProvider;
+    public IngredientCrudService(Repository<Ingredient> ingredientRepository, Validator<Ingredient> ingredientValidator, GuidProvider guidProvider) {
+        this.ingredientRepository = Objects.requireNonNull(ingredientRepository);
+        this.ingredientValidator = Objects.requireNonNull(ingredientValidator);
+        this.guidProvider = Objects.requireNonNull(guidProvider);
     }
 
     @Override

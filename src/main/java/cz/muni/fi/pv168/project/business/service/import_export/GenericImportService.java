@@ -13,6 +13,7 @@ import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.model.UnitTableModel;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -29,7 +30,7 @@ public class GenericImportService implements ImportService {
             RecipeTableModel recipeTableModel,
             UnitTableModel unitTableModel,
             IngredientTableModel ingredientTableModel,
-            Collection<BatchImporter> importers) {
+            List<BatchImporter> importers) {
         this.recipeTableModel = recipeTableModel;
         this.unitTableModel = unitTableModel;
         this.ingredientTableModel = ingredientTableModel;

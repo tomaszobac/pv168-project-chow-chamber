@@ -1,6 +1,7 @@
 package cz.muni.fi.pv168.project.business.service.import_export.format;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  */
 public final class FormatMapping<T extends FileFormat> {
 
-    private final Collection<T> fileFormats;
+    private final List<T> fileFormats;
     private final Map<String, T> extensionMapping;
 
     /**
@@ -20,7 +21,7 @@ public final class FormatMapping<T extends FileFormat> {
      *
      * @param fileFormats The {@link Collection} of derives from {@link FileFormat}
      */
-    public FormatMapping(Collection<T> fileFormats) {
+    public FormatMapping(List<T> fileFormats) {
         this.fileFormats = fileFormats;
         extensionMapping = fileFormats.stream()
             .map(f -> f.getFormat().extensions().stream()

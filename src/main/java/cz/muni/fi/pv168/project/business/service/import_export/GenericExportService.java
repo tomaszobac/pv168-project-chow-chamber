@@ -11,6 +11,7 @@ import cz.muni.fi.pv168.project.business.service.import_export.format.Format;
 import cz.muni.fi.pv168.project.business.service.import_export.format.FormatMapping;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Generic synchronous implementation of the {@link ExportService}
@@ -27,7 +28,7 @@ public class GenericExportService implements ExportService {
             CrudService<Recipe> recipeCrudService,
             CrudService<Unit> unitCrudService,
             CrudService<Ingredient> ingredientCrudService,
-            Collection<BatchExporter> exporters
+            List<BatchExporter> exporters
     ) {
         this.recipeCrudService = recipeCrudService;
         this.unitCrudService = unitCrudService;

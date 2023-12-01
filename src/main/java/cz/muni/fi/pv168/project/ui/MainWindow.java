@@ -56,7 +56,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.List;
 
-
 public class MainWindow {
     private final MyFrame mainFrame;
     private final Action quitAction;

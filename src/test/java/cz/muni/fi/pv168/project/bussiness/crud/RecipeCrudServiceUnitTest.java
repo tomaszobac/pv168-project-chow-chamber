@@ -8,12 +8,13 @@ import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.ValidationResult;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -29,7 +30,6 @@ public class RecipeCrudServiceUnitTest {
     private Repository<Recipe> recipeRepository;
     private RecipeValidator recipeValidator;
     private GuidProvider guidProvider;
-
 
     @BeforeEach
     @SuppressWarnings("unchecked")

@@ -30,7 +30,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
-
 public class CustomIngredientDialog extends JDialog {
     private final JComboBox<Ingredient> ingredientComboBox = new JComboBox<>();
     private final JComboBox<Unit> unitComboBox = new JComboBox<>();

@@ -1,6 +1,5 @@
 package cz.muni.fi.pv168.project.business.service.validation.common;
 
-
 import cz.muni.fi.pv168.project.business.service.validation.ValidationResult;
 
 public final class StringLengthValidator extends PropertyValidator<String>  {

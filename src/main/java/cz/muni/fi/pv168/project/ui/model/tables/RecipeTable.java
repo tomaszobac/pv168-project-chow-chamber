@@ -112,8 +112,6 @@ public class RecipeTable extends MyTable {
 
         singleRecipeInfo.addTab("Ingredients", null, ingredientsTab, "Second Tab");
 
-
-
         JPanel instructionTab = new JPanel(new GridBagLayout());
 
         JTextArea textArea = new JTextArea(recipe.getInstructions());
@@ -126,7 +124,6 @@ public class RecipeTable extends MyTable {
 
         gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
         singleRecipeInfo.addTab("Instructions", null, instructionTab, "Third Tab");
-
 
         // creates and handles tabs of singleRecipeInfo
         createNewRecipeTab(singleRecipeInfo, recipe.getName());

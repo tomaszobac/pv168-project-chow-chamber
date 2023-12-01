@@ -64,7 +64,6 @@ final class SqlFileExecutor {
         }
     }
 
-
     private String loadSQLFromResources(final String fileName) {
         URL resource = resourceRoot.getResource(fileName);
         if (resource == null) {

@@ -13,7 +13,6 @@ import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory.HLAVNI_JIDL
 import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory.NONE;
 import static cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory.PRILOHA;
 
-
 /**
  *
  * Class for simple testing of recipe app.

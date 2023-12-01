@@ -54,7 +54,6 @@ public class Ingredient extends Entity {
         this.calories = calories;
     }
 
-
     @Override
     public String toString() {
         return String.format("Ingredient{name: %s; calories: %.2f; unit: %s}",

@@ -34,12 +34,6 @@ public class RecipeIngredient{
         return newIngredient.getCalories() * (amount * newIngredient.getUnit().getConversionToBase()) / newIngredient.getUnit().getConversionToBase();
     }
 
-    @Override
-    public String toString() {
-        return String.format("RecipeIngredient{name: %s; caloriesPerSet: %.2f; unit: %s; amount: %.2f}",
-                newIngredient.getName(), this.getCaloriesPerSetAmount(), newIngredient.getUnit().getName(), amount);
-    }
-
     public String getName() {
         return newIngredient.getName();
     }
@@ -50,5 +44,11 @@ public class RecipeIngredient{
 
     public Unit getUnit() {
         return newIngredient.getUnit();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("RecipeIngredient{name: %s; caloriesPerSet: %.2f; unit: %s; amount: %.2f}",
+                newIngredient.getName(), this.getCaloriesPerSetAmount(), newIngredient.getUnit().getName(), amount);
     }
 }

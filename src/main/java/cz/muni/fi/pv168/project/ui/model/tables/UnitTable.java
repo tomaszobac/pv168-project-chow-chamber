@@ -1,11 +1,20 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
+import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -72,21 +81,22 @@ public class UnitTable extends MyTable {
             unitInfoTabs = new JTabbedPane();
         }
         JTabbedPane singleRecipeInfo = new JTabbedPane();
+        Unit unit = (Unit) unitTable.getValueAt(unitTable.getSelectedRow(), 0);
 
         // Create a JPanel to display the recipe information
         JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((String) unitTable.getValueAt(unitTable.getSelectedRow(), 0), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(unit.getName(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Type:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(unitTable.getValueAt(unitTable.getSelectedRow(), 1).toString(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(unit.getType().toString(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Base:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel((Double.toString((Double) unitTable.getValueAt(unitTable.getSelectedRow(), 2))), 1));
+        infoPanel.add(MainWindowUtilities.createLabel((Double.toString(unit.getConversionToBase())), 1));
 
         // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
         // creates and handles tabs of singleRecipeInfo
-        createNewTab(singleRecipeInfo, unitTable.getValueAt(unitTable.getSelectedRow(), 0).toString());
+        createNewTab(singleRecipeInfo, unit.getName());
         MainWindowUtilities.switchToTab(unitInTabs - 1, unitInfoTabs);
         unitInfoFrame.add(unitInfoTabs);
         unitInfoFrame.pack();

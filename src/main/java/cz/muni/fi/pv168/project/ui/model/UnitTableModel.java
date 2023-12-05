@@ -1,22 +1,38 @@
 package cz.muni.fi.pv168.project.ui.model;
 
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.business.model.Entity;
+import cz.muni.fi.pv168.project.business.model.Unit;
+import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnitTableModel extends AbstractTableModel {
-    private final List<Unit> units;
+public class UnitTableModel extends AbstractTableModel implements EntityTableModel<Unit> {
+    private List<Unit> units;
+    private final UnitCrudService unitCrudService;
     private final List<Column<Unit, ?>> columns = List.of(
+            Column.readonly("Unit", Unit.class, Unit -> Unit),
             Column.readonly("Name", String.class, Unit::getName),
             Column.readonly("Type", UnitType.class, Unit::getType),
             Column.readonly("Conversion to base", Double.class, Unit::getConversionToBase)
     );
 
-    public UnitTableModel(List<Unit> units) {
-        this.units = new ArrayList<>(units);
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> Unit.class;
+            case 1 -> String.class;
+            case 2 -> UnitType.class;
+            case 3 -> Double.class;
+            default -> super.getColumnClass(columnIndex);
+        };
+    }
+
+    public UnitTableModel(UnitCrudService unitCrudService) {
+        this.unitCrudService = unitCrudService;
+        this.units = new ArrayList<>(unitCrudService.findAll());
     }
 
     @Override
@@ -41,30 +57,43 @@ public class UnitTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        var ingredient = getEntity(rowIndex);
-        return columns.get(columnIndex).getValue(ingredient);
+        var unit = getEntity(rowIndex);
+        return columns.get(columnIndex).getValue(unit);
     }
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
-        var ingredient = getEntity(rowIndex);
-        columns.get(columnIndex).setValue(value, ingredient);
+        var unit = getEntity(rowIndex);
+        columns.get(columnIndex).setValue(value, unit);
     }
 
     public void deleteRow(int rowIndex) {
+        unitCrudService.deleteByGuid(units.get(rowIndex).getGuid());
         units.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
 
-    public void addRow(Unit ingredient) {
+    public void addRow(Unit unit) {
+        unitCrudService.create(unit).intoException();
         int newRowIndex = units.size();
-        units.add(ingredient);
+        units.add(unit);
         fireTableRowsInserted(newRowIndex, newRowIndex);
     }
 
-    public void updateRow(Unit ingredient) {
-        int rowIndex = units.indexOf(ingredient);
+    public void updateRow(Unit unit) {
+        unitCrudService.update(unit);
+        int rowIndex = units.indexOf(unit);
         fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+
+    public void deleteAll() {
+        unitCrudService.deleteAll();
+        refresh();
+    }
+
+    public void refresh() {
+        this.units = new ArrayList<>(unitCrudService.findAll());
+        fireTableDataChanged();
     }
 
     public Unit getEntity(int rowIndex) {

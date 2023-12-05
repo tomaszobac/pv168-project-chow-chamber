@@ -1,18 +1,34 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
-import cz.muni.fi.pv168.project.testGen.TestTable;
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
 import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.Unit;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.ui.model.tables.RecipeIngredientsTable;
+import cz.muni.fi.pv168.project.ui.renderers.IngredientComboBoxRenderer;
+import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 
 public class CustomIngredientDialog extends JDialog {
     private final JComboBox<Ingredient> ingredientComboBox = new JComboBox<>();
@@ -23,15 +39,18 @@ public class CustomIngredientDialog extends JDialog {
     private final Action editAction;
     private final Action deleteAction;
 
-    public CustomIngredientDialog(JFrame parentFrame, Recipe recipe) {
+    public CustomIngredientDialog(JFrame parentFrame, Recipe recipe, JTable ingredientTable, JTable unitTable) {
         super(parentFrame, "Recipe ingredients", true);
         setLayout(new BorderLayout());
-        for (Ingredient ingredient : TestTable.getTableThree()) {
-            ingredientComboBox.addItem(ingredient);
+
+        for (int i = 0; i < ingredientTable.getRowCount(); i++) {
+            ingredientComboBox.addItem((Ingredient) ingredientTable.getValueAt(i, 0));
         }
-        for (Unit unit : TestTable.getTableTwo()) {
-            unitComboBox.addItem(unit);
+        ingredientComboBox.setRenderer(new IngredientComboBoxRenderer());
+        for (int i = 0; i < unitTable.getRowCount(); i++) {
+            unitComboBox.addItem((Unit) unitTable.getValueAt(i, 0));
         }
+        unitComboBox.setRenderer(new UnitComboBoxRenderer());
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout());
@@ -51,15 +70,15 @@ public class CustomIngredientDialog extends JDialog {
         recipeIngredientsTableModel = new RecipeIngredientsTableModel(recipe.getIngredients());
         RecipeIngredientsTable recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(recipeIngredientsTableModel, 2, this::rowSelectionChanged);
         // recipeIngredientsTable.setMouseListener(recipeIngredientsTable);
-        editAction = new EditIngredientAction(recipeIngredientsTable);
+        editAction = new EditIngredientAction(recipeIngredientsTable, unitTable);
         deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
         add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
         addButton.addActionListener(e -> {
             Ingredient selectedIngredient = (Ingredient) ingredientComboBox.getSelectedItem();
             Unit selectedUnit = (Unit) unitComboBox.getSelectedItem();
             String amount = amountTextField.getText();
-            if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getName().equals(selectedUnit.getName()))) {
-                Ingredient newIngredient = new Ingredient(selectedIngredient.getName(), selectedIngredient.getCalories(), selectedIngredient.getUnit(), Double.parseDouble(amountTextField.getText()));
+            if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getType().equals(selectedUnit.getType()))) {
+                RecipeIngredient newIngredient = new RecipeIngredient(selectedIngredient.getName(), selectedIngredient.getCalories(), selectedUnit, Double.parseDouble(amountTextField.getText()), selectedIngredient);
                 recipeIngredientsTableModel.addRow(newIngredient);
                 recipe.addIngredient(newIngredient);
             } else {
@@ -78,7 +97,7 @@ public class CustomIngredientDialog extends JDialog {
         deleteButton.addActionListener(e -> {
             int selectedRow = recipeIngredientsTable.getSelectedRow();
             if (selectedRow >= 0) {
-                Ingredient ingredientToDelete = recipeIngredientsTableModel.getEntity(selectedRow);
+                RecipeIngredient ingredientToDelete = recipeIngredientsTableModel.getEntity(selectedRow);
                 if (ingredientToDelete != null) {
                     recipeIngredientsTableModel.deleteRow(selectedRow);
                     recipe.getIngredients().remove(ingredientToDelete);

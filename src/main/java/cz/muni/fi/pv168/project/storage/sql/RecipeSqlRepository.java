@@ -1,0 +1,75 @@
+//package cz.muni.fi.pv168.project.storage.sql;
+//
+//import cz.muni.fi.pv168.project.business.model.Employee;
+//import cz.muni.fi.pv168.project.business.repository.Repository;
+//import cz.muni.fi.pv168.project.storage.sql.dao.DataAccessObject;
+//import cz.muni.fi.pv168.project.storage.sql.dao.DataStorageException;
+//import cz.muni.fi.pv168.project.storage.sql.entity.RecipeEntity;
+//import cz.muni.fi.pv168.project.storage.sql.entity.mapper.EntityMapper;
+//import java.util.List;
+//import java.util.Optional;
+//
+///**
+// * Implementation of {@link Repository} for {@link Employee} entity using SQL database.
+// *
+// * @author Vojtech Sassmann
+// */
+//public class RecipeSqlRepository implements Repository<Employee> {
+//
+//    private final DataAccessObject<EmployeeEntity> employeeDao;
+//    private final EntityMapper<EmployeeEntity, Employee> employeeMapper;
+//
+//    public RecipeSqlRepository(
+//            DataAccessObject<EmployeeEntity> employeeDao,
+//            EntityMapper<EmployeeEntity, Employee> employeeMapper) {
+//        this.employeeDao = employeeDao;
+//        this.employeeMapper = employeeMapper;
+//    }
+//
+//
+//    @Override
+//    public List<Employee> findAll() {
+//        return employeeDao
+//                .findAll()
+//                .stream()
+//                .map(employeeMapper::mapToBusiness)
+//                .toList();
+//    }
+//
+//    @Override
+//    public void create(Employee newEntity) {
+//        employeeDao.create(employeeMapper.mapNewEntityToDatabase(newEntity));
+//    }
+//
+//    @Override
+//    public void update(Employee entity) {
+//        var existingEmployee = employeeDao.findByGuid(entity.getGuid())
+//                .orElseThrow(() -> new DataStorageException("Employee not found, guid: " + entity.getGuid()));
+//        var updatedEmployeeEntity = employeeMapper
+//                .mapExistingEntityToDatabase(entity, existingEmployee.id());
+//
+//        employeeDao.update(updatedEmployeeEntity);
+//    }
+//
+//    @Override
+//    public void deleteByGuid(String guid) {
+//        employeeDao.deleteByGuid(guid);
+//    }
+//
+//    @Override
+//    public void deleteAll() {
+//        employeeDao.deleteAll();
+//    }
+//
+//    @Override
+//    public boolean existsByGuid(String guid) {
+//        return employeeDao.existsByGuid(guid);
+//    }
+//
+//    @Override
+//    public Optional<Employee> findByGuid(String guid) {
+//       return employeeDao
+//            .findByGuid(guid)
+//            .map(employeeMapper::mapToBusiness);
+//    }
+//}

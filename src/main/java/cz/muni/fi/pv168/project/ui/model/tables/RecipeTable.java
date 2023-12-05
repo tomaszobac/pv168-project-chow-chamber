@@ -1,18 +1,27 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
-import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
-import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
-import cz.muni.fi.pv168.project.ui.dialog.CustomIngredientDialog;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
-import cz.muni.fi.pv168.project.ui.model.entities.Ingredient;
-import cz.muni.fi.pv168.project.ui.model.entities.Recipe;
-import cz.muni.fi.pv168.project.ui.model.entities.Unit;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -83,16 +92,7 @@ public class RecipeTable extends MyTable {
         Recipe recipe = (Recipe) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0);
 
         // Create a JPanel to display the recipe information
-        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipe.getName(), 0), 1);
-        infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipe.getCategoryName(), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipe.getTime().toString(), 1));
-        infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(Integer.toString(recipe.getPortions()), 1));
+        JPanel infoPanel = createInfoPanel(recipe);
 
         // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
@@ -112,19 +112,18 @@ public class RecipeTable extends MyTable {
 
         singleRecipeInfo.addTab("Ingredients", null, ingredientsTab, "Second Tab");
 
-
-
         JPanel instructionTab = new JPanel(new GridBagLayout());
 
         JTextArea textArea = new JTextArea(recipe.getInstructions());
         textArea.setEnabled(false);
         textArea.setDisabledTextColor(new Color(255, 255, 255));
+        textArea.setPreferredSize(new Dimension(200, 300));
         JScrollPane instructionsScrollPane = new JScrollPane(textArea);
+        gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
         instructionTab.add(instructionsScrollPane, gbc);
 
         gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
         singleRecipeInfo.addTab("Instructions", null, instructionTab, "Third Tab");
-
 
         // creates and handles tabs of singleRecipeInfo
         createNewRecipeTab(singleRecipeInfo, recipe.getName());
@@ -132,6 +131,20 @@ public class RecipeTable extends MyTable {
         recipesInfoFrame.add(recipesInfoTabs);
         recipesInfoFrame.pack();
         recipesInfoFrame.setVisible(true);
+    }
+
+    private JPanel createInfoPanel(Recipe recipe) {
+        JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getName(), 0), 1);
+        infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getCategoryName(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getTime().toString(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(Integer.toString(recipe.getPortions()), 1));
+        return infoPanel;
     }
 
     private void createNewRecipeTab(JTabbedPane singleRecipeInfo, String name) {

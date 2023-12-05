@@ -1,6 +1,6 @@
 package cz.muni.fi.pv168.project.ui.model.enums;
 
-public enum RecipeCategories {
+public enum RecipeCategory {
     PRILOHA("Příloha"),
     HLAVNI_JIDLO("Hlavní jídlo"),
     ZAKUSEK("Zákusek"),
@@ -8,7 +8,7 @@ public enum RecipeCategories {
 
     private final String category;
 
-    RecipeCategories(String s) {
+    RecipeCategory(String s) {
         this.category = s;
     }
 

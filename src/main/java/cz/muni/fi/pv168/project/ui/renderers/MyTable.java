@@ -1,9 +1,11 @@
 package cz.muni.fi.pv168.project.ui.renderers;
 
-import javax.swing.*;
+import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+
 // TODO: make the whole tables package with MyTable more abstract to avoid code duplication
 public class MyTable extends JTable {
 

@@ -39,7 +39,6 @@ class GenericExportServiceIntegrationTest {
     private static final Path TEST_RESOURCES = PROJECT_ROOT.resolve(Path.of("src", "test", "resources"));
 
     private final Path exportFilePath = TEST_RESOURCES
-            .resolve("output")
             .resolve("test_export" + ".json");
 
     private GenericExportService genericExportService;

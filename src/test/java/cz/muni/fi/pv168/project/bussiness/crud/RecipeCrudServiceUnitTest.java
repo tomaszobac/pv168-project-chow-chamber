@@ -24,8 +24,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RecipeCrudServiceUnitTest {
-    // private static final Department IT_DEPARTMENT = new Department("d-1", "IT", "22");
-
     private RecipeCrudService recipeCrudService;
     private Repository<Recipe> recipeRepository;
     private RecipeValidator recipeValidator;
@@ -71,9 +69,6 @@ public class RecipeCrudServiceUnitTest {
         assertThat(result).isEqualTo(ValidationResult.success());
         verify(recipeRepository, times(1))
                 .create(refEq(expectedRecipe));
-        // The 'refEq' is used to compare instances field by field. Default compares instances
-        // using the 'equals' method. That is not sufficient because we want to test here that
-        // all fields have the exact value we expect.
     }
 
     @Test

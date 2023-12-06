@@ -22,7 +22,6 @@ public final class DatabaseManager {
     private final String databaseConnectionString;
 
     private DatabaseManager(String jdbcUri) {
-        // connection pool with empty credentials
         this.databaseConnectionString = jdbcUri;
         this.dataSource = JdbcConnectionPool.create(jdbcUri, "", "");
 

@@ -1,8 +1,10 @@
 package cz.muni.fi.pv168.project;
 
-import cz.muni.fi.pv168.project.ui.MainWindow;
-
 import java.awt.EventQueue;
+
+import cz.muni.fi.pv168.project.ui.MainWindow;
+import cz.muni.fi.pv168.project.wiring.ProductionDependencyProvider;
+
 
 /**
  * The entry point of the application.
@@ -14,6 +16,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> new MainWindow().show());
+        EventQueue.invokeLater(() -> new MainWindow(new ProductionDependencyProvider()).show());
     }
 }

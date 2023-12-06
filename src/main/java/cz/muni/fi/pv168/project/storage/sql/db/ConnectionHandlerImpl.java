@@ -29,7 +29,6 @@ class ConnectionHandlerImpl implements ConnectionHandler {
     public void close() {
         try {
             if (connection.getAutoCommit()) {
-                // Not transaction, connection can be closed
                 connection.close();
             }
         } catch (SQLException e) {

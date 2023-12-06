@@ -91,17 +91,14 @@ public class RecipeTable extends MyTable {
         JTabbedPane singleRecipeInfo = new JTabbedPane();
         Recipe recipe = (Recipe) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0);
 
-        // Create a JPanel to display the recipe information
         JPanel infoPanel = createInfoPanel(recipe);
 
-        // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
 
-        // Use GridBagConstraints to control resizing
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0; // Allows horizontal resizing
-        gbc.weighty = 1.0; // Allows vertical resizing
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
 
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
         RecipeIngredientsTableModel recipeIngredientsTableModel = new RecipeIngredientsTableModel(recipe.getIngredients());
@@ -119,13 +116,12 @@ public class RecipeTable extends MyTable {
         textArea.setDisabledTextColor(new Color(255, 255, 255));
         textArea.setPreferredSize(new Dimension(200, 300));
         JScrollPane instructionsScrollPane = new JScrollPane(textArea);
-        gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
+        gbc.insets = new Insets(20, 20, 20, 20);
         instructionTab.add(instructionsScrollPane, gbc);
 
-        gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
+        gbc.insets = new Insets(20, 20, 20, 20);
         singleRecipeInfo.addTab("Instructions", null, instructionTab, "Third Tab");
 
-        // creates and handles tabs of singleRecipeInfo
         createNewRecipeTab(singleRecipeInfo, recipe.getName());
         MainWindowUtilities.switchToTab(recipeInTabs - 1, recipesInfoTabs);
         recipesInfoFrame.add(recipesInfoTabs);
@@ -148,17 +144,14 @@ public class RecipeTable extends MyTable {
     }
 
     private void createNewRecipeTab(JTabbedPane singleRecipeInfo, String name) {
-        // Create a custom tab component with a close button
         JPanel customTabComponent = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         JLabel titleLabel = new JLabel(name);
         JButton closeButton = getjButton(singleRecipeInfo);
         customTabComponent.add(titleLabel);
         customTabComponent.add(closeButton);
-        // Add the tab to the tabbed pane with the custom tab component
         recipesInfoTabs.addTab(null, singleRecipeInfo);
         int tabIndex = recipesInfoTabs.indexOfComponent(singleRecipeInfo);
         recipesInfoTabs.setTabComponentAt(tabIndex, customTabComponent);
-        // Set the selected tab
         recipesInfoTabs.setSelectedIndex(tabIndex);
     }
 
@@ -167,7 +160,6 @@ public class RecipeTable extends MyTable {
         closeButton.setPreferredSize(new Dimension(16, 16));
 
         closeButton.addActionListener(e -> {
-            // Handle tab removal when the close button is clicked
             int tabIndex = recipesInfoTabs.indexOfComponent(singleRecipeInfo);
             if (tabIndex != -1) {
                 recipesInfoTabs.remove(tabIndex);

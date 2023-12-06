@@ -25,11 +25,8 @@ public class DeleteIngredientAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         var ingredientTableModel = (IngredientTableModel) ingredientTable.getModel();
         Arrays.stream(ingredientTable.getSelectedRows())
-                // view row index must be converted to model row index
                 .map(ingredientTable::convertRowIndexToModel)
                 .boxed()
-                // We need to delete rows in descending order to not change index of rows
-                // which are not deleted yet
                 .sorted(Comparator.reverseOrder())
                 .forEach(ingredientTableModel::deleteRow);
     }

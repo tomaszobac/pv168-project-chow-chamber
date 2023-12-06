@@ -21,7 +21,6 @@ public class GenericExportService implements ExportService {
     private final CrudService<Recipe> recipeCrudService;
     private final CrudService<Unit> unitCrudService;
     private final CrudService<Ingredient> ingredientCrudService;
-
     private final FormatMapping<BatchExporter> exporters;
 
     public GenericExportService(

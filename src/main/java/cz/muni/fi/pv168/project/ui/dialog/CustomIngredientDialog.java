@@ -35,6 +35,7 @@ public class CustomIngredientDialog extends JDialog {
     private final JComboBox<Unit> unitComboBox = new JComboBox<>();
     private final JTextField amountTextField = new JTextField();
     private final RecipeIngredientsTableModel recipeIngredientsTableModel;
+    // edit action for possible editing, don't know if needed
     private final Action editAction;
     private final Action deleteAction;
 
@@ -61,13 +62,14 @@ public class CustomIngredientDialog extends JDialog {
         topPanel.add(unitComboBox);
 
         JButton addButton = new JButton("Add Ingredient");
-        addButton.setForeground(Color.WHITE);
+        addButton.setForeground(Color.WHITE); // Set the text color to white
         Font buttonFont = addButton.getFont();
-        addButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
+        addButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize())); // Make the text bold
         addButton.setBackground(new Color(42, 162, 26));
 
         recipeIngredientsTableModel = new RecipeIngredientsTableModel(recipe.getIngredients());
         RecipeIngredientsTable recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(recipeIngredientsTableModel, 2, this::rowSelectionChanged);
+        // recipeIngredientsTable.setMouseListener(recipeIngredientsTable);
         editAction = new EditIngredientAction(recipeIngredientsTable, unitTable);
         deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
         add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
@@ -80,14 +82,15 @@ public class CustomIngredientDialog extends JDialog {
                 recipeIngredientsTableModel.addRow(newIngredient);
                 recipe.addIngredient(newIngredient);
             } else {
+                // Display an error dialog
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         topPanel.add(addButton, BorderLayout.SOUTH);
 
         JButton deleteButton = new JButton("Delete Ingredient");
-        deleteButton.setForeground(Color.WHITE);
-        deleteButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
+        deleteButton.setForeground(Color.WHITE); // Set the text color to white
+        deleteButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize())); // Make the text bold
         deleteButton.setBackground(new Color(182, 28, 28));
         topPanel.add(deleteButton, BorderLayout.SOUTH);
         deleteButton.addActionListener(deleteAction);
@@ -100,6 +103,7 @@ public class CustomIngredientDialog extends JDialog {
                     recipe.getIngredients().remove(ingredientToDelete);
                 }
             } else {
+                // Display an error dialog if no ingredient is selected
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, "Please select an ingredient to delete", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });

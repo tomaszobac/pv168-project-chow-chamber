@@ -1,2 +1,12 @@
-2023-12-07 00:07:30 [main] cz.muni.fi.pv168.project.storage.sql.db.DatabaseManager.createDbFileSystemPath()
-DEBUG: Root directory for the database already exists: C:\Users\Tom\Documents\pv168-project-template\db
+2023-11-30 21:46:45 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{category: Hlavní jídlo; name: test; time: 01:10; portions: 10, numberOfIngredients: 2}
+2023-11-30 21:46:45 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{category: Příloha; name: fsadfdsfs; time: 00:10; portions: 4, numberOfIngredients: 5}
+2023-11-30 21:46:45 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{category: Příloha; name: Vomáčka; time: 00:10; portions: 4, numberOfIngredients: 0}
+2023-11-30 21:46:45 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{category: Příloha; name: Vomáčka; time: 00:10; portions: 4, numberOfIngredients: 0}
+2023-11-30 21:46:45 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{category: Bez kategorie; name: nevim; time: 23:59; portions: 99, numberOfIngredients: 0}
+2023-11-30 21:46:45 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{category: Příloha; name: Vomáčka; time: 00:10; portions: 4, numberOfIngredients: 0}

@@ -1,7 +1,6 @@
 package cz.muni.fi.pv168.project.ui.action.recipe;
 
 import cz.muni.fi.pv168.project.ui.dialog.RecipeDialog;
-import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
 
@@ -15,16 +14,12 @@ public class EditRecipeAction extends AbstractAction {
     private final JTable recipeTable;
     private final JTable ingredientTable;
     private final JTable unitTable;
-    private final JTable recipeIngredientsTable;
-    private final RecipeIngredientTableFilter filter;
 
-    public EditRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
+    public EditRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable) {
         super("Edit", Icons.EDIT_ICON);
         this.recipeTable = recipeTable;
         this.ingredientTable = ingredientTable;
         this.unitTable = unitTable;
-        this.recipeIngredientsTable = recipeIngredientsTable;
-        this.filter = filter;
         putValue(SHORT_DESCRIPTION, "Edits selected recipe");
         putValue(MNEMONIC_KEY, KeyEvent.VK_E);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl E"));
@@ -42,7 +37,7 @@ public class EditRecipeAction extends AbstractAction {
         var recipeTableModel = (RecipeTableModel) recipeTable.getModel();
         int modelRow = recipeTable.convertRowIndexToModel(selectedRows[0]);
         var recipe = recipeTableModel.getEntity(modelRow);
-        var dialog = new RecipeDialog(recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
+        var dialog = new RecipeDialog(recipe, ingredientTable, unitTable);
         dialog.show(recipeTable, "Edit recipe")
                 .ifPresent(recipeTableModel::updateRow);
     }

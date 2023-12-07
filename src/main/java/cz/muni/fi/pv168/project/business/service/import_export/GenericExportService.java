@@ -1,7 +1,6 @@
 package cz.muni.fi.pv168.project.business.service.import_export;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
-import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.service.crud.CrudService;
@@ -22,20 +21,18 @@ public class GenericExportService implements ExportService {
     private final CrudService<Recipe> recipeCrudService;
     private final CrudService<Unit> unitCrudService;
     private final CrudService<Ingredient> ingredientCrudService;
-    private final CrudService<RecipeIngredient> recipeIngredientCrudService;
+
     private final FormatMapping<BatchExporter> exporters;
 
     public GenericExportService(
             CrudService<Recipe> recipeCrudService,
             CrudService<Unit> unitCrudService,
             CrudService<Ingredient> ingredientCrudService,
-            CrudService<RecipeIngredient> recipeIngredientCrudService,
             List<BatchExporter> exporters
     ) {
         this.recipeCrudService = recipeCrudService;
         this.unitCrudService = unitCrudService;
         this.ingredientCrudService = ingredientCrudService;
-        this.recipeIngredientCrudService = recipeIngredientCrudService;
         this.exporters = new FormatMapping<>(exporters);
     }
 
@@ -48,7 +45,7 @@ public class GenericExportService implements ExportService {
     public void exportData(String filePath) {
         var exporter = getExporter(filePath);
 
-        var batch = new Batch(unitCrudService.findAll(), ingredientCrudService.findAll(), recipeCrudService.findAll(), recipeIngredientCrudService.findAll());
+        var batch = new Batch(unitCrudService.findAll(), ingredientCrudService.findAll(), recipeCrudService.findAll());
         exporter.exportBatch(batch, filePath);
     }
 

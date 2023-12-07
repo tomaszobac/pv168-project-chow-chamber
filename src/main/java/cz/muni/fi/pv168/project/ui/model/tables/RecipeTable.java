@@ -1,15 +1,8 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
-import cz.muni.fi.pv168.project.business.model.GuidProvider;
-import cz.muni.fi.pv168.project.business.model.Ingredient;
-import cz.muni.fi.pv168.project.business.model.Recipe;
-import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
-import cz.muni.fi.pv168.project.business.repository.Repository;
-import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
-import cz.muni.fi.pv168.project.business.service.validation.RecipeIngredientValidator;
-import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
 import javax.swing.BorderFactory;
@@ -19,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
@@ -34,10 +26,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RecipeTable extends MyTable {
-    private final List<Recipe> infoTables = new ArrayList<>();
+    private final List<List<String>> infoTables = new ArrayList<>();
     private JFrame recipesInfoFrame = null;
     private JTabbedPane recipesInfoTabs = null;
     private int recipeInTabs = 0;
@@ -45,7 +36,7 @@ public class RecipeTable extends MyTable {
     public RecipeTable(AbstractTableModel model) {
         super(model);
     }
-    public void setMouseListener(MyTable recipeTable, RecipeIngredientCrudService recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
+    public void setMouseListener(MyTable recipeTable) {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -56,8 +47,13 @@ public class RecipeTable extends MyTable {
                         recipesInfoFrame.setVisible(true);
                     } else{
                         recipeInTabs++;
-                        infoTables.add((Recipe) getValueAt(getSelectedRow(), 0));
-                        openRecipeInfoWindow(recipeTable, recIngCrud, ingRepository, recRepository, provider);
+                        List<String> newRecipe = new ArrayList<>();
+                        newRecipe.add(getValueAt(getSelectedRow(), 0).toString());
+                        newRecipe.add(getValueAt(getSelectedRow(), 1).toString());
+                        newRecipe.add(getValueAt(getSelectedRow(), 2).toString());
+                        newRecipe.add(getValueAt(getSelectedRow(), 3).toString());
+                        infoTables.add(newRecipe);
+                        openRecipeInfoWindow(recipeTable);
                     }
                 }
             }
@@ -68,7 +64,7 @@ public class RecipeTable extends MyTable {
         boolean flag = true;
         for (int j = 0; j < infoTables.size(); j++) {
             for (int i = 0; i < 4; i++) {
-                if (!infoTables.get(j).equals(recipeTable.getValueAt(recipeTable.getSelectedRow(), 0))) {
+                if (!infoTables.get(j).get(i).equals(recipeTable.getValueAt(recipeTable.getSelectedRow(), i).toString())) {
                     flag = true;
                     break;
                 }
@@ -86,7 +82,7 @@ public class RecipeTable extends MyTable {
      *
      * @param recipeTable represents table of stored recipes.
      */
-    private void openRecipeInfoWindow(MyTable recipeTable, RecipeIngredientCrudService recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
+    private void openRecipeInfoWindow(MyTable recipeTable) {
         if (recipesInfoFrame == null) {
             recipesInfoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
             recipesInfoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -95,24 +91,22 @@ public class RecipeTable extends MyTable {
         JTabbedPane singleRecipeInfo = new JTabbedPane();
         Recipe recipe = (Recipe) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0);
 
+        // Create a JPanel to display the recipe information
         JPanel infoPanel = createInfoPanel(recipe);
 
+        // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
 
+        // Use GridBagConstraints to control resizing
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
+        gbc.weightx = 1.0; // Allows horizontal resizing
+        gbc.weighty = 1.0; // Allows vertical resizing
 
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
-
-        RecipeIngredientValidator validator = new RecipeIngredientValidator();
-        RecipeIngredientCrudService crud = new RecipeIngredientCrudService(new InMemoryRepository<>(List.of()), validator, provider);
-        RecipeIngredientsTableModel recIngTableModel = new RecipeIngredientsTableModel(crud , recRepository, ingRepository);
-        getIngredients(recipe, recIngCrud).forEach(recIngTableModel::addRow);
-        JTable table = MainWindowUtilities.createTableFromModel(recIngTableModel, 2, null);
-        JScrollPane recipeIngredientsScrollPane = new JScrollPane(table);
-        MainWindowUtilities.hideFirstColumn(table);
+        RecipeIngredientsTableModel recipeIngredientsTableModel = new RecipeIngredientsTableModel(recipe.getIngredients());
+        RecipeIngredientsTable recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(recipeIngredientsTableModel, 2, null);
+        JScrollPane recipeIngredientsScrollPane = new JScrollPane(recipeIngredientsTable);
 
         ingredientsTab.add(recipeIngredientsScrollPane, gbc);
 
@@ -125,19 +119,18 @@ public class RecipeTable extends MyTable {
         textArea.setDisabledTextColor(new Color(255, 255, 255));
         textArea.setPreferredSize(new Dimension(200, 300));
         JScrollPane instructionsScrollPane = new JScrollPane(textArea);
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
         instructionTab.add(instructionsScrollPane, gbc);
 
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = new Insets(20, 20, 20, 20); // Gives it space between border and the content
         singleRecipeInfo.addTab("Instructions", null, instructionTab, "Third Tab");
 
+        // creates and handles tabs of singleRecipeInfo
         createNewRecipeTab(singleRecipeInfo, recipe.getName());
         MainWindowUtilities.switchToTab(recipeInTabs - 1, recipesInfoTabs);
         recipesInfoFrame.add(recipesInfoTabs);
         recipesInfoFrame.pack();
         recipesInfoFrame.setVisible(true);
-
-
     }
 
     private JPanel createInfoPanel(Recipe recipe) {
@@ -155,14 +148,17 @@ public class RecipeTable extends MyTable {
     }
 
     private void createNewRecipeTab(JTabbedPane singleRecipeInfo, String name) {
+        // Create a custom tab component with a close button
         JPanel customTabComponent = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         JLabel titleLabel = new JLabel(name);
         JButton closeButton = getjButton(singleRecipeInfo);
         customTabComponent.add(titleLabel);
         customTabComponent.add(closeButton);
+        // Add the tab to the tabbed pane with the custom tab component
         recipesInfoTabs.addTab(null, singleRecipeInfo);
         int tabIndex = recipesInfoTabs.indexOfComponent(singleRecipeInfo);
         recipesInfoTabs.setTabComponentAt(tabIndex, customTabComponent);
+        // Set the selected tab
         recipesInfoTabs.setSelectedIndex(tabIndex);
     }
 
@@ -171,6 +167,7 @@ public class RecipeTable extends MyTable {
         closeButton.setPreferredSize(new Dimension(16, 16));
 
         closeButton.addActionListener(e -> {
+            // Handle tab removal when the close button is clicked
             int tabIndex = recipesInfoTabs.indexOfComponent(singleRecipeInfo);
             if (tabIndex != -1) {
                 recipesInfoTabs.remove(tabIndex);
@@ -182,12 +179,5 @@ public class RecipeTable extends MyTable {
             }
         });
         return closeButton;
-    }
-
-    private List<RecipeIngredient> getIngredients(Recipe recipe, RecipeIngredientCrudService crud) {
-        return crud.findAll()
-                .stream()
-                .filter(recipeIngredient -> recipeIngredient.getRecipeGuid().equals(recipe.getGuid()))
-                .collect(Collectors.toList());
     }
 }

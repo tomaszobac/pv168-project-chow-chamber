@@ -96,10 +96,10 @@ public class BatchJsonExporter implements BatchExporter {
         boolean flag = true;
         for(RecipeIngredient i: recipe.getIngredients()){
             line.append("{");
-            line.append("\"name\":");
-            line.append("\"" + i.getName() + "\",");
-            line.append("\"calories\":");
-            line.append("\"" + i.getCalories() + "\",");
+            line.append("\"recipeGuid\":");
+            line.append("\"" + i.getRecipe().getGuid() + "\",");
+            line.append("\"ingredientGuid\":");
+            line.append("\"" + i.getIngredient().getGuid() + "\",");
             line.append("\"unit\":");
             line.append("{");
             line.append("\"name\":");

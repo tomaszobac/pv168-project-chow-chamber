@@ -127,7 +127,7 @@ public class MainWindow {
                 ingredientCrudService,
                 List.of(new BatchJsonImporter()));
 
-        importService.importData(null);
+        //importService.importData(null);
 
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);

@@ -76,7 +76,7 @@ public class CustomIngredientDialog extends JDialog {
             Unit selectedUnit = (Unit) unitComboBox.getSelectedItem();
             String amount = amountTextField.getText();
             if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getType().equals(selectedUnit.getType()))) {
-                RecipeIngredient newIngredient = new RecipeIngredient(selectedIngredient.getName(), selectedIngredient.getCalories(), selectedUnit, Double.parseDouble(amountTextField.getText()), selectedIngredient);
+                RecipeIngredient newIngredient = new RecipeIngredient(recipe,  selectedIngredient, selectedUnit, Double.parseDouble(amountTextField.getText()));
                 recipeIngredientsTableModel.addRow(newIngredient);
                 recipe.addIngredient(newIngredient);
             } else {

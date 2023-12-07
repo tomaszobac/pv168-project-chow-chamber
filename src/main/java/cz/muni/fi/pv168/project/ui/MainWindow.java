@@ -131,11 +131,13 @@ public class MainWindow {
         GenericExportService exportService = new GenericExportService(recipeCrudService,
                 unitCrudService,
                 ingredientCrudService,
+                recipeIngredientCrudService,
                 List.of(new BatchJsonExporter()));
 
         GenericImportService importService = new GenericImportService(recipeCrudService,
                 unitCrudService,
                 ingredientCrudService,
+                recipeIngredientCrudService,
                 List.of(new BatchJsonImporter()));
 
         //importService.importData(null);

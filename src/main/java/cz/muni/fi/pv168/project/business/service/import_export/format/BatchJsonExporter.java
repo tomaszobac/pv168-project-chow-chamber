@@ -2,6 +2,7 @@ package cz.muni.fi.pv168.project.business.service.import_export.format;
 
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.service.import_export.DataManipulationException;
 import cz.muni.fi.pv168.project.business.service.import_export.batch.Batch;
@@ -72,6 +73,22 @@ public class BatchJsonExporter implements BatchExporter {
                 writer.write(line.toString());
                 start = false;
             }
+            writer.write(ending);
+            writer.newLine();
+
+            String recipeIngredients = "\"recipeIngredient\":[";
+            writer.write(recipeIngredients);
+            start = true;
+
+            for (var recipeIngredient : batch.recipeIngredients()) {
+                StringBuilder line = new StringBuilder();
+                if (!start){
+                    line.append(",");
+                }
+                createJsonRecipeIngredientLine(line, recipeIngredient);
+                writer.write(line.toString());
+                start = false;
+            }
             writer.write("]");
             writer.write("}");
             writer.newLine();
@@ -119,5 +136,18 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"" + ingredient.getUnit().getConversionToBase() + "\"");
         line.append("}");
         line.append("}");
+    }
+
+    public void createJsonRecipeIngredientLine(StringBuilder line, RecipeIngredient recipeIngredient) {
+        line.append("{");
+        line.append("\"recipeGuid\":");
+        line.append("\"" + recipeIngredient.getRecipe().getGuid() + "\",");
+        line.append("\"ingredientGuid\":");
+        line.append("\"" + recipeIngredient.getIngredient().getGuid() + "\",");
+        line.append("\"unit\":");
+        createJsonUnitLine(line, recipeIngredient.getUnit());
+        line.append(",");
+        line.append("\"amount\":");
+        line.append("\"" + recipeIngredient.getAmount() + "\",");
     }
 }

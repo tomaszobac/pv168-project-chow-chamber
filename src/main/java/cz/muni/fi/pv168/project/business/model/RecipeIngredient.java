@@ -13,6 +13,15 @@ public class RecipeIngredient extends Entity {
     Unit unit;
     double amount;
 
+
+    public RecipeIngredient(String guid, String recipeGuid, String ingredientGuid, Unit unit, double amount) {
+        super(guid);
+        this.recipeGuid = recipeGuid;
+        this.ingredientGuid = ingredientGuid;
+        this.unit = unit;
+        this.amount = amount;
+    }
+
     @JsonCreator
     public RecipeIngredient(@JsonProperty("recipeGuid") String recipeGuid,
                             @JsonProperty("ingredientGuid") String ingredientGuid,
@@ -37,6 +46,14 @@ public class RecipeIngredient extends Entity {
 
     public double getCaloriesPerSetAmount() {
         return ingredient.getCalories() * (amount * unit.getConversionToBase()) / ingredient.getUnit().getConversionToBase();
+    }
+
+    public String getRecipeGuid() {
+        return recipeGuid;
+    }
+
+    public String getIngredientGuid() {
+        return ingredientGuid;
     }
 
     public Recipe getRecipe() {

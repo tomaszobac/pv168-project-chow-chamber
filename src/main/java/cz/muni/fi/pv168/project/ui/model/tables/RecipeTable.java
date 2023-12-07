@@ -101,7 +101,7 @@ public class RecipeTable extends MyTable {
         gbc.weighty = 1.0;
 
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
-        JScrollPane recipeIngredientsScrollPane = new JScrollPane(recipeIngredientsTable); // TODO: Add filter to show only own ingredients
+        JScrollPane recipeIngredientsScrollPane = new JScrollPane(recipeIngredientsTable);
 
         ingredientsTab.add(recipeIngredientsScrollPane, gbc);
 

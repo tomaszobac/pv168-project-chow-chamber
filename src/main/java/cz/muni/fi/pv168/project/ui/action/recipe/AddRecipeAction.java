@@ -2,6 +2,7 @@ package cz.muni.fi.pv168.project.ui.action.recipe;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.dialog.RecipeDialog;
+import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
 
@@ -19,8 +20,9 @@ public class AddRecipeAction extends AbstractAction {
     private final JTable ingredientTable;
     private final JTable unitTable;
     private final JTable recipeIngredientsTable;
+    private final RecipeIngredientTableFilter filter;
 
-    public AddRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable) {
+    public AddRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
         super("Add", Icons.ADD_ICON);
         putValue(SHORT_DESCRIPTION, "Adds new recipe");
         putValue(MNEMONIC_KEY, KeyEvent.VK_A);
@@ -29,12 +31,13 @@ public class AddRecipeAction extends AbstractAction {
         this.ingredientTable = ingredientTable;
         this.unitTable = unitTable;
         this.recipeIngredientsTable = recipeIngredientsTable;
+        this.filter = filter;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         var recipeTableModel = (RecipeTableModel) this.recipeTable.getModel();
-        var dialog = new RecipeDialog(createPrefilledRecipe(), ingredientTable, unitTable, recipeIngredientsTable);
+        var dialog = new RecipeDialog(createPrefilledRecipe(), ingredientTable, unitTable, recipeIngredientsTable, filter);
         dialog.show(recipeTable, "Add recipe")
                 .ifPresent(recipeTableModel::addRow);
     }

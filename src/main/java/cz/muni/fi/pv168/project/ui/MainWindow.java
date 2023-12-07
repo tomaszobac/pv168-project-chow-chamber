@@ -35,6 +35,7 @@ import cz.muni.fi.pv168.project.ui.action.unit.DeleteUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.EditUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.FilterUnitAction;
 import cz.muni.fi.pv168.project.ui.filters.IngredientTableFilter;
+import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.RecipeTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.UnitTableFilter;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
@@ -81,6 +82,7 @@ public class MainWindow {
     private final RecipeTableFilter recipeTableFilter;
     private final UnitTableFilter unitTableFilter;
     private final IngredientTableFilter ingredientTableFilter;
+    private final RecipeIngredientTableFilter recipeIngredientsTableFilter;
 
     public MainWindow(DependencyProvider dependencyProvider) {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
@@ -128,6 +130,11 @@ public class MainWindow {
         ingredientTable.setRowSorter(ingredientRowSorter);
         this.ingredientTableFilter = ingredientFilter;
 
+        TableRowSorter<RecipeIngredientsTableModel> recipeIngredientRowSorter = new TableRowSorter<>((RecipeIngredientsTableModel) recipeIngredientsTable.getModel());
+        RecipeIngredientTableFilter recipeIngredientFilter = new RecipeIngredientTableFilter(recipeIngredientRowSorter);
+        recipeIngredientsTable.setRowSorter(recipeIngredientRowSorter);
+        this.recipeIngredientsTableFilter = recipeIngredientFilter;
+
         GenericExportService exportService = new GenericExportService(recipeCrudService,
                 unitCrudService,
                 ingredientCrudService,
@@ -142,8 +149,8 @@ public class MainWindow {
 
         //importService.importData(null);
 
-        addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable);
-        editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable);
+        addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);
+        editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);
         deleteAction = new DeleteRecipeAction(recipeTable);
         importAction = new ImportAction(importService, this::refresh);
         exportAction = new ExportAction(exportService);
@@ -179,8 +186,8 @@ public class MainWindow {
 
         switch (selectedIndex) {
             case 0:  // Recipes tab
-                addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable);
-                editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable);
+                addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter);
+                editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter);
                 deleteAction = new DeleteRecipeAction(recipeTable);
                 filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
                 break;

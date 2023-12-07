@@ -6,6 +6,7 @@ import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
+import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.renderers.IngredientComboBoxRenderer;
 import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
@@ -35,7 +36,7 @@ public class CustomIngredientDialog extends JDialog {
     private final Action editAction;
     private final Action deleteAction;
 
-    public CustomIngredientDialog(JFrame parentFrame, Recipe recipe, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable) {
+    public CustomIngredientDialog(JFrame parentFrame, Recipe recipe, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
         super(parentFrame, "Recipe ingredients", true);
         setLayout(new BorderLayout());
 
@@ -62,6 +63,8 @@ public class CustomIngredientDialog extends JDialog {
         Font buttonFont = addButton.getFont();
         addButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
         addButton.setBackground(new Color(42, 162, 26));
+
+        filter.filterGuid(recipe.getGuid());
 
         editAction = new EditIngredientAction(recipeIngredientsTable, unitTable);
         deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);

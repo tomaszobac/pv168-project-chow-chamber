@@ -2,7 +2,6 @@ package cz.muni.fi.pv168.project.business.service.import_export.format;
 
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
-import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.service.import_export.DataManipulationException;
 import cz.muni.fi.pv168.project.business.service.import_export.batch.Batch;
@@ -91,35 +90,7 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"time\":");
         line.append("\"" + recipe.getTime().toString() + "\",");
         line.append("\"portions\":");
-        line.append("\"" + recipe.getPortions() + "\",");
-        line.append("\"ingredients\":[");
-        boolean flag = true;
-        for(RecipeIngredient i: recipe.getIngredients()){
-            line.append("{");
-            line.append("\"recipeGuid\":");
-            line.append("\"" + i.getRecipe().getGuid() + "\",");
-            line.append("\"ingredientGuid\":");
-            line.append("\"" + i.getIngredient().getGuid() + "\",");
-            line.append("\"unit\":");
-            line.append("{");
-            line.append("\"name\":");
-            line.append("\"" + i.getUnit().getName() + "\",");
-            line.append("\"type\":");
-            line.append("\"" + i.getUnit().getType().toString() + "\",");
-            line.append("\"conversionToBase\":");
-            line.append("\"" + i.getUnit().getConversionToBase() + "\"");
-            line.append("},");
-            line.append("\"amount\":");
-            line.append("\"" + i.getAmount() + "\"");
-            line.append("},");
-            flag = false;
-        }
-        if (!flag){
-            line.deleteCharAt(line.length() - 1);
-        }
-        line.append("],");
-        line.append("\"numberOfIngredients\":");
-        line.append("\"" + recipe.getNumberOfIngredients() + "\"");
+        line.append("\"" + recipe.getPortions() + "\"");
         line.append("}");
     }
     public void createJsonUnitLine(StringBuilder line, Unit unit){

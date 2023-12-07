@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -19,8 +18,6 @@ public class Recipe extends Entity {
     private RecipeCategory category;
     private LocalTime time;
     private int portions;
-    private ArrayList<RecipeIngredient> ingredients;
-    private int numberOfIngredients;
 
     /**
      * Creates a new Recipe object with the specified parameters.
@@ -30,41 +27,15 @@ public class Recipe extends Entity {
      * @param category     The category of the recipe.
      * @param time         The cooking time of the recipe.
      * @param portions     The number of portions the recipe yields.
-     * @param ingredients  The list of ingredients required for the recipe.
      * @param instructions The cooking instructions for the recipe.
      */
-    public Recipe(String guid, String name, RecipeCategory category, LocalTime time, int portions,
-                  ArrayList<RecipeIngredient> ingredients, String instructions) {
+    public Recipe(String guid, String name, RecipeCategory category, LocalTime time, int portions, String instructions) {
         super(guid);
         this.name = name;
         this.category = category;
         this.time = time;
         this.portions = portions;
-        this.ingredients = ingredients;
-        this.numberOfIngredients = ingredients.size();
         this.instructions = instructions;
-    }
-
-    /**
-     * Constructs a new Recipe instance with the given parameters.
-     *
-     * @param name the name of the recipe (not null)
-     * @param category the category of the recipe (not null)
-     * @param time the cooking time of the recipe (not null)
-     * @param portions the number of portions the recipe makes
-     * @param ingredients the list of ingredients required for the recipe (not null)
-     * @param instructions the cooking instructions for the recipe (not null)
-     * @throws NullPointerException if any of the required parameters (name, category, time, ingredients, or instructions) are null
-     */
-    public Recipe(String name, RecipeCategory category, LocalTime time, int portions,
-                  ArrayList<RecipeIngredient> ingredients, String instructions) {
-        this.name = Objects.requireNonNull(name, "name must not be null");
-        this.category = Objects.requireNonNull(category, "category must not be null");
-        this.time = Objects.requireNonNull(time, "time must not be null");
-        this.portions = portions;
-        this.ingredients = Objects.requireNonNull(ingredients, "ingredients must not be null");
-        this.numberOfIngredients = ingredients.size();
-        this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
     }
 
     /**
@@ -74,7 +45,6 @@ public class Recipe extends Entity {
      * @param category     the category of the recipe, must not be null
      * @param time         the time required to prepare the recipe, must not be null
      * @param portions     the number of portions the recipe serves
-     * @param ingredients  the list of ingredients required for the recipe, must not be null
      * @param instructions the instructions to prepare the recipe, must not be null
      */
     @JsonCreator
@@ -82,11 +52,12 @@ public class Recipe extends Entity {
                   @JsonProperty("instructions") String instructions,
                   @JsonProperty("category") RecipeCategory category,
                   @JsonProperty("time") LocalTime time,
-                  @JsonProperty("portions") int portions,
-                  @JsonProperty("ingredients") ArrayList<RecipeIngredient> ingredients,
-                  @JsonProperty("numberOfIngredients") int numberOfIngredients) {
-        this(name, category, time, portions, ingredients, instructions);
-        this.numberOfIngredients = numberOfIngredients;
+                  @JsonProperty("portions") int portions) {
+        this.name = Objects.requireNonNull(name, "name must not be null");
+        this.category = Objects.requireNonNull(category, "category must not be null");
+        this.time = Objects.requireNonNull(time, "time must not be null");
+        this.portions = portions;
+        this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
     }
 
     /**
@@ -191,47 +162,7 @@ public class Recipe extends Entity {
     public void setInstructions(String instructions) {
         this.instructions = Objects.requireNonNull(instructions, "Instructions must not be null");
     }
-
-    /**
-     * Retrieves the list of ingredients in the recipe.
-     *
-     * @return The list of ingredients in the recipe.
-     */
-    public ArrayList<RecipeIngredient> getIngredients() {
-        return ingredients;
-    }
-
-    /**
-     * Sets the ingredients of the recipe.
-     *
-     * @param ingredients the list of RecipeIngredient objects representing the ingredients
-     * @throws NullPointerException if ingredients is null
-     */
-    public void setIngredients(ArrayList<RecipeIngredient> ingredients) {
-        this.ingredients = Objects.requireNonNull(ingredients, "Ingredients must not be null");
-        this.numberOfIngredients = ingredients.size();
-    }
-
-    /**
-     * Adds a new ingredient to the list of ingredients.
-     *
-     * @param ingredient The RecipeIngredient object to add.
-     */
-    public void addIngredient(RecipeIngredient ingredient) {
-        ingredients.add(ingredient);
-        numberOfIngredients++;
-    }
-
-    /**
-     * Returns the number of ingredients in the recipe.
-     *
-     * @return The number of ingredients in the recipe.
-     */
-    public int getNumberOfIngredients() {
-        return numberOfIngredients;
-    }
-
-    /**
+/**
      * Returns a string representation of the Recipe.
      *
      * @return A string representation of the Recipe in the format "Recipe{category: %s; name: %s; time: %s; portions: %d, numberOfIngredients: %d}",
@@ -240,7 +171,7 @@ public class Recipe extends Entity {
      */
     @Override
     public String toString() {
-        return String.format("Recipe{category: %s; name: %s; time: %s; portions: %d, numberOfIngredients: %d}",
-                category.getCategory(), name, time, portions, numberOfIngredients); // TODO: Decide whether to add instructions and ingredients
+        return String.format("Recipe{category: %s; name: %s; time: %s; portions: %d}",
+                category.getCategory(), name, time, portions);
     }
 }

@@ -73,7 +73,6 @@ public class CustomIngredientDialog extends JDialog {
             if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getType().equals(selectedUnit.getType()))) {
                 RecipeIngredient newIngredient = new RecipeIngredient(recipe,  selectedIngredient, selectedUnit, Double.parseDouble(amountTextField.getText()));
                 ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).addRow(newIngredient);
-                recipe.addIngredient(newIngredient);
             } else {
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -92,7 +91,6 @@ public class CustomIngredientDialog extends JDialog {
                 RecipeIngredient ingredientToDelete = ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).getEntity(selectedRow);
                 if (ingredientToDelete != null) {
                     ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).deleteRow(selectedRow);
-                    recipe.getIngredients().remove(ingredientToDelete);
                 }
             } else {
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, "Please select an ingredient to delete", "Error", JOptionPane.ERROR_MESSAGE);

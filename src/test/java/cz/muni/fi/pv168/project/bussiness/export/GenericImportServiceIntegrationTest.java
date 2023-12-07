@@ -2,21 +2,21 @@ package cz.muni.fi.pv168.project.bussiness.export;
 
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.model.UuidGuidProvider;
 import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
 import cz.muni.fi.pv168.project.business.service.import_export.GenericImportService;
 import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonImporter;
 import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
+import cz.muni.fi.pv168.project.business.service.validation.RecipeIngredientValidator;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
 import cz.muni.fi.pv168.project.business.service.validation.ValidationException;
 import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
-import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
-import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
-import cz.muni.fi.pv168.project.ui.model.UnitTableModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -54,10 +54,16 @@ class GenericImportServiceIntegrationTest {
         var unitCrudService = new UnitCrudService(unitRepository, unitValidator,
                 uuidGuidProvider);
 
+        var recipeIngredientRepository = new InMemoryRepository<RecipeIngredient>(List.of());
+        var recipeIngredientValidator = new RecipeIngredientValidator();
+        var recipeIngredientsCrudService = new RecipeIngredientCrudService(recipeIngredientRepository,
+                recipeIngredientValidator, uuidGuidProvider);
+
         genericImportService = new GenericImportService(
                 recipeCrudService,
                 unitCrudService,
                 ingredientCrudService,
+                recipeIngredientsCrudService,
                 List.of(new BatchJsonImporter())
         );
     }

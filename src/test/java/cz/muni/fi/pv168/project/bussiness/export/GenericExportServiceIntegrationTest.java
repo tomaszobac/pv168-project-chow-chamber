@@ -7,10 +7,12 @@ import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.model.UuidGuidProvider;
 import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
 import cz.muni.fi.pv168.project.business.service.import_export.GenericExportService;
 import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonExporter;
 import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
+import cz.muni.fi.pv168.project.business.service.validation.RecipeIngredientValidator;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
 import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
@@ -61,10 +63,16 @@ class GenericExportServiceIntegrationTest {
         var unitCrudService = new UnitCrudService(unitRepository, unitValidator,
                 uuidGuidProvider);
 
+        var recipeIngredientRepository = new InMemoryRepository<>(setUpRecipeIngredients());
+        var recipeIngredientValidator = new RecipeIngredientValidator();
+        var recipeIngredientCrudService = new RecipeIngredientCrudService(recipeIngredientRepository, recipeIngredientValidator,
+                uuidGuidProvider);
+
         genericExportService = new GenericExportService(
                 recipeCrudService,
                 unitCrudService,
                 ingredientCrudService,
+                recipeIngredientCrudService,
                 List.of(new BatchJsonExporter())
         );
     }
@@ -139,7 +147,7 @@ class GenericExportServiceIntegrationTest {
     }
 
     private RecipeIngredient setUpRecipeIngredient() {
-        return new RecipeIngredient("Vlašák", 1000000, setUpUnit(), 1);
+        return new RecipeIngredient("Vlašák", "1000000", setUpUnit(), 100);
     }
 
     private ArrayList<Ingredient> setUpIngredients() {
@@ -163,12 +171,10 @@ class GenericExportServiceIntegrationTest {
     }
 
     private Recipe setUpKrtkuvDort() {
-        return new Recipe("76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45", "Krtkův dort", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2,
-                setUpRecipeIngredients(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        return new Recipe("76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45", "Krtkův dort", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     private Recipe setUpChlebaSVlasakem() {
-        return new Recipe("dc96a827-b56b-4252-bf24-bb8f25209f3e", "Chleba s vlašákem", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2,
-                setUpRecipeIngredients(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        return new Recipe("dc96a827-b56b-4252-bf24-bb8f25209f3e", "Chleba s vlašákem", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 }

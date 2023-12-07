@@ -76,7 +76,6 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
                 .build();
     }
 
-    // Set a DocumentFilter to allow only numeric input with a configurable decimal point
     public static void setNumericWithSeparatorFilter(JTextField textField, boolean allowSeparator) {
         Document doc = new PlainDocument() {
             @Override
@@ -90,13 +89,13 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
                 for (int i = 0; i < str.length(); i++) {
                     char c = str.charAt(i);
                     if (c == ':' && !allowSeparator) {
-                        return; // Separator not allowed
+                        return;
                     }
                     if (!Character.isDigit(c) && c != ':') {
-                        return; // Non-numeric character
+                        return;
                     }
                     if (c == ':' && currentText.contains(":")) {
-                        return; // Already contains a decimal point
+                        return;
                     }
                     newText.insert(offs + i, c);
                 }
@@ -112,14 +111,12 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     @Override
     RecipeTableFilter getEntity() {
         try {
-            // Portions
             String fromPortionsString = fromPortionsField.getText();
             String toPortionsString = toPortionsField.getText();
             int fromPortions = fromPortionsString.isEmpty() ? 0 : Integer.parseInt(fromPortionsString);
             int toPortions = toPortionsString.isEmpty() ? Integer.MAX_VALUE : Integer.parseInt(toPortionsString);
             recipeTableFilter.filterPortions(fromPortions, toPortions);
 
-            // Times
             String fromTimeString = fromTimeField.getText();
             String toTimeString = toTimeField.getText();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -127,8 +124,6 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
             LocalTime fromTime = fromTimeString.isEmpty() ? LocalTime.of(0, 0) : LocalTime.parse(fromTimeString, formatter);
             LocalTime toTime = fromTimeString.isEmpty() ? LocalTime.of(23, 59) : LocalTime.parse(toTimeString, formatter);
             recipeTableFilter.filterTime(fromTime, toTime);
-
-            // Name
             recipeTableFilter.filterName(nameField.getText());
 
         } catch (NumberFormatException | DateTimeParseException e) {

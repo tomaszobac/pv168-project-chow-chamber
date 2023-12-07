@@ -1,3 +1,4 @@
-{"recipes":[{"name":"","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"}],
-  "units":[{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
-  "ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}]}
+{"recipes":[{"guid":"3fb93dd4-6986-4810-965b-8ee652639b8a","name":"","instructions":"This recipe has no name","category":"HLAVNI_JIDLO","time":"12:00","portions":"2"}],
+"units":[{"guid":"22d2fb3f-0507-4e8e-915a-2aef50e7f633","name":"Liter","type":"Volume","conversionToBase":"1.0"}],
+"ingredients":[{"guid":"16a5f7d2-d3d5-4431-9335-b4eea6498df4","name":"Voda","calories":"0.0","unit":{"name":"Liter","type":"Volume","conversionToBase":"1.0"}}],
+"recipeIngredients":[{"recipeGuid":"3fb93dd4-6986-4810-965b-8ee652639b8a","ingredientGuid":"16a5f7d2-d3d5-4431-9335-b4eea6498df4","unit":{"guid":"22d2fb3f-0507-4e8e-915a-2aef50e7f633","name":"Liter","type":"Volume","conversionToBase":"1.0"},"amount":"1111.0"}]}

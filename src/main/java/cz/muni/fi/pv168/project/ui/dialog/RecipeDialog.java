@@ -1,6 +1,7 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 import javax.swing.ComboBoxModel;
@@ -27,11 +28,12 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     private final JTextField portionsField = new JTextField();
     private final JTextArea instructionsArea = new JTextArea("Instructions go here!");
     private final Recipe recipe;
+    private boolean returnedOK = false;
 
-    public RecipeDialog(Recipe recipe, JTable ingredientTable, JTable unitTable) {
+    public RecipeDialog(Recipe recipe, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
         this.recipe = recipe;
         setValues();
-        addFields(ingredientTable, unitTable);
+        addFields(ingredientTable, unitTable, recipeIngredientsTable, filter);
     }
 
     private void setValues() {
@@ -57,17 +59,16 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         instructionsArea.setLineWrap(true);
     }
 
-    private void addFields(JTable ingredientTable, JTable unitTable) {
+    private void addFields(JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
         var categoryComboBox = new JComboBox<>(categoryField);
         add("Name:", nameField);
         add("Category:", categoryComboBox);
         add("Time:", timeField);
         add("Portions:", portionsField);
 
-        JButton customIngredientButton = createCustomIngredientButton(ingredientTable, unitTable);
+        JButton customIngredientButton = createCustomIngredientButton(ingredientTable, unitTable, recipeIngredientsTable, filter);
         add("", customIngredientButton);
 
-        // Add instructions area
         JScrollPane instructionsScrollPane = new JScrollPane(instructionsArea);
         instructionsScrollPane.setPreferredSize(new Dimension(400, 300));
         add("Instructions:", instructionsScrollPane, "wmin 250lp, grow, gapy 10");
@@ -81,25 +82,34 @@ public class RecipeDialog extends EntityDialog<Recipe> {
      *
      * @return A styled JButton configured for adding ingredient(s) to a recipe.
      */
-    private JButton createCustomIngredientButton(JTable ingredientTable, JTable unitTable) {
+    private JButton createCustomIngredientButton(JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
         JButton customIngredientButton = new JButton("Add ingredient(s) to recipe");
         customIngredientButton.setOpaque(true);
         customIngredientButton.setForeground(Color.WHITE);
         Font buttonFont = customIngredientButton.getFont();
         customIngredientButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
         customIngredientButton.setBackground(new Color(26, 72, 93));
-        customIngredientButton.addActionListener(e -> createCustomIngredient(ingredientTable, unitTable));
+        customIngredientButton.addActionListener(e -> createCustomIngredient(ingredientTable, unitTable, recipeIngredientsTable, filter));
         return customIngredientButton;
     }
 
-    private void createCustomIngredient(JTable ingredientTable, JTable unitTable) {
+    private void createCustomIngredient(JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
         JFrame addIngredientsFrame = new JFrame();
-        CustomIngredientDialog customIngredientDialog = new CustomIngredientDialog(addIngredientsFrame, recipe, ingredientTable, unitTable);
+        CustomIngredientDialog customIngredientDialog = new CustomIngredientDialog(addIngredientsFrame, recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
         customIngredientDialog.setVisible(true);
+    }
+
+    public boolean getReturnedOK() {
+        return returnedOK;
+    }
+
+    public String getRecipeGuid() {
+        return recipe.getGuid();
     }
 
     @Override
     Recipe getEntity() {
+        returnedOK = true;
         recipe.setName(nameField.getText());
         recipe.setCategory((RecipeCategory) categoryField.getSelectedItem());
         recipe.setInstructions(instructionsArea.getText());

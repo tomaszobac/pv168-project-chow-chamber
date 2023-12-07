@@ -7,10 +7,12 @@ import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.model.UuidGuidProvider;
 import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
 import cz.muni.fi.pv168.project.business.service.import_export.GenericExportService;
 import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonExporter;
 import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
+import cz.muni.fi.pv168.project.business.service.validation.RecipeIngredientValidator;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
 import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
 import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
@@ -39,7 +41,6 @@ class GenericExportServiceIntegrationTest {
     private static final Path TEST_RESOURCES = PROJECT_ROOT.resolve(Path.of("src", "test", "resources"));
 
     private final Path exportFilePath = TEST_RESOURCES
-            .resolve("output")
             .resolve("test_export" + ".json");
 
     private GenericExportService genericExportService;
@@ -62,10 +63,16 @@ class GenericExportServiceIntegrationTest {
         var unitCrudService = new UnitCrudService(unitRepository, unitValidator,
                 uuidGuidProvider);
 
+        var recipeIngredientRepository = new InMemoryRepository<>(setUpRecipeIngredients());
+        var recipeIngredientValidator = new RecipeIngredientValidator();
+        var recipeIngredientCrudService = new RecipeIngredientCrudService(recipeIngredientRepository, recipeIngredientValidator,
+                uuidGuidProvider);
+
         genericExportService = new GenericExportService(
                 recipeCrudService,
                 unitCrudService,
                 ingredientCrudService,
+                recipeIngredientCrudService,
                 List.of(new BatchJsonExporter())
         );
     }
@@ -83,8 +90,9 @@ class GenericExportServiceIntegrationTest {
 
         assertExportedContent("""
                 {"recipes":[],
-                "units":[{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
-                "ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}]}
+                "units":[{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
+                "ingredients":[{"guid":"afa5","name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}],
+                "recipeIngredients":[{"recipeGuid":"Vlašák","ingredientGuid":"1000000","unit":{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"100.0"}]}
                 """);
     }
 
@@ -97,9 +105,10 @@ class GenericExportServiceIntegrationTest {
 
         assertExportedContent(
                 """
-                        {"recipes":[{"name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"}],
-                        "units":[{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
-                        "ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}]}
+                        {"recipes":[{"guid":"76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45","name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2"}],
+                        "units":[{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
+                        "ingredients":[{"guid":"afa5","name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}],
+                        "recipeIngredients":[{"recipeGuid":"Vlašák","ingredientGuid":"1000000","unit":{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"100.0"}]}
                         """);
     }
 
@@ -113,9 +122,10 @@ class GenericExportServiceIntegrationTest {
 
         assertExportedContent(
                 """
-                        {"recipes":[{"name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"},{"name":"Chleba s vlašákem","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"}],
-                        "units":[{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
-                        "ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}]}
+                        {"recipes":[{"guid":"76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45","name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2"},{"guid":"dc96a827-b56b-4252-bf24-bb8f25209f3e","name":"Chleba s vlašákem","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2"}],
+                        "units":[{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
+                        "ingredients":[{"guid":"afa5","name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}],
+                        "recipeIngredients":[{"recipeGuid":"Vlašák","ingredientGuid":"1000000","unit":{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"100.0"}]}
                         """);
     }
 
@@ -140,7 +150,7 @@ class GenericExportServiceIntegrationTest {
     }
 
     private RecipeIngredient setUpRecipeIngredient() {
-        return new RecipeIngredient("Vlašák", 1000000, setUpUnit(), 1);
+        return new RecipeIngredient("guid13344", "Vlašák", "1000000", setUpUnit(), 100);
     }
 
     private ArrayList<Ingredient> setUpIngredients() {
@@ -164,12 +174,10 @@ class GenericExportServiceIntegrationTest {
     }
 
     private Recipe setUpKrtkuvDort() {
-        return new Recipe("76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45", "Krtkův dort", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2,
-                setUpRecipeIngredients(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        return new Recipe("76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45", "Krtkův dort", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     private Recipe setUpChlebaSVlasakem() {
-        return new Recipe("dc96a827-b56b-4252-bf24-bb8f25209f3e", "Chleba s vlašákem", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2,
-                setUpRecipeIngredients(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        return new Recipe("dc96a827-b56b-4252-bf24-bb8f25209f3e", "Chleba s vlašákem", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 }

@@ -1,8 +1,10 @@
 package cz.muni.fi.pv168.project.ui.action.recipe;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.ui.dialog.RecipeDialog;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
+import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
 
@@ -40,6 +42,18 @@ public class AddRecipeAction extends AbstractAction {
         var dialog = new RecipeDialog(createPrefilledRecipe(), ingredientTable, unitTable, recipeIngredientsTable, filter);
         dialog.show(recipeTable, "Add recipe")
                 .ifPresent(recipeTableModel::addRow);
+        if (!dialog.getReturnedOK()) {
+            clearAddedRecipeIngredients(recipeIngredientsTable, dialog.getRecipeGuid());
+        }
+    }
+
+    private void clearAddedRecipeIngredients(JTable recipeIngredientsTable, String guid) {
+        for (int i = recipeIngredientsTable.getRowCount() - 1; i >= 0; i--) {
+            RecipeIngredient recipeIngredient = (RecipeIngredient) recipeIngredientsTable.getModel().getValueAt(i, 0);
+            if (recipeIngredient.getRecipeGuid().equals(guid)) {
+                ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).deleteRow(i);
+            }
+        }
     }
 
     private Recipe createPrefilledRecipe() {

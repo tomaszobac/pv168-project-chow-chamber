@@ -28,6 +28,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     private final JTextField portionsField = new JTextField();
     private final JTextArea instructionsArea = new JTextArea("Instructions go here!");
     private final Recipe recipe;
+    private boolean returnedOK = false;
 
     public RecipeDialog(Recipe recipe, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
         this.recipe = recipe;
@@ -98,8 +99,17 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         customIngredientDialog.setVisible(true);
     }
 
+    public boolean getReturnedOK() {
+        return returnedOK;
+    }
+
+    public String getRecipeGuid() {
+        return recipe.getGuid();
+    }
+
     @Override
     Recipe getEntity() {
+        returnedOK = true;
         recipe.setName(nameField.getText());
         recipe.setCategory((RecipeCategory) categoryField.getSelectedItem());
         recipe.setInstructions(instructionsArea.getText());

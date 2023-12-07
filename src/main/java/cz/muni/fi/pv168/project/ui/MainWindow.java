@@ -105,6 +105,20 @@ public class MainWindow {
         IngredientCrudService ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator, guidProvider);
         RecipeIngredientCrudService recipeIngredientCrudService = new RecipeIngredientCrudService(recipeIngredientRepository, recipeIngredientValidator, guidProvider);
 
+        GenericExportService exportService = new GenericExportService(recipeCrudService,
+                unitCrudService,
+                ingredientCrudService,
+                recipeIngredientCrudService,
+                List.of(new BatchJsonExporter()));
+
+        GenericImportService importService = new GenericImportService(recipeCrudService,
+                unitCrudService,
+                ingredientCrudService,
+                recipeIngredientCrudService,
+                List.of(new BatchJsonImporter()));
+
+        importService.importData(null);
+
         recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(recipeCrudService), 0, this::rowSelectionChanged);
         unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(unitCrudService), 3, this::rowSelectionChanged);
         ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(ingredientCrudService), 1, this::rowSelectionChanged);
@@ -134,20 +148,6 @@ public class MainWindow {
         RecipeIngredientTableFilter recipeIngredientFilter = new RecipeIngredientTableFilter(recipeIngredientRowSorter);
         recipeIngredientsTable.setRowSorter(recipeIngredientRowSorter);
         this.recipeIngredientsTableFilter = recipeIngredientFilter;
-
-        GenericExportService exportService = new GenericExportService(recipeCrudService,
-                unitCrudService,
-                ingredientCrudService,
-                recipeIngredientCrudService,
-                List.of(new BatchJsonExporter()));
-
-        GenericImportService importService = new GenericImportService(recipeCrudService,
-                unitCrudService,
-                ingredientCrudService,
-                recipeIngredientCrudService,
-                List.of(new BatchJsonImporter()));
-
-        //importService.importData(null);
 
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);

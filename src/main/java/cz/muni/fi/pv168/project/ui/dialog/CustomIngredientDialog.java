@@ -104,6 +104,15 @@ public class CustomIngredientDialog extends JDialog {
         setLocationRelativeTo(parentFrame);
     }
 
+    private void clearAddedRecipeIngredients(JTable recipeIngredientsTable, String guid) {
+        for (int i = recipeIngredientsTable.getRowCount(); i >= 0; i--) {
+            RecipeIngredient recipeIngredient = (RecipeIngredient) recipeIngredientsTable.getModel().getValueAt(i, 0);
+            if (recipeIngredient.getRecipeGuid().equals(guid)) {
+                ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).deleteRow(i);
+            }
+        }
+    }
+
     private void rowSelectionChanged(ListSelectionEvent listSelectionEvent) {
         var selectionModel = (ListSelectionModel) listSelectionEvent.getSource();
         if (selectionModel.isSelectionEmpty()) {

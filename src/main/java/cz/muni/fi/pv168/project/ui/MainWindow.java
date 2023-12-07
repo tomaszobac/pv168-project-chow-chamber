@@ -171,7 +171,7 @@ public class MainWindow {
         this.menubar = createMenuBar();
         mainFrame.setJMenuBar(this.menubar);
 
-        recipeTable.setMouseListener(recipeTable, recipeIngredientsTable);
+        recipeTable.setMouseListener(recipeTable, recipeIngredientCrudService, ingredientRepository, recipeRepository, guidProvider);
         unitTable.setMouseListener(unitTable);
         ingredientTable.setMouseListener(ingredientTable);
 

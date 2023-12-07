@@ -50,10 +50,25 @@ public class GenericImportService implements ImportService {
         Batch batch = batchJsonImporter.importBatch(
                 Objects.requireNonNullElse(filePath, "src/main/resources/database.json"));
 
-        batch.units().forEach(this::createUnit);
-        batch.ingredients().forEach(this::createIngredients);
-        batch.recipes().forEach(this::createRecipe);
-        batch.recipeIngredients().forEach(this::createRecipeIngredient);
+        Collection<Unit> units = batch.units();
+        if (units != null) {
+            units.forEach(this::createUnit);
+        }
+
+        Collection<Ingredient> ingredients = batch.ingredients();
+        if (ingredients != null) {
+            ingredients.forEach(this::createIngredients);
+        }
+
+        Collection<Recipe> recipes = batch.recipes();
+        if (recipes != null) {
+            recipes.forEach(this::createRecipe);
+        }
+
+        Collection<RecipeIngredient> recipeIngredients = batch.recipeIngredients();
+        if (recipeIngredients != null) {
+            recipeIngredients.forEach(this::createRecipeIngredient);
+        }
     }
 
     @Override

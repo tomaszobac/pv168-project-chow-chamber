@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
-public class RecipeIngredient{
+public class RecipeIngredient extends Entity {
     String recipeGuid;
     String ingredientGuid;
     Recipe recipe;

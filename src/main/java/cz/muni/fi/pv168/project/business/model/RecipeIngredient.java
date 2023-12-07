@@ -3,18 +3,18 @@ package cz.muni.fi.pv168.project.business.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
-
 public class RecipeIngredient extends Entity {
     String recipeGuid;
     String ingredientGuid;
-    Recipe recipe;
-    Ingredient ingredient;
     Unit unit;
     double amount;
 
-
-    public RecipeIngredient(String guid, String recipeGuid, String ingredientGuid, Unit unit, double amount) {
+    @JsonCreator
+    public RecipeIngredient(@JsonProperty("guid") String guid,
+                            @JsonProperty("recipeGuid") String recipeGuid,
+                            @JsonProperty("ingredientGuid") String ingredientGuid,
+                            @JsonProperty("unit") Unit unit,
+                            @JsonProperty("amount") double amount) {
         super(guid);
         this.recipeGuid = recipeGuid;
         this.ingredientGuid = ingredientGuid;
@@ -22,20 +22,9 @@ public class RecipeIngredient extends Entity {
         this.amount = amount;
     }
 
-    @JsonCreator
-    public RecipeIngredient(@JsonProperty("recipeGuid") String recipeGuid,
-                            @JsonProperty("ingredientGuid") String ingredientGuid,
-                            @JsonProperty("unit") Unit unit,
-                            @JsonProperty("amount") double amount) {
+    public RecipeIngredient(String recipeGuid, String ingredientGuid, Unit unit, double amount) {
         this.recipeGuid = recipeGuid;
         this.ingredientGuid = ingredientGuid;
-        this.unit = unit;
-        this.amount = amount;
-    }
-
-    public RecipeIngredient(Recipe recipe, Ingredient ingredient, Unit unit, double amount) {
-        this.recipe = Objects.requireNonNull(recipe, "Recipe cannot be null");
-        this.ingredient = Objects.requireNonNull(ingredient, "Ingredient cannot be null");
         this.unit = unit;
         this.amount = amount;
     }
@@ -44,8 +33,8 @@ public class RecipeIngredient extends Entity {
         return amount;
     }
 
-    public double getCaloriesPerSetAmount() {
-        return ingredient.getCalories() * (amount * unit.getConversionToBase()) / ingredient.getUnit().getConversionToBase();
+    public double getCaloriesPerSetAmount(Unit inUnit, double inCalories) {
+        return inCalories * (amount * unit.getConversionToBase()) / inUnit.getConversionToBase();
     }
 
     public String getRecipeGuid() {
@@ -54,14 +43,6 @@ public class RecipeIngredient extends Entity {
 
     public String getIngredientGuid() {
         return ingredientGuid;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public Ingredient getIngredient() {
-        return ingredient;
     }
 
     public Unit getUnit() {

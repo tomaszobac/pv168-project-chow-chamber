@@ -28,7 +28,11 @@ public class Ingredient extends Entity {
      * @param calories the number of calories in the Ingredient
      * @param unit the unit of measurement for the Ingredient (must not be null)
      */
-    public Ingredient(String guid, String name, double calories, Unit unit) {
+    @JsonCreator
+    public Ingredient(@JsonProperty("guid") String guid,
+                      @JsonProperty("name") String name,
+                      @JsonProperty("calories") double calories,
+                      @JsonProperty("unit") Unit unit) {
         super(guid);
         this.name = Objects.requireNonNull(name, "Name must not be null");
         this.calories = calories;
@@ -42,10 +46,7 @@ public class Ingredient extends Entity {
      * @param calories the number of calories in the ingredient
      * @param unit the unit of measurement for the ingredient (must not be null)
      */
-    @JsonCreator
-    public Ingredient(@JsonProperty("name") String name,
-                      @JsonProperty("calories") double calories,
-                      @JsonProperty("unit") Unit unit) {
+    public Ingredient(String name, double calories, Unit unit) {
         this.name = Objects.requireNonNull(name, "Name must not be null");
         this.calories = calories;
         this.unit = Objects.requireNonNull(unit, "Unit must not be null");

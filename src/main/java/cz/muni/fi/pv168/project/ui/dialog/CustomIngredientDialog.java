@@ -71,7 +71,7 @@ public class CustomIngredientDialog extends JDialog {
             Unit selectedUnit = (Unit) unitComboBox.getSelectedItem();
             String amount = amountTextField.getText();
             if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getType().equals(selectedUnit.getType()))) {
-                RecipeIngredient newIngredient = new RecipeIngredient(recipe,  selectedIngredient, selectedUnit, Double.parseDouble(amountTextField.getText()));
+                RecipeIngredient newIngredient = new RecipeIngredient(recipe.getGuid(),  selectedIngredient.getGuid(), selectedUnit, Double.parseDouble(amountTextField.getText()));
                 ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).addRow(newIngredient);
             } else {
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);

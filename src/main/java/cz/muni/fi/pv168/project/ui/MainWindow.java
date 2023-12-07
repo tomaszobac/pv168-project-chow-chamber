@@ -106,7 +106,7 @@ public class MainWindow {
         recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(recipeCrudService), 0, this::rowSelectionChanged);
         unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(unitCrudService), 3, this::rowSelectionChanged);
         ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(ingredientCrudService), 1, this::rowSelectionChanged);
-        recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(new RecipeIngredientsTableModel(recipeIngredientCrudService), 2, this::rowSelectionChanged);
+        recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(new RecipeIngredientsTableModel(recipeIngredientCrudService, recipeRepository, ingredientRepository), 2, this::rowSelectionChanged);
 
         MainWindowUtilities.hideFirstColumn(recipeTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);

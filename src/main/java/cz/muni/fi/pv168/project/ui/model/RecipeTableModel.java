@@ -2,6 +2,7 @@ package cz.muni.fi.pv168.project.ui.model;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.service.crud.CrudService;
+import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
 
 import javax.swing.table.AbstractTableModel;
 import java.time.LocalTime;
@@ -94,6 +95,10 @@ public class RecipeTableModel extends AbstractTableModel implements EntityTableM
     public void refresh() {
         this.recipes = new ArrayList<>(recipeCrudService.findAll());
         fireTableDataChanged();
+    }
+
+    public String getNewGuid() {
+        return ((RecipeCrudService) recipeCrudService).getNewGuid();
     }
 
     public Recipe getEntity(int rowIndex) {

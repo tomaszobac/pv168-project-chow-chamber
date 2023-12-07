@@ -40,13 +40,14 @@ public class AddRecipeAction extends AbstractAction {
     }
 
     private Recipe createPrefilledRecipe() {
-        return new Recipe(
+        Recipe recipe = new Recipe(
                 "Vomáčka",
                 "Uvaříme vodu",
                 PRILOHA,
                 LocalTime.parse("00:10"),
-                4
+                4);
 
-        );
+        recipe.setGuid(((RecipeTableModel) recipeTable.getModel()).getNewGuid());
+        return recipe;
     }
 }

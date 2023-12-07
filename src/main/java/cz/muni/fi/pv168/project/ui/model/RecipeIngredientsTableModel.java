@@ -1,22 +1,22 @@
 package cz.muni.fi.pv168.project.ui.model;
 
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
+import cz.muni.fi.pv168.project.business.repository.Repository;
 import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RecipeIngredientsTableModel extends AbstractTableModel implements EntityTableModel<RecipeIngredient> {
     private List<RecipeIngredient> ingredients;
     private final RecipeIngredientCrudService recipeIngredientCrudService;
-    private final List<Column<RecipeIngredient, ?>> columns = List.of(
-            Column.readonly("RecipeIngredient", RecipeIngredient.class, recipeIngredient -> recipeIngredient),
-            Column.readonly("Name", String.class, recipeIngredient -> recipeIngredient.getIngredient().getName()),
-            Column.readonly("Amount", Double.class, RecipeIngredient::getAmount),
-            Column.readonly("Unit", String.class, recipeIngredient -> recipeIngredient.getUnit().getName()),
-            Column.readonly("Calories", Double.class, RecipeIngredient::getCaloriesPerSetAmount)
-    );
+    private final Repository<Recipe> recipeRepository;
+    private final Repository<Ingredient> ingredientRepository;
+    private final List<Column<RecipeIngredient, ?>> columns;
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
@@ -28,9 +28,20 @@ public class RecipeIngredientsTableModel extends AbstractTableModel implements E
         };
     }
 
-    public RecipeIngredientsTableModel(RecipeIngredientCrudService recipeIngredientCrudService) {
-        this.recipeIngredientCrudService = recipeIngredientCrudService;
+    public RecipeIngredientsTableModel(RecipeIngredientCrudService recipeIngredientCrudService,
+                                       Repository<Recipe> recipeRepository,
+                                       Repository<Ingredient> ingredientRepository) {
+        this.recipeIngredientCrudService = Objects.requireNonNull(recipeIngredientCrudService, "recipeIngredientCrudService cannot be null");
+        this.recipeRepository = Objects.requireNonNull(recipeRepository, "recipeRepository must not be null");
+        this.ingredientRepository = Objects.requireNonNull(ingredientRepository, "ingredientRepository must not be null");
         this.ingredients = new ArrayList<>(recipeIngredientCrudService.findAll());
+        this.columns = List.of(
+                Column.readonly("RecipeIngredient", RecipeIngredient.class, recipeIngredient -> recipeIngredient),
+                Column.readonly("Name", String.class, recipeIngredient -> ingredientRepository.findByGuid(recipeIngredient.getIngredientGuid()).orElseThrow().getName()),
+                Column.readonly("Amount", Double.class, RecipeIngredient::getAmount),
+                Column.readonly("Unit", String.class, recipeIngredient -> recipeIngredient.getUnit().getName()),
+                Column.readonly("Calories", Double.class, recipeIngredient -> recipeIngredient.getCaloriesPerSetAmount(ingredientRepository.findByGuid(recipeIngredient.getIngredientGuid()).orElseThrow().getUnit(), ingredientRepository.findByGuid(recipeIngredient.getIngredientGuid()).orElseThrow().getCalories()))
+        );
     }
 
     @Override

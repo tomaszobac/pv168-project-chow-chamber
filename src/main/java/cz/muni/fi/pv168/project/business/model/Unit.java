@@ -23,7 +23,11 @@ public class Unit extends Entity {
      * @param type The type of the unit.
      * @param conversionToBase The conversion factor to the base unit.
      */
-    public Unit(String guid, String name, UnitType type, double conversionToBase) {
+    @JsonCreator
+    public Unit(@JsonProperty("guid") String guid,
+                @JsonProperty("name") String name,
+                @JsonProperty("type") UnitType type,
+                @JsonProperty("conversionToBase") double conversionToBase) {
         super(guid);
         this.name = name;
         this.conversionToBase = conversionToBase;
@@ -38,10 +42,7 @@ public class Unit extends Entity {
      * @param conversionToBase The conversion factor to the base unit.
      * @throws NullPointerException if either name or type is null.
      */
-    @JsonCreator
-    public Unit(@JsonProperty("name") String name,
-                @JsonProperty("type") UnitType type,
-                @JsonProperty("conversionToBase") double conversionToBase) {
+    public Unit(String name, UnitType type, double conversionToBase) {
         this.name = Objects.requireNonNull(name, "name must not be null");
         this.conversionToBase = conversionToBase;
         this.type = Objects.requireNonNull(type, "type must not be null");

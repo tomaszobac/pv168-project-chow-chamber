@@ -29,13 +29,19 @@ public class Recipe extends Entity {
      * @param portions     The number of portions the recipe yields.
      * @param instructions The cooking instructions for the recipe.
      */
-    public Recipe(String guid, String name, RecipeCategory category, LocalTime time, int portions, String instructions) {
+    @JsonCreator
+    public Recipe(@JsonProperty("guid") String guid,
+                  @JsonProperty("name") String name,
+                  @JsonProperty("category") RecipeCategory category,
+                  @JsonProperty("time") LocalTime time,
+                  @JsonProperty("portions") int portions,
+                  @JsonProperty("instructions") String instructions) {
         super(guid);
-        this.name = name;
-        this.category = category;
-        this.time = time;
+        this.name = Objects.requireNonNull(name, "name must not be null");
+        this.category = Objects.requireNonNull(category, "category must not be null");
+        this.time = Objects.requireNonNull(time, "time must not be null");
         this.portions = portions;
-        this.instructions = instructions;
+        this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
     }
 
     /**
@@ -47,12 +53,7 @@ public class Recipe extends Entity {
      * @param portions     the number of portions the recipe serves
      * @param instructions the instructions to prepare the recipe, must not be null
      */
-    @JsonCreator
-    public Recipe(@JsonProperty("name") String name,
-                  @JsonProperty("instructions") String instructions,
-                  @JsonProperty("category") RecipeCategory category,
-                  @JsonProperty("time") LocalTime time,
-                  @JsonProperty("portions") int portions) {
+    public Recipe(String name, String instructions, RecipeCategory category, LocalTime time, int portions) {
         this.name = Objects.requireNonNull(name, "name must not be null");
         this.category = Objects.requireNonNull(category, "category must not be null");
         this.time = Objects.requireNonNull(time, "time must not be null");

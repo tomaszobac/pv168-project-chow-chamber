@@ -76,7 +76,7 @@ public class BatchJsonExporter implements BatchExporter {
             writer.write(ending);
             writer.newLine();
 
-            String recipeIngredients = "\"recipeIngredient\":[";
+            String recipeIngredients = "\"recipeIngredients\":[";
             writer.write(recipeIngredients);
             start = true;
 
@@ -98,6 +98,8 @@ public class BatchJsonExporter implements BatchExporter {
     }
     public void createJsonRecipeLine(StringBuilder line, Recipe recipe){
         line.append("{");
+        line.append("\"guid\":");
+        line.append("\"" + recipe.getGuid() + "\",");
         line.append("\"name\":");
         line.append("\"" + recipe.getName() + "\",");
         line.append("\"instructions\":");
@@ -112,6 +114,8 @@ public class BatchJsonExporter implements BatchExporter {
     }
     public void createJsonUnitLine(StringBuilder line, Unit unit){
         line.append("{");
+        line.append("\"guid\":");
+        line.append("\"" + unit.getGuid() + "\",");
         line.append("\"name\":");
         line.append("\"" + unit.getName() + "\",");
         line.append("\"type\":");
@@ -122,6 +126,8 @@ public class BatchJsonExporter implements BatchExporter {
     }
     public void createJsonIngredientLine(StringBuilder line, Ingredient ingredient){
         line.append("{");
+        line.append("\"guid\":");
+        line.append("\"" + ingredient.getGuid() + "\",");
         line.append("\"name\":");
         line.append("\"" + ingredient.getName() + "\",");
         line.append("\"calories\":");
@@ -141,13 +147,14 @@ public class BatchJsonExporter implements BatchExporter {
     public void createJsonRecipeIngredientLine(StringBuilder line, RecipeIngredient recipeIngredient) {
         line.append("{");
         line.append("\"recipeGuid\":");
-        line.append("\"" + recipeIngredient.getRecipe().getGuid() + "\",");
+        line.append("\"" + recipeIngredient.getRecipeGuid() + "\",");
         line.append("\"ingredientGuid\":");
-        line.append("\"" + recipeIngredient.getIngredient().getGuid() + "\",");
+        line.append("\"" + recipeIngredient.getIngredientGuid() + "\",");
         line.append("\"unit\":");
         createJsonUnitLine(line, recipeIngredient.getUnit());
         line.append(",");
         line.append("\"amount\":");
-        line.append("\"" + recipeIngredient.getAmount() + "\",");
+        line.append("\"" + recipeIngredient.getAmount() + "\"");
+        line.append("}");
     }
 }

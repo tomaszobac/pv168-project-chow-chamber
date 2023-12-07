@@ -1,3 +1,4 @@
-{"recipes":[{"name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"},{"name":"Chleba s vlašákem","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"}],
-  "units":[{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
-  "ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}]}
+{"recipes":[{"guid":"91568f2c-21d4-4f4c-b351-da6ee17a5d25","name":"Vomáčka2","instructions":"The better original","category":"PRILOHA","time":"00:10","portions":"4"},{"guid":"91568f2c-21d4-4f4c-b351-da6ee17a5d25","name":"Vomáčka","instructions":"The original","category":"HLAVNI_JIDLO","time":"10:10","portions":"43"}],
+"units":[],
+"ingredients":[],
+"recipeIngredients":[]}

@@ -90,8 +90,9 @@ class GenericExportServiceIntegrationTest {
 
         assertExportedContent("""
                 {"recipes":[],
-                "units":[{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
-                "ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}]}
+                "units":[{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
+                "ingredients":[{"guid":"afa5","name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}],
+                "recipeIngredients":[{"recipeGuid":"Vlašák","ingredientGuid":"1000000","unit":{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"100.0"}]}
                 """);
     }
 
@@ -104,9 +105,10 @@ class GenericExportServiceIntegrationTest {
 
         assertExportedContent(
                 """
-                        {"recipes":[{"name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"}],
-                        "units":[{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
-                        "ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}]}
+                        {"recipes":[{"guid":"76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45","name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2"}],
+                        "units":[{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
+                        "ingredients":[{"guid":"afa5","name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}],
+                        "recipeIngredients":[{"recipeGuid":"Vlašák","ingredientGuid":"1000000","unit":{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"100.0"}]}
                         """);
     }
 
@@ -120,9 +122,10 @@ class GenericExportServiceIntegrationTest {
 
         assertExportedContent(
                 """
-                        {"recipes":[{"name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"},{"name":"Chleba s vlašákem","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"1.0"}],"numberOfIngredients":"1"}],
-                        "units":[{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
-                        "ingredients":[{"name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}]}
+                        {"recipes":[{"guid":"76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45","name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2"},{"guid":"dc96a827-b56b-4252-bf24-bb8f25209f3e","name":"Chleba s vlašákem","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2"}],
+                        "units":[{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"}],
+                        "ingredients":[{"guid":"afa5","name":"Vlašák","calories":"1000000.0","unit":{"name":"kilogram","type":"Weight","conversionToBase":"0.001"}}],
+                        "recipeIngredients":[{"recipeGuid":"Vlašák","ingredientGuid":"1000000","unit":{"guid":"If I see one more type fail im gonna lose it","name":"kilogram","type":"Weight","conversionToBase":"0.001"},"amount":"100.0"}]}
                         """);
     }
 
@@ -147,7 +150,7 @@ class GenericExportServiceIntegrationTest {
     }
 
     private RecipeIngredient setUpRecipeIngredient() {
-        return new RecipeIngredient("Vlašák", "1000000", setUpUnit(), 100);
+        return new RecipeIngredient("guid13344", "Vlašák", "1000000", setUpUnit(), 100);
     }
 
     private ArrayList<Ingredient> setUpIngredients() {

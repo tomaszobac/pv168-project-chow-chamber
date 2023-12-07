@@ -111,6 +111,7 @@ public class MainWindow {
         MainWindowUtilities.hideFirstColumn(recipeTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
         MainWindowUtilities.hideFirstColumn(unitTable);
+        MainWindowUtilities.hideFirstColumn(recipeIngredientsTable);
 
         TableRowSorter<RecipeTableModel> recipeRowSorter = new TableRowSorter<>((RecipeTableModel) recipeTable.getModel());
         RecipeTableFilter recipeFilter = new RecipeTableFilter(recipeRowSorter);
@@ -139,8 +140,8 @@ public class MainWindow {
 
         //importService.importData(null);
 
-        addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
-        editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
+        addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable);
+        editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable);
         deleteAction = new DeleteRecipeAction(recipeTable);
         importAction = new ImportAction(importService, this::refresh);
         exportAction = new ExportAction(exportService);
@@ -161,7 +162,7 @@ public class MainWindow {
         this.menubar = createMenuBar();
         mainFrame.setJMenuBar(this.menubar);
 
-        recipeTable.setMouseListener(recipeTable);
+        recipeTable.setMouseListener(recipeTable, recipeIngredientsTable);
         unitTable.setMouseListener(unitTable);
         ingredientTable.setMouseListener(ingredientTable);
 
@@ -176,8 +177,8 @@ public class MainWindow {
 
         switch (selectedIndex) {
             case 0:  // Recipes tab
-                addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable);
-                editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable);
+                addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable);
+                editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable);
                 deleteAction = new DeleteRecipeAction(recipeTable);
                 filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
                 break;

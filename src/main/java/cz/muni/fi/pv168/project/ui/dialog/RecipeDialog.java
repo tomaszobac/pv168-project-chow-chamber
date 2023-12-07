@@ -28,10 +28,10 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     private final JTextArea instructionsArea = new JTextArea("Instructions go here!");
     private final Recipe recipe;
 
-    public RecipeDialog(Recipe recipe, JTable ingredientTable, JTable unitTable) {
+    public RecipeDialog(Recipe recipe, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable) {
         this.recipe = recipe;
         setValues();
-        addFields(ingredientTable, unitTable);
+        addFields(ingredientTable, unitTable, recipeIngredientsTable);
     }
 
     private void setValues() {
@@ -57,14 +57,14 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         instructionsArea.setLineWrap(true);
     }
 
-    private void addFields(JTable ingredientTable, JTable unitTable) {
+    private void addFields(JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable) {
         var categoryComboBox = new JComboBox<>(categoryField);
         add("Name:", nameField);
         add("Category:", categoryComboBox);
         add("Time:", timeField);
         add("Portions:", portionsField);
 
-        JButton customIngredientButton = createCustomIngredientButton(ingredientTable, unitTable);
+        JButton customIngredientButton = createCustomIngredientButton(ingredientTable, unitTable, recipeIngredientsTable);
         add("", customIngredientButton);
 
         JScrollPane instructionsScrollPane = new JScrollPane(instructionsArea);
@@ -80,20 +80,20 @@ public class RecipeDialog extends EntityDialog<Recipe> {
      *
      * @return A styled JButton configured for adding ingredient(s) to a recipe.
      */
-    private JButton createCustomIngredientButton(JTable ingredientTable, JTable unitTable) {
+    private JButton createCustomIngredientButton(JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable) {
         JButton customIngredientButton = new JButton("Add ingredient(s) to recipe");
         customIngredientButton.setOpaque(true);
         customIngredientButton.setForeground(Color.WHITE);
         Font buttonFont = customIngredientButton.getFont();
         customIngredientButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
         customIngredientButton.setBackground(new Color(26, 72, 93));
-        customIngredientButton.addActionListener(e -> createCustomIngredient(ingredientTable, unitTable));
+        customIngredientButton.addActionListener(e -> createCustomIngredient(ingredientTable, unitTable, recipeIngredientsTable));
         return customIngredientButton;
     }
 
-    private void createCustomIngredient(JTable ingredientTable, JTable unitTable) {
+    private void createCustomIngredient(JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable) {
         JFrame addIngredientsFrame = new JFrame();
-        CustomIngredientDialog customIngredientDialog = new CustomIngredientDialog(addIngredientsFrame, recipe, ingredientTable, unitTable);
+        CustomIngredientDialog customIngredientDialog = new CustomIngredientDialog(addIngredientsFrame, recipe, ingredientTable, unitTable, recipeIngredientsTable);
         customIngredientDialog.setVisible(true);
     }
 

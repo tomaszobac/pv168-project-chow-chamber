@@ -19,8 +19,9 @@ public class AddRecipeAction extends AbstractAction {
     private final JTable recipeTable;
     private final JTable ingredientTable;
     private final JTable unitTable;
+    private final JTable recipeIngredientsTable;
 
-    public AddRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable) {
+    public AddRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable) {
         super("Add", Icons.ADD_ICON);
         putValue(SHORT_DESCRIPTION, "Adds new recipe");
         putValue(MNEMONIC_KEY, KeyEvent.VK_A);
@@ -28,12 +29,13 @@ public class AddRecipeAction extends AbstractAction {
         this.recipeTable = recipeTable;
         this.ingredientTable = ingredientTable;
         this.unitTable = unitTable;
+        this.recipeIngredientsTable = recipeIngredientsTable;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         var recipeTableModel = (RecipeTableModel) this.recipeTable.getModel();
-        var dialog = new RecipeDialog(createPrefilledRecipe(), ingredientTable, unitTable);
+        var dialog = new RecipeDialog(createPrefilledRecipe(), ingredientTable, unitTable, recipeIngredientsTable);
         dialog.show(recipeTable, "Add recipe")
                 .ifPresent(recipeTableModel::addRow);
     }

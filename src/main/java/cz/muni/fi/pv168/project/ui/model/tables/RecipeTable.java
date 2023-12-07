@@ -1,8 +1,7 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
-import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
-import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
 import javax.swing.BorderFactory;
@@ -12,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
@@ -36,7 +36,7 @@ public class RecipeTable extends MyTable {
     public RecipeTable(AbstractTableModel model) {
         super(model);
     }
-    public void setMouseListener(MyTable recipeTable) {
+    public void setMouseListener(MyTable recipeTable, JTable recipeIngredientTable) {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -53,7 +53,7 @@ public class RecipeTable extends MyTable {
                         newRecipe.add(getValueAt(getSelectedRow(), 2).toString());
                         newRecipe.add(getValueAt(getSelectedRow(), 3).toString());
                         infoTables.add(newRecipe);
-                        openRecipeInfoWindow(recipeTable);
+                        openRecipeInfoWindow(recipeTable, recipeIngredientTable);
                     }
                 }
             }
@@ -82,7 +82,7 @@ public class RecipeTable extends MyTable {
      *
      * @param recipeTable represents table of stored recipes.
      */
-    private void openRecipeInfoWindow(MyTable recipeTable) {
+    private void openRecipeInfoWindow(MyTable recipeTable, JTable recipeIngredientsTable) {
         if (recipesInfoFrame == null) {
             recipesInfoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
             recipesInfoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -101,9 +101,7 @@ public class RecipeTable extends MyTable {
         gbc.weighty = 1.0;
 
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
-        RecipeIngredientsTableModel recipeIngredientsTableModel = new RecipeIngredientsTableModel(recipe.getIngredients());
-        RecipeIngredientsTable recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(recipeIngredientsTableModel, 2, null);
-        JScrollPane recipeIngredientsScrollPane = new JScrollPane(recipeIngredientsTable);
+        JScrollPane recipeIngredientsScrollPane = new JScrollPane(recipeIngredientsTable); // TODO: Add filter to show only own ingredients
 
         ingredientsTab.add(recipeIngredientsScrollPane, gbc);
 

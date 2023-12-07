@@ -14,12 +14,14 @@ public class EditRecipeAction extends AbstractAction {
     private final JTable recipeTable;
     private final JTable ingredientTable;
     private final JTable unitTable;
+    private final JTable recipeIngredientsTable;
 
-    public EditRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable) {
+    public EditRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable) {
         super("Edit", Icons.EDIT_ICON);
         this.recipeTable = recipeTable;
         this.ingredientTable = ingredientTable;
         this.unitTable = unitTable;
+        this.recipeIngredientsTable = recipeIngredientsTable;
         putValue(SHORT_DESCRIPTION, "Edits selected recipe");
         putValue(MNEMONIC_KEY, KeyEvent.VK_E);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl E"));
@@ -37,7 +39,7 @@ public class EditRecipeAction extends AbstractAction {
         var recipeTableModel = (RecipeTableModel) recipeTable.getModel();
         int modelRow = recipeTable.convertRowIndexToModel(selectedRows[0]);
         var recipe = recipeTableModel.getEntity(modelRow);
-        var dialog = new RecipeDialog(recipe, ingredientTable, unitTable);
+        var dialog = new RecipeDialog(recipe, ingredientTable, unitTable, recipeIngredientsTable);
         dialog.show(recipeTable, "Edit recipe")
                 .ifPresent(recipeTableModel::updateRow);
     }

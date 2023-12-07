@@ -70,7 +70,7 @@ public class RecipeIngredient extends Entity {
 
     @Override
     public String toString() {
-        return String.format("RecipeIngredient{recipeGuid: %s; ingredientGuid: %s; unit: %s; amount: %.2f}",
-                recipe.getGuid(), ingredient.getGuid(), unit.getName(), amount);
+        return String.format("RecipeIngredient{guid: %s; recipeGuid: %s; ingredientGuid: %s; unit: %s; amount: %.2f}",
+                getGuid(), recipeGuid, ingredientGuid, unit.getName(), amount);
     }
 }

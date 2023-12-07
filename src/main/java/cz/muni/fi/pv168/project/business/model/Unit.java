@@ -110,7 +110,7 @@ public class Unit extends Entity {
      */
     @Override
     public String toString() {
-        return String.format("Unit{name: %s; type: %s; toBase: %.3f}",
-                name, type.name(), conversionToBase);
+        return String.format("Unit{guid: %s; name: %s; type: %s; toBase: %.3f}",
+                getGuid(), name, type.name(), conversionToBase);
     }
 }

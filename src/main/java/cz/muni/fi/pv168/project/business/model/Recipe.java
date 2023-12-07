@@ -171,7 +171,7 @@ public class Recipe extends Entity {
      */
     @Override
     public String toString() {
-        return String.format("Recipe{category: %s; name: %s; time: %s; portions: %d}",
-                category.getCategory(), name, time, portions);
+        return String.format("Recipe{guid: %s; category: %s; name: %s; time: %s; portions: %d}",
+                getGuid(), category.getCategory(), name, time, portions);
     }
 }

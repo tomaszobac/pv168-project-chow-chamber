@@ -113,7 +113,7 @@ public class Ingredient extends Entity {
      */
     @Override
     public String toString() {
-        return String.format("Ingredient{name: %s; calories: %.2f; unit: %s}",
-                name, calories, unit.getName());
+        return String.format("Ingredient{guid: %s; name: %s; calories: %.2f; unit: %s}",
+                getGuid(), name, calories, unit.getName());
     }
 }

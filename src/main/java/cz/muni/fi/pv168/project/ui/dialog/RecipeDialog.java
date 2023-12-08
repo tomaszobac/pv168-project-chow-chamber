@@ -1,26 +1,20 @@
 package cz.muni.fi.pv168.project.ui.dialog;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
+import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 import cz.muni.fi.pv168.project.ui.renderers.CategoryRenderer;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 
 public class RecipeDialog extends EntityDialog<Recipe> {
     private final JTextField nameField = new JTextField();
@@ -104,6 +98,18 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         JFrame addIngredientsFrame = new JFrame();
         CustomIngredientDialog customIngredientDialog = new CustomIngredientDialog(addIngredientsFrame, recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
         customIngredientDialog.setVisible(true);
+
+        List<RecipeIngredient> list = customIngredientDialog.getNewRecipeIngredients();
+        RecipeIngredientsTableModel model = (RecipeIngredientsTableModel) recipeIngredientsTable.getModel();
+        if (!customIngredientDialog.getExitThroughDone()) {
+            System.out.println("EXIT WAS NOT THROUGH DONE!");
+            for (int i = model.getRowCount() - 1; i >= 0; i--) {
+                RecipeIngredient recipeIngredient = (RecipeIngredient) model.getValueAt(i, 0);
+                if (list.contains(recipeIngredient)) {
+                    model.deleteRow(i);
+                }
+            }
+        }
     }
 
     public boolean getReturnedOK() {

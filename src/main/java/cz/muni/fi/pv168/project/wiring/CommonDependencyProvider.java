@@ -26,6 +26,7 @@ import cz.muni.fi.pv168.project.business.service.validation.Validator;
 import cz.muni.fi.pv168.project.storage.sql.IngredientSqlRepository;
 import cz.muni.fi.pv168.project.storage.sql.RecipeIngredientSqlRepository;
 import cz.muni.fi.pv168.project.storage.sql.RecipeSqlRepository;
+import cz.muni.fi.pv168.project.storage.sql.TransactionalImportService;
 import cz.muni.fi.pv168.project.storage.sql.UnitSqlRepository;
 import cz.muni.fi.pv168.project.storage.sql.dao.IngredientDao;
 import cz.muni.fi.pv168.project.storage.sql.dao.RecipeDao;
@@ -59,7 +60,7 @@ public class CommonDependencyProvider implements DependencyProvider {
     private final CrudService<Unit> unitCrudService;
     private final CrudService<RecipeIngredient> recipeIngredientCrudService;
     private final ImportService importService;
-    private final ExportService import_exportService;
+    private final ExportService exportService;
     private final RecipeValidator recipeValidator;
     private final IngredientValidator ingredientValidator;
     private final UnitValidator unitValidator;
@@ -101,10 +102,11 @@ public class CommonDependencyProvider implements DependencyProvider {
         this.unitCrudService = new UnitCrudService(this.units, this.unitValidator, guidProvider);
         this.recipeIngredientCrudService = new RecipeIngredientCrudService(this.recipeIngredients, this.recipeIngredientValidator, guidProvider);
 
-        this.import_exportService = new GenericExportService(this.recipeCrudService, this.unitCrudService, this.ingredientCrudService, this.recipeIngredientCrudService,
+        this.exportService = new GenericExportService(this.recipeCrudService, this.unitCrudService, this.ingredientCrudService, this.recipeIngredientCrudService,
                 List.of(new BatchJsonExporter()));
-        this.importService = new GenericImportService(this.recipeCrudService, this.unitCrudService, this.ingredientCrudService, this.recipeIngredientCrudService,
+        var genericImportService = new GenericImportService(this.recipeCrudService, this.unitCrudService, this.ingredientCrudService, this.recipeIngredientCrudService,
                 List.of(new BatchJsonImporter()));
+        importService = new TransactionalImportService(genericImportService, transactionExecutor);
     }
 
     @Override
@@ -164,7 +166,7 @@ public class CommonDependencyProvider implements DependencyProvider {
 
     @Override
     public ExportService getExportService() {
-        return import_exportService;
+        return exportService;
     }
 
     @Override

@@ -1,8 +1,5 @@
 package cz.muni.fi.pv168.project.storage.sql;
 
-import java.util.List;
-import java.util.Optional;
-
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.repository.Repository;
 import cz.muni.fi.pv168.project.storage.sql.dao.DataAccessObject;
@@ -10,11 +7,11 @@ import cz.muni.fi.pv168.project.storage.sql.dao.DataStorageException;
 import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
 import cz.muni.fi.pv168.project.storage.sql.entity.mapper.EntityMapper;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * Implementation of {@link Repository} for {@link Ingredient} entity using SQL database.
- * <p>
- * Original by:
- * @author Vojtech Sassmann
  */
 public class IngredientSqlRepository implements Repository<Ingredient> {
 

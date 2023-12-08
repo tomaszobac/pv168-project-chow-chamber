@@ -4,7 +4,6 @@ import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
-import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
@@ -15,12 +14,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CustomIngredientDialog extends JDialog {
     private final JComboBox<Ingredient> ingredientComboBox = new JComboBox<>();
     private final JComboBox<Unit> unitComboBox = new JComboBox<>();
     private final JTextField amountTextField = new JTextField();
-    private final Action editAction;
     private final Action deleteAction;
     private final List<RecipeIngredient> newRecipeIngredients = new ArrayList<>();
     private boolean exitThroughDone = false;
@@ -33,9 +32,14 @@ public class CustomIngredientDialog extends JDialog {
             ingredientComboBox.addItem((Ingredient) ingredientTable.getValueAt(i, 0));
         }
         ingredientComboBox.setRenderer(new IngredientComboBoxRenderer());
-        for (int i = 0; i < unitTable.getRowCount(); i++) {
-            unitComboBox.addItem((Unit) unitTable.getValueAt(i, 0));
+        if (ingredientComboBox.getItemCount() > 0) {
+            ingredientComboBox.setSelectedIndex(0);
         }
+        ingredientComboBox.addActionListener( e -> {
+            updateUnitComboBox(unitTable, false);
+        });
+
+        updateUnitComboBox(unitTable, true);
         unitComboBox.setRenderer(new UnitComboBoxRenderer());
 
         JPanel topPanel = new JPanel();
@@ -55,7 +59,6 @@ public class CustomIngredientDialog extends JDialog {
 
         filter.filterGuid(recipe.getGuid());
 
-        editAction = new EditIngredientAction(recipeIngredientsTable, unitTable);
         deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
         add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
         addButton.addActionListener(e -> {
@@ -107,6 +110,21 @@ public class CustomIngredientDialog extends JDialog {
         add(bottomPanel, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(parentFrame);
+        updateUnitComboBox(unitTable, false);
+    }
+
+    private void updateUnitComboBox(JTable unitTable, boolean all) {
+        Ingredient selectedItem = (Ingredient) ingredientComboBox.getSelectedItem();
+        if (Objects.isNull(selectedItem)) {
+            return;
+        }
+        unitComboBox.removeAllItems();
+        for (int i = 0; i < unitTable.getRowCount(); i++) {
+            Unit unit = (Unit) unitTable.getValueAt(i, 0);
+            if(all || selectedItem.getUnit().getType().equals(unit.getType())) {
+                unitComboBox.addItem(unit);
+            }
+        }
     }
 
     public boolean getExitThroughDone() {

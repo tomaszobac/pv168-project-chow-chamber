@@ -102,7 +102,6 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         List<RecipeIngredient> list = customIngredientDialog.getNewRecipeIngredients();
         RecipeIngredientsTableModel model = (RecipeIngredientsTableModel) recipeIngredientsTable.getModel();
         if (!customIngredientDialog.getExitThroughDone()) {
-            System.out.println("EXIT WAS NOT THROUGH DONE!");
             for (int i = model.getRowCount() - 1; i >= 0; i--) {
                 RecipeIngredient recipeIngredient = (RecipeIngredient) model.getValueAt(i, 0);
                 if (list.contains(recipeIngredient)) {

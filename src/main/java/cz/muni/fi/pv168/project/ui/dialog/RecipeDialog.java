@@ -9,6 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -107,6 +108,45 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         return recipe.getGuid();
     }
 
+    private LocalTime getTime(JTextField timeField) {
+        int hours = 0;
+        int minutes = 0;
+        String timeString = timeField.getText();
+        if (timeString.isBlank()) {
+            return LocalTime.of(hours, minutes);
+        }
+        try {
+
+            if (timeString.matches("\\d+")) {
+                minutes = Integer.parseInt(timeString);
+            } else {
+                String[] parts = timeString.split(":");
+
+                if (parts.length == 2) {
+                    hours = Integer.parseInt(parts[0]);
+                    minutes = Integer.parseInt(parts[1]);
+                } else {
+                    throw new IllegalArgumentException("Invalid time format: " + timeString);
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid time format: " + timeString, e);
+        }
+
+        if (minutes > 59) {
+            hours += minutes / 60;
+            minutes = minutes % 60;
+        } else if (minutes < 0)
+            minutes = 0;
+
+        if (hours > 23)
+            hours = 23;
+        else if (hours < 0)
+            hours = 0;
+
+        return LocalTime.of(hours, minutes);
+    }
+
     @Override
     Recipe getEntity() {
         returnedOK = true;
@@ -114,9 +154,10 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         recipe.setCategory((RecipeCategory) categoryField.getSelectedItem());
         recipe.setInstructions(instructionsArea.getText());
         try {
-            recipe.setTime(LocalTime.parse(timeField.getText()));
+            recipe.setTime(getTime(timeField));
             recipe.setPortions(Integer.parseInt(portionsField.getText()));
-        } catch (DateTimeException | NumberFormatException e) {
+        } catch (DateTimeException | IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
             return null;
         }
         return recipe;

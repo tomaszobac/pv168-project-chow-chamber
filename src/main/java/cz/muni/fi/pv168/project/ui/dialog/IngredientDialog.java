@@ -5,9 +5,9 @@ import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import java.time.DateTimeException;
 
 public class IngredientDialog extends EntityDialog<Ingredient> {
     private final JTextField nameField = new JTextField();
@@ -45,7 +45,8 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
             ingredient.setName(nameField.getText());
             ingredient.setCalories(Double.parseDouble(caloryField.getText()));
             ingredient.setUnit((Unit) unitComboBox.getSelectedItem());
-        } catch (DateTimeException | NumberFormatException e){
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
             return null;
         }
         return ingredient;

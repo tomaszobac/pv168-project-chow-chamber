@@ -59,10 +59,10 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
                 for (int i = 0; i < str.length(); i++) {
                     char c = str.charAt(i);
                     if (!Character.isDigit(c) && c != '.') {
-                        return;
+                        return; // Non-numeric character
                     }
                     if (c == '.' && currentText.contains(".")) {
-                        return;
+                        return; // Already contains a decimal point
                     }
                     newText.insert(offs + i, c);
                 }
@@ -78,11 +78,14 @@ public class FilterIngredientDialog extends EntityDialog<IngredientTableFilter> 
     @Override
     IngredientTableFilter getEntity() {
         try {
+            // Portions
             String fromCaloriesString = fromCaloriesField.getText();
             String toCaloriesString = toCaloriesField.getText();
             Double fromCalories = fromCaloriesString.isEmpty() ? 0.0 : Double.parseDouble(fromCaloriesString);
             Double toCalories = toCaloriesString.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(toCaloriesString);
             ingredientTableFilter.filterCalories(fromCalories, toCalories);
+
+            // Name
             ingredientTableFilter.filterName(nameField.getText());
         } catch (NumberFormatException numberFormatException) {
             JOptionPane.showMessageDialog(FilterIngredientDialog.this,

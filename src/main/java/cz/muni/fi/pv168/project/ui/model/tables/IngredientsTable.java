@@ -83,9 +83,12 @@ public class IngredientsTable extends MyTable {
         JTabbedPane singleIngredientInfo = new JTabbedPane();
         Ingredient ingredient = (Ingredient) ingredientTable.getValueAt(ingredientTable.getSelectedRow(), 0);
 
+        // Create a JPanel to display the Ingredient information
         JPanel infoPanel = createInfoPanel(ingredient);
 
+        // Add more labels for other Ingredient attributes here
         singleIngredientInfo.addTab("Basic info", null, infoPanel, "First Tab");
+        // creates and handles tabs of singleIngredientInfo
         createNewTab(singleIngredientInfo, ingredient.getName());
         MainWindowUtilities.switchToTab(ingredientInTabs - 1, ingredientInfoTabs);
         ingredientInfoFrame.add(ingredientInfoTabs);
@@ -94,14 +97,17 @@ public class IngredientsTable extends MyTable {
     }
 
     private void createNewTab(JTabbedPane singleIngredientInfo, String name) {
+        // Create a custom tab component with a close button
         JPanel customTabComponent = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         JLabel titleLabel = new JLabel(name);
         JButton closeButton = getJButton(singleIngredientInfo);
         customTabComponent.add(titleLabel);
         customTabComponent.add(closeButton);
+        // Add the tab to the tabbed pane with the custom tab component
         ingredientInfoTabs.addTab(null, singleIngredientInfo);
         int tabIndex = ingredientInfoTabs.indexOfComponent(singleIngredientInfo);
         ingredientInfoTabs.setTabComponentAt(tabIndex, customTabComponent);
+        // Set the selected tab
         ingredientInfoTabs.setSelectedIndex(tabIndex);
     }
 
@@ -122,6 +128,7 @@ public class IngredientsTable extends MyTable {
         closeButton.setPreferredSize(new Dimension(16, 16));
 
         closeButton.addActionListener(e -> {
+            // Handle tab removal when the close button is clicked
             int tabIndex = ingredientInfoTabs.indexOfComponent(singleIngredientInfo);
             if (tabIndex != -1) {
                 ingredientInfoTabs.remove(tabIndex);

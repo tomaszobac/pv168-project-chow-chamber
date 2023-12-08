@@ -31,8 +31,8 @@ public class TestTable {
     private static final List<Unit> tableTwo = List.of(
             new Unit("guid1", "Liter", UnitType.Volume, 1.0),
             new Unit("guid2", "Kilogram", UnitType.Weight, 1.0),
-            new Unit("guid3", "Cup", UnitType.Volume, 0.25),
-            new Unit("guid4", "Milliliter", UnitType.Volume, 0.001));
+            new Unit("guid3", "Cup", UnitType.Volume, 0.25), // 1 cup = 0.25 liters
+            new Unit("guid4", "Milliliter", UnitType.Volume, 0.001)); // 1 milliliter = 0.001 liters
 
     private static final List<Ingredient> tableThree = List.of(
         new Ingredient("guid1", "Water", 0, tableTwo.get(0)),

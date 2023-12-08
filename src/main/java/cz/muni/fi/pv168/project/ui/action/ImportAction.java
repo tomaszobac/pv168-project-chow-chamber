@@ -14,12 +14,10 @@ import java.io.File;
 
 public class ImportAction extends AbstractAction {
     private final ImportService importService;
-    private final Runnable callback;
 
-    public ImportAction(ImportService importService, Runnable callback) {
+    public ImportAction(ImportService importService) {
         super("Import", Icons.IMPORT_ICON);
         this.importService = importService;
-        this.callback = callback;
 
         putValue(SHORT_DESCRIPTION, "Imports data");
         putValue(MNEMONIC_KEY, KeyEvent.VK_I);
@@ -39,7 +37,6 @@ public class ImportAction extends AbstractAction {
 
             importService.importData(importFile.getAbsolutePath());
 
-            callback.run();
             JOptionPane.showMessageDialog(null, "Import was done");
         }
     }

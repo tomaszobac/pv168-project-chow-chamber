@@ -83,6 +83,7 @@ public class UnitTable extends MyTable {
         JTabbedPane singleRecipeInfo = new JTabbedPane();
         Unit unit = (Unit) unitTable.getValueAt(unitTable.getSelectedRow(), 0);
 
+        // Create a JPanel to display the recipe information
         JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
@@ -92,7 +93,9 @@ public class UnitTable extends MyTable {
         infoPanel.add(MainWindowUtilities.createLabel("Base:", 0));
         infoPanel.add(MainWindowUtilities.createLabel((Double.toString(unit.getConversionToBase())), 1));
 
+        // Add more labels for other recipe attributes here
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
+        // creates and handles tabs of singleRecipeInfo
         createNewTab(singleRecipeInfo, unit.getName());
         MainWindowUtilities.switchToTab(unitInTabs - 1, unitInfoTabs);
         unitInfoFrame.add(unitInfoTabs);
@@ -101,14 +104,17 @@ public class UnitTable extends MyTable {
     }
 
     private void createNewTab(JTabbedPane singleRecipeInfo, String name) {
+        // Create a custom tab component with a close button
         JPanel customTabComponent = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         JLabel titleLabel = new JLabel(name);
         JButton closeButton = getJButton(singleRecipeInfo);
         customTabComponent.add(titleLabel);
         customTabComponent.add(closeButton);
+        // Add the tab to the tabbed pane with the custom tab component
         unitInfoTabs.addTab(null, singleRecipeInfo);
         int tabIndex = unitInfoTabs.indexOfComponent(singleRecipeInfo);
         unitInfoTabs.setTabComponentAt(tabIndex, customTabComponent);
+        // Set the selected tab
         unitInfoTabs.setSelectedIndex(tabIndex);
     }
 
@@ -117,6 +123,7 @@ public class UnitTable extends MyTable {
         closeButton.setPreferredSize(new Dimension(16, 16));
 
         closeButton.addActionListener(e -> {
+            // Handle tab removal when the close button is clicked
             int tabIndex = unitInfoTabs.indexOfComponent(singleRecipeInfo);
             if (tabIndex != -1) {
                 unitInfoTabs.remove(tabIndex);

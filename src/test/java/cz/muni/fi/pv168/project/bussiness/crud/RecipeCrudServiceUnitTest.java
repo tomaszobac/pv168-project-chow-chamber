@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RecipeCrudServiceUnitTest {
+    // private static final Department IT_DEPARTMENT = new Department("d-1", "IT", "22");
+
     private RecipeCrudService recipeCrudService;
     private Repository<Recipe> recipeRepository;
     private RecipeValidator recipeValidator;
@@ -68,6 +71,9 @@ public class RecipeCrudServiceUnitTest {
         assertThat(result).isEqualTo(ValidationResult.success());
         verify(recipeRepository, times(1))
                 .create(refEq(expectedRecipe));
+        // The 'refEq' is used to compare instances field by field. Default compares instances
+        // using the 'equals' method. That is not sufficient because we want to test here that
+        // all fields have the exact value we expect.
     }
 
     @Test
@@ -160,6 +166,7 @@ public class RecipeCrudServiceUnitTest {
                 RecipeCategory.HLAVNI_JIDLO,
                 LocalTime.NOON,
                 1,
+                new ArrayList<>(),
                 "Hello there traveler"
         );
     }

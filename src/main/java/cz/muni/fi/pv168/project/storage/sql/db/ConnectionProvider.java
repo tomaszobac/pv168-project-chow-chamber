@@ -28,6 +28,7 @@ public final class ConnectionProvider {
         var connection = getConnection();
 
         try {
+            // we need to disable auto-commit in order to have statements executed in the transaction
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new DataStorageException("Unable to disable auto-commit for connection", e);

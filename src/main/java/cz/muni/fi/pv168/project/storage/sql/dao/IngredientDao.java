@@ -1,5 +1,7 @@
 package cz.muni.fi.pv168.project.storage.sql.dao;
 
+import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
+import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,10 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import cz.muni.fi.pv168.project.business.model.Unit;
-import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
-import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
-
 /**
  * DAO for {@link IngredientEntity} entity.
  */
@@ -20,97 +18,77 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
 
     private final Supplier<ConnectionHandler> connections;
 
-    /**
-     * Constructs a new IngredientDao object with the given Supplier of ConnectionHandler.
-     *
-     * @param connections the Supplier of ConnectionHandler to be used by the IngredientDao
-     */
     public IngredientDao(Supplier<ConnectionHandler> connections) {
         this.connections = connections;
     }
 
-    /**
-     * Creates a new ingredient in the data storage.
-     *
-     * @param newIngredient the new ingredient to create in the data storage
-     * @return the created ingredient entity
-     * @throws DataStorageException if an error occurs while storing the ingredient
-     */
     @Override
-    public IngredientEntity create(IngredientEntity newIngredient) {
-        var sql = "INSERT INTO Ingredient (guid, name, calories, unit) VALUES (?, ?, ?, ?);";
+    public IngredientEntity create(IngredientEntity newDepartment) {
+        var sql = "INSERT INTO Department (guid, number, name) VALUES (?, ?, ?);";
 
         try (
                 var connection = connections.get();
                 var statement = connection.use().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
-            statement.setString(1, newIngredient.guid());
-            statement.setString(2, newIngredient.name());
-            statement.setDouble(3, newIngredient.calories());
-            statement.setObject(4, newIngredient.unit());
+            statement.setString(1, newDepartment.guid());
+            statement.setString(2, newDepartment.number());
+            statement.setString(3, newDepartment.name());
             statement.executeUpdate();
 
             try (ResultSet keyResultSet = statement.getGeneratedKeys()) {
-                long ingredientId;
+                long departmentId;
 
                 if (keyResultSet.next()) {
-                    ingredientId = keyResultSet.getLong(1);
+                    departmentId = keyResultSet.getLong(1);
                 } else {
-                    throw new DataStorageException("Failed to fetch generated key for: " + newIngredient);
+                    throw new DataStorageException("Failed to fetch generated key for: " + newDepartment);
                 }
                 if (keyResultSet.next()) {
-                    throw new DataStorageException("Multiple keys returned for: " + newIngredient);
+                    throw new DataStorageException("Multiple keys returned for: " + newDepartment);
                 }
 
-                return findById(ingredientId).orElseThrow();
+                return findById(departmentId).orElseThrow();
             }
         } catch (SQLException ex) {
-            throw new DataStorageException("Failed to store: " + newIngredient, ex);
+            throw new DataStorageException("Failed to store: " + newDepartment, ex);
         }
     }
 
-    /**
-     * Retrieves all ingredients from the database.
-     *
-     * @return a collection of IngredientEntity objects representing all the ingredients stored in the database
-     * @throws DataStorageException if there is an error retrieving the ingredients from the database
-     */
     @Override
     public Collection<IngredientEntity> findAll() {
         var sql = """
-                SELECT id, guid, name, calories, unit
-                FROM Ingredient
+                SELECT id,
+                       guid,
+                       number,
+                       name
+                FROM Department
                 """;
         try (
                 var connection = connections.get();
                 var statement = connection.use().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
-            List<IngredientEntity> ingredients = new ArrayList<>();
+            List<IngredientEntity> departments = new ArrayList<>();
             try (var resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    var ingredient = ingredientFromResultSet(resultSet);
-                    ingredients.add(ingredient);
+                    var department = departmentFromResultSet(resultSet);
+                    departments.add(department);
                 }
             }
 
-            return ingredients;
+            return departments;
         } catch (SQLException ex) {
-            throw new DataStorageException("Failed to load all ingredients", ex);
+            throw new DataStorageException("Failed to load all departments", ex);
         }
     }
 
-    /**
-     * Retrieves an ingredient from the database based on the provided ID.
-     *
-     * @param id the ID of the ingredient to retrieve
-     * @return an Optional containing the IngredientEntity if found, or an empty Optional if not found
-     * @throws DataStorageException if there is an error retrieving the ingredient
-     */
     @Override
     public Optional<IngredientEntity> findById(long id) {
         var sql = """
-                SELECT id, guid, name, calories, unit
-                FROM Ingredient
+                SELECT id,
+                       guid,
+                       number,
+                       name
+                FROM Department
                 WHERE id = ?
                 """;
         try (
@@ -120,27 +98,24 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
             statement.setLong(1, id);
             var resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return Optional.of(ingredientFromResultSet(resultSet));
+                return Optional.of(departmentFromResultSet(resultSet));
             } else {
+                // department not found
                 return Optional.empty();
             }
         } catch (SQLException ex) {
-            throw new DataStorageException("Failed to load ingredient by id: " + id, ex);
+            throw new DataStorageException("Failed to load department by id: " + id, ex);
         }
     }
 
-    /**
-     * Finds an ingredient entity by its GUID.
-     *
-     * @param guid the GUID of the ingredient to find
-     * @return an Optional containing the ingredient entity if found, or an empty Optional if not found
-     * @throws DataStorageException if there was an error accessing the data storage
-     */
     @Override
     public Optional<IngredientEntity> findByGuid(String guid) {
         var sql = """
-                SELECT id, guid, name, calories, unit
-                FROM Ingredient
+                SELECT id,
+                       guid,
+                       number,
+                       name
+                FROM Department
                 WHERE guid = ?
                 """;
         try (
@@ -150,66 +125,49 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
             statement.setString(1, guid);
             var resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return Optional.of(ingredientFromResultSet(resultSet));
+                return Optional.of(departmentFromResultSet(resultSet));
             } else {
-
+                // department not found
                 return Optional.empty();
             }
         } catch (SQLException ex) {
-            throw new DataStorageException("Failed to load ingredient by guid: " + guid, ex);
+            throw new DataStorageException("Failed to load department by guid: " + guid, ex);
         }
     }
 
-    /**
-     * Updates an ingredient entity in the data storage.
-     *
-     * @param entity the ingredient entity to update
-     * @return the updated ingredient entity
-     * @throws DataStorageException if there is an error updating the ingredient
-     */
     @Override
     public IngredientEntity update(IngredientEntity entity) {
         var sql = """
-                UPDATE Ingredient
-                SET name = ?,
-                    calories = ?,
-                    unit = ?
+                UPDATE Department
+                SET number = ?,
+                    name = ?
                 WHERE id = ?
                 """;
         try (
                 var connection = connections.get();
                 var statement = connection.use().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
-            statement.setString(1, entity.guid());
+            statement.setString(1, entity.number());
             statement.setString(2, entity.name());
-            statement.setDouble(3, entity.calories());
-            statement.setObject(4, entity.unit());
+            statement.setLong(3, entity.id());
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {
-                throw new DataStorageException("Ingredient not found, id: " + entity.id());
+                throw new DataStorageException("Department not found, id: " + entity.id());
             }
             if (rowsUpdated > 1) {
-                throw new DataStorageException("More then 1 ingredient (rows=%d) has been updated: %s"
+                throw new DataStorageException("More then 1 department (rows=%d) has been updated: %s"
                         .formatted(rowsUpdated, entity));
             }
             return entity;
         } catch (SQLException ex) {
-            throw new DataStorageException("Failed to update ingredient: " + entity, ex);
+            throw new DataStorageException("Failed to update department: " + entity, ex);
         }
     }
 
-    /**
-     * Deletes an ingredient from the database based on its GUID.
-     * Throws a DataStorageException if the ingredient is not found or if more than one ingredient is deleted.
-     *
-     * @param guid The GUID of the ingredient to be deleted.
-     * @throws DataStorageException If the ingredient is not found or if more than one ingredient is deleted.
-     * @throws SQLException If there is an error executing the SQL statement.
-     */
     @Override
     public void deleteByGuid(String guid) {
         var sql = """
-                DELETE FROM Ingredient
+                DELETE FROM Department
                 WHERE guid = ?
                 """;
         try (
@@ -219,47 +177,35 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
             statement.setString(1, guid);
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {
-                throw new DataStorageException("Ingredient not found, guid: " + guid);
+                throw new DataStorageException("Department not found, guid: " + guid);
             }
             if (rowsUpdated > 1) {
-                throw new DataStorageException("More then 1 ingredient (rows=%d) has been deleted: %s"
+                throw new DataStorageException("More then 1 department (rows=%d) has been deleted: %s"
                         .formatted(rowsUpdated, guid));
             }
         } catch (SQLException ex) {
-            throw new DataStorageException("Failed to delete ingredient, guid: " + guid, ex);
+            throw new DataStorageException("Failed to delete department, guid: " + guid, ex);
         }
     }
 
-    /**
-     * Deletes all ingredients from the database.
-     *
-     * @throws DataStorageException if there is an error in the data storage or database operation
-     */
     @Override
     public void deleteAll() {
-        var sql = "DELETE FROM Ingredient";
+        var sql = "DELETE FROM Department";
         try (
                 var connection = connections.get();
                 var statement = connection.use().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
             statement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataStorageException("Failed to delete all ingredients", ex);
+            throw new DataStorageException("Failed to delete all departments", ex);
         }
     }
 
-    /**
-     * Checks if an ingredient with the given GUID exists in the data storage.
-     *
-     * @param guid The GUID of the ingredient to check for existence.
-     * @return {@code true} if the ingredient exists, {@code false} otherwise.
-     * @throws DataStorageException If an error occurs while checking the existence of the ingredient.
-     */
     @Override
     public boolean existsByGuid(String guid) {
         var sql = """
                 SELECT id
-                FROM Ingredient
+                FROM Department
                 WHERE guid = ?
                 """;
         try (
@@ -271,24 +217,16 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
                 return resultSet.next();
             }
         } catch (SQLException ex) {
-            throw new DataStorageException("Failed to check if ingredient exists, guid: " + guid, ex);
+            throw new DataStorageException("Failed to check if department exists, guid: " + guid, ex);
         }
     }
 
-    /**
-     * This method converts a ResultSet object to an IngredientEntity object.
-     *
-     * @param resultSet the ResultSet object to convert
-     * @return a new IngredientEntity object with data from the ResultSet
-     * @throws SQLException if an error occurs while retrieving data from the ResultSet
-     */
-    private static IngredientEntity ingredientFromResultSet(ResultSet resultSet) throws SQLException {
+    private static IngredientEntity departmentFromResultSet(ResultSet resultSet) throws SQLException {
         return new IngredientEntity(
                 resultSet.getLong("id"),
                 resultSet.getString("guid"),
-                resultSet.getString("name"),
-                resultSet.getDouble("calories"),
-                resultSet.getObject("unit", Unit.class)
+                resultSet.getString("number"),
+                resultSet.getString("name")
         );
     }
 }

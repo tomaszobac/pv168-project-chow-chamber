@@ -12,9 +12,16 @@ import java.util.function.Function;
  * @param <T> The type of values that this column can store
  */
 public class Column<E, T> {
+    // The name of the column
     private final String name;
+
+    // A function that retrieves the value from an entity
     private final Function<E, T> valueGetter;
+
+    // A function that sets the value for an entity. It may be null
     private final BiConsumer<E, T> valueSetter;
+
+    // The class type of values that this column can store
     private final Class<T> columnType;
 
     private Column(String name, Class<T> columnClass, Function<E, T> valueGetter, BiConsumer<E, T> valueSetter) {
@@ -37,7 +44,7 @@ public class Column<E, T> {
         if (valueSetter == null) {
             throw new UnsupportedOperationException("Cannot set value in readonly column: '" + name + "'");
         }
-        valueSetter.accept(entity, columnType.cast(value));
+        valueSetter.accept(entity, columnType.cast(value)); // see Item 33: Consider type-safe heterogeneous containers
     }
 
     T getValue(E entity) {

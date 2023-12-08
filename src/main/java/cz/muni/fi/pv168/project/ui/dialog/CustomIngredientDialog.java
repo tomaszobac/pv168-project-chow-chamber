@@ -11,23 +11,10 @@ import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.renderers.IngredientComboBoxRenderer;
 import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomIngredientDialog extends JDialog {
     private final JComboBox<Ingredient> ingredientComboBox = new JComboBox<>();
@@ -35,6 +22,8 @@ public class CustomIngredientDialog extends JDialog {
     private final JTextField amountTextField = new JTextField();
     private final Action editAction;
     private final Action deleteAction;
+    private final List<RecipeIngredient> newRecipeIngredients = new ArrayList<>();
+    private boolean exitThroughDone = false;
 
     public CustomIngredientDialog(JFrame parentFrame, Recipe recipe, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
         super(parentFrame, "Recipe ingredients", true);
@@ -75,6 +64,7 @@ public class CustomIngredientDialog extends JDialog {
             String amount = amountTextField.getText();
             if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getType().equals(selectedUnit.getType()))) {
                 RecipeIngredient newIngredient = new RecipeIngredient(recipe.getGuid(),  selectedIngredient.getGuid(), selectedUnit, Double.parseDouble(amountTextField.getText()));
+                newRecipeIngredients.add(newIngredient);
                 ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).addRow(newIngredient);
             } else {
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);
@@ -100,30 +90,30 @@ public class CustomIngredientDialog extends JDialog {
             }
         });
         add(topPanel, BorderLayout.NORTH);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(e -> dispose());
+        JButton doneButton = new JButton("Done");
+        doneButton.addActionListener(e -> {
+            exitThroughDone = true;
+            dispose();
+        });
+        bottomPanel.add(doneButton);
+        bottomPanel.add(closeButton);
+
+        add(bottomPanel, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(parentFrame);
     }
 
-    private void clearAddedRecipeIngredients(JTable recipeIngredientsTable, String guid) {
-        for (int i = recipeIngredientsTable.getRowCount(); i >= 0; i--) {
-            RecipeIngredient recipeIngredient = (RecipeIngredient) recipeIngredientsTable.getModel().getValueAt(i, 0);
-            if (recipeIngredient.getRecipeGuid().equals(guid)) {
-                ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).deleteRow(i);
-            }
-        }
+    public boolean getExitThroughDone() {
+        return exitThroughDone;
     }
 
-    private void rowSelectionChanged(ListSelectionEvent listSelectionEvent) {
-        var selectionModel = (ListSelectionModel) listSelectionEvent.getSource();
-        if (selectionModel.isSelectionEmpty()) {
-            editAction.setEnabled(false);
-            deleteAction.setEnabled(false);
-        } else if (selectionModel.getSelectedItemsCount() == 1) {
-            editAction.setEnabled(true);
-            deleteAction.setEnabled(true);
-        } else if (selectionModel.getSelectedItemsCount() > 1) {
-            editAction.setEnabled(false);
-            deleteAction.setEnabled(true);
-        }
+    public List<RecipeIngredient> getNewRecipeIngredients() {
+        return newRecipeIngredients;
     }
 }

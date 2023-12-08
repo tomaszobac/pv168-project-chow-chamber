@@ -86,6 +86,7 @@ public class RecipeTable extends MyTable {
         if (recipesInfoFrame == null) {
             recipesInfoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
             recipesInfoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            recipesInfoFrame.setMinimumSize(new Dimension(500, 300));
             recipesInfoTabs = new JTabbedPane();
         }
         JTabbedPane singleRecipeInfo = new JTabbedPane();

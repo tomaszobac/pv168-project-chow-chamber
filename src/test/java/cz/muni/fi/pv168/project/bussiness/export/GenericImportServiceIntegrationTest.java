@@ -54,13 +54,10 @@ class GenericImportServiceIntegrationTest {
         var unitCrudService = new UnitCrudService(unitRepository, unitValidator,
                 uuidGuidProvider);
 
-        RecipeTableModel recipeTableModel = new RecipeTableModel(recipeCrudService);
-        IngredientTableModel ingredientTableModel = new IngredientTableModel(ingredientCrudService);
-        UnitTableModel unitTableModel = new UnitTableModel(unitCrudService);
         genericImportService = new GenericImportService(
-                recipeTableModel,
-                unitTableModel,
-                ingredientTableModel,
+                recipeCrudService,
+                unitCrudService,
+                ingredientCrudService,
                 List.of(new BatchJsonImporter())
         );
     }
@@ -74,62 +71,13 @@ class GenericImportServiceIntegrationTest {
                 .isEmpty();
     }
 
-//    @Test
-//    void singleRecipe() {
-//        Path importFilePath = TEST_RESOURCES.resolve("single-recipe.json");
-//        genericImportService.importData(importFilePath.toString());
-//
-//        // We need to specify the 'usingRecursiveFieldByFieldElementComparator' to actually compare
-//        // all fields of the Employee and all fields of the Department. If we don't specify this comparator,
-//        // comparison is done by using the 'equals' method. The 'equals' method compares only the 'guid' fields.
-//
-//        assertThat(recipeCrudService.findAll())
-//                .usingRecursiveFieldByFieldElementComparator()
-//                .containsExactly(
-//                        new Recipe( "76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45", "Krtkův dort", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2,
-//                                new ArrayList<>(),"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-//                );
-//    }
-//
-//    @Test
-//    void multipleRecipes() {
-//        Path importFilePath = TEST_RESOURCES.resolve("multiple-recipes.json");
-//        genericImportService.importData(importFilePath.toString());
-//
-//        ArrayList<RecipeIngredient> ingredients = new ArrayList<>();
-//        ingredients.add(new RecipeIngredient("Vlašák", 1000000, new Unit("If I see one more type fail im gonna lose it", "kilogram", UnitType.Weight, 0.001), 1));
-//
-//        assertThat(recipeCrudService.findAll())
-//                .usingRecursiveFieldByFieldElementComparator()
-//                .containsExactlyInAnyOrder(
-//                        new Recipe( "Krtkův dort","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2,
-//                                ingredients, 1),
-//                        new Recipe( "Chleba s vlašákem","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", RecipeCategory.ZAKUSEK, LocalTime.NOON, 2,
-//                                ingredients, 1)
-//                );
-//    }
-
     @Test
     void invalidNameFails() {
         Path importFilePath = TEST_RESOURCES.resolve("invalid-name-recipe.json");
 
         var stringPath = importFilePath.toString();
-        // we want only single invocation in the 'isThrownBy' method so that we don't accidentally catch
-        // unwanted exceptions
         assertThatExceptionOfType(ValidationException.class)
                 .isThrownBy(() -> genericImportService.importData(stringPath))
                 .withMessageContaining("'Recipe name' length is not between 2 (inclusive) and 150 (inclusive)");
     }
-
-//    @Test
-//    void duplicateGuidFails() {
-//        Path importFilePath = TEST_RESOURCES.resolve("duplicate-guid-recipes.json");
-//
-//        var stringPath = importFilePath.toString();
-//        // we want only single invocation in the 'isThrownBy' method so that we don't accidentally catch
-//        // unwanted exceptions
-//        assertThatExceptionOfType(EntityAlreadyExistsException.class)
-//                .isThrownBy(() -> genericImportService.importData(stringPath))
-//                .withMessage("Recipe with given guid already exists: 76c59af3-6e9a-4fcb-bd7e-d0a163ed8b45");
-//    }
 }

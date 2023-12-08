@@ -30,7 +30,6 @@ public abstract class AbstractRenderer<T> implements ListCellRenderer<T>, TableC
             boolean isSelected, boolean hasFocus,
             int row, int column) {
 
-        // reset foreground color to default
         tableCellRenderer.setForeground(null);
         var label = (JLabel) tableCellRenderer.getTableCellRendererComponent(
                 table, value, isSelected, hasFocus, row, column);

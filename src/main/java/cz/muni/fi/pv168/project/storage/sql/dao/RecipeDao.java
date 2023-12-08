@@ -56,7 +56,7 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
         ) {
             statement.setString(1, newRecipe.guid());
             statement.setString(2, newRecipe.name());
-            statement.setString(3, newRecipe.category().getCategory());
+            statement.setString(3, newRecipe.category().toString());
             statement.setTime(4, Time.valueOf(newRecipe.time()));
             statement.setInt(5, newRecipe.portions());
             statement.setString(6, newRecipe.instructions());
@@ -215,10 +215,11 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
         ) {
             statement.setString(1, entity.guid());
             statement.setString(2, entity.name());
-            statement.setString(3, entity.category().getCategory());
+            statement.setString(3, entity.category().toString());
             statement.setString(4, entity.time().toString());
             statement.setInt(5, entity.portions());
             statement.setString(6, entity.instructions());
+            statement.setLong(7, entity.id());
             statement.executeUpdate();
 
             int rowsUpdated = statement.executeUpdate();

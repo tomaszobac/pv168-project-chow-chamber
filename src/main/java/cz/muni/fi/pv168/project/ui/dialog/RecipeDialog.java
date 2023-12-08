@@ -46,6 +46,9 @@ public class RecipeDialog extends EntityDialog<Recipe> {
 
         timeField.setText(recipe.getTime().toString());
         portionsField.setText(Integer.toString(recipe.getPortions()));
+        if (!recipe.getInstructions().isBlank()) {
+            instructionsArea.setText(recipe.getInstructions());
+        }
         instructionsArea.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {

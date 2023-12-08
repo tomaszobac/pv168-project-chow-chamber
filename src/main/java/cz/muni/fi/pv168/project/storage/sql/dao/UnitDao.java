@@ -1,5 +1,9 @@
 package cz.muni.fi.pv168.project.storage.sql.dao;
 
+import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
+import cz.muni.fi.pv168.project.storage.sql.entity.UnitEntity;
+import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,10 +12,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
-import cz.muni.fi.pv168.project.storage.sql.entity.UnitEntity;
-import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 /**
  * DAO for {@link UnitEntity} entity.
@@ -171,7 +171,8 @@ public final class UnitDao implements DataAccessObject<UnitEntity> {
     public UnitEntity update(UnitEntity entity) {
         var sql = """
                 UPDATE Unit
-                SET name = ?,
+                SET guid = ?,
+                    name = ?,
                     type = ?,
                     conversionToBase = ?
                 WHERE id = ?
@@ -184,6 +185,7 @@ public final class UnitDao implements DataAccessObject<UnitEntity> {
             statement.setString(2, entity.name());
             statement.setString(3, entity.type().toString());
             statement.setDouble(4, entity.conversionToBase());
+            statement.setLong(5, entity.id());
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {
                 throw new DataStorageException("Unit not found, id: " + entity.id());

@@ -59,7 +59,7 @@ public class AddRecipeAction extends AbstractAction {
     private Recipe createPrefilledRecipe() {
         Recipe recipe = new Recipe(
                 "Vomáčka",
-                "Uvaříme vodu",
+                "",
                 PRILOHA,
                 LocalTime.parse("00:10"),
                 4);

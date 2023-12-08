@@ -132,8 +132,6 @@ public class MainWindow {
         mainFrameTabs.addTab("<html><b>Ingredients</b></html>", new JScrollPane(ingredientTable));
         mainFrame.add(mainFrameTabs, BorderLayout.CENTER);
 
-        dependencyProvider.getImportService().importData(null);
-
         this.toolbar = createToolbar();
         mainFrame.add(this.toolbar, BorderLayout.BEFORE_FIRST_LINE);
 
@@ -149,7 +147,7 @@ public class MainWindow {
         ingredientTable.setMouseListener(ingredientTable);
 
         mainFrameTabs.addChangeListener(e -> updateActions(mainFrameTabs.getSelectedIndex()));
-
+        refresh();
         mainFrame.pack();
     }
 

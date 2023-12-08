@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * The Unit class represents a unit of measurement.
  * It extends the Entity class and has fields for the unit's name, type, and conversion factor to the base unit.
  */
-public class Unit extends Entity {
+public class Unit extends Entity implements Serializable {
     private String name;
     private UnitType type;
     private double conversionToBase;

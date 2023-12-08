@@ -1,2 +1,8 @@
-2023-12-07 00:07:30 [main] cz.muni.fi.pv168.project.storage.sql.db.DatabaseManager.createDbFileSystemPath()
-DEBUG: Root directory for the database already exists: C:\Users\Tom\Documents\pv168-project-template\db
+2023-12-08 16:02:39 [AWT-EventQueue-0] cz.muni.fi.pv168.project.storage.sql.db.DatabaseManager.createDbFileSystemPath()
+DEBUG: Root directory for the database already exists: C:\Users\kotrc\Documents\JAVA\TEAM_PROJECT\pv168-project-template\db
+2023-12-08 16:02:40 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 82a3bdd9-a068-4e4d-bf12-40ea0848d92c; category: Zákusek; name: Krtkov dort; time: 00:30; portions: 4}
+2023-12-08 16:02:40 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 6040066a-f4a4-4448-8b82-db1369603934; category: Příloha; name: Vomáčka; time: 00:10; portions: 4}
+2023-12-08 16:03:17 [AWT-EventQueue-0] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 2754af25-a5e0-4c33-ad18-ea229d26b617; category: Zákusek; name: Cocaine; time: 00:05; portions: 4}

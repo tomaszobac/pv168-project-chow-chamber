@@ -12,9 +12,6 @@ import java.util.Optional;
 
 /**
  * Implementation of {@link Repository} for {@link RecipeIngredient} entity using SQL database.
- * <p>
- * Original by:
- * @author Vojtech Sassmann
  */
 public class RecipeIngredientSqlRepository implements Repository<RecipeIngredient> {
 

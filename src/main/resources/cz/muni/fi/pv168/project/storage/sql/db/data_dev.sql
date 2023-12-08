@@ -2,7 +2,7 @@
 -- Development data - used for development
 --
 
---  Departments
+--  Ingredients
 INSERT INTO "Ingredient" ("guid", "name", "calories", "unit")
 VALUES ('1', 'Voda', '0.0', 'Milliliter'),
        ('2', 'Bread', '10.0', 'Kilogram'),

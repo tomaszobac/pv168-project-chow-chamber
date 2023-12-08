@@ -12,9 +12,6 @@ import java.util.Optional;
 
 /**
  * Implementation of {@link Repository} for {@link Unit} entity using SQL database.
- * <p>
- * Original by:
- * @author Vojtech Sassmann //TODO: Delete this xD
  */
 public class UnitSqlRepository implements Repository<Unit> {
 

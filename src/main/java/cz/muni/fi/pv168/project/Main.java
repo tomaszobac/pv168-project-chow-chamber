@@ -1,10 +1,9 @@
 package cz.muni.fi.pv168.project;
 
-import java.awt.EventQueue;
-
 import cz.muni.fi.pv168.project.ui.MainWindow;
-import cz.muni.fi.pv168.project.ui.wiring.ProductionDependencyProvider;
+import cz.muni.fi.pv168.project.wiring.ProductionDependencyProvider;
 
+import java.awt.EventQueue;
 
 /**
  * The entry point of the application.

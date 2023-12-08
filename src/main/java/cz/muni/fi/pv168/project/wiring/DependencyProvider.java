@@ -1,5 +1,6 @@
 package cz.muni.fi.pv168.project.wiring;
 
+import cz.muni.fi.pv168.project.business.model.GuidProvider;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
@@ -40,6 +41,8 @@ public interface DependencyProvider {
     ImportService getImportService();
 
     ExportService getExportService();
+
+    GuidProvider getGuidProvider();
 
     Validator<Recipe> getRecipeValidator();
 

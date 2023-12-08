@@ -5,6 +5,7 @@ import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.repository.Repository;
+import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.validation.RecipeIngredientValidator;
 import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
@@ -45,7 +46,7 @@ public class RecipeTable extends MyTable {
     public RecipeTable(AbstractTableModel model) {
         super(model);
     }
-    public void setMouseListener(MyTable recipeTable, RecipeIngredientCrudService recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
+    public void setMouseListener(MyTable recipeTable, CrudService<RecipeIngredient> recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -86,7 +87,7 @@ public class RecipeTable extends MyTable {
      *
      * @param recipeTable represents table of stored recipes.
      */
-    private void openRecipeInfoWindow(MyTable recipeTable, RecipeIngredientCrudService recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
+    private void openRecipeInfoWindow(MyTable recipeTable, CrudService<RecipeIngredient> recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
         if (recipesInfoFrame == null) {
             recipesInfoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
             recipesInfoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -187,7 +188,7 @@ public class RecipeTable extends MyTable {
         return closeButton;
     }
 
-    private List<RecipeIngredient> getIngredients(Recipe recipe, RecipeIngredientCrudService crud) {
+    private List<RecipeIngredient> getIngredients(Recipe recipe, CrudService<RecipeIngredient> crud) {
         return crud.findAll()
                 .stream()
                 .filter(recipeIngredient -> recipeIngredient.getRecipeGuid().equals(recipe.getGuid()))

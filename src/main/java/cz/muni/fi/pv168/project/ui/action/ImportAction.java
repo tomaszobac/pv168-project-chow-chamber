@@ -40,7 +40,7 @@ public class ImportAction extends AbstractAction {
         if (dialogResult == JFileChooser.APPROVE_OPTION) {
             File importFile = fileChooser.getSelectedFile();
 
-            transactionExecutor.executeInTransaction(() -> importService.importData(importFile.getAbsolutePath()));
+            importService.importData(importFile.getAbsolutePath());
 
             callback.run();
             JOptionPane.showMessageDialog(null, "Import was done");

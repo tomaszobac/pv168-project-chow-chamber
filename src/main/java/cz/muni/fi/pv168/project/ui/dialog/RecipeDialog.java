@@ -67,7 +67,6 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         JButton customIngredientButton = createCustomIngredientButton(ingredientTable, unitTable);
         add("", customIngredientButton);
 
-        // Add instructions area
         JScrollPane instructionsScrollPane = new JScrollPane(instructionsArea);
         instructionsScrollPane.setPreferredSize(new Dimension(400, 300));
         add("Instructions:", instructionsScrollPane, "wmin 250lp, grow, gapy 10");

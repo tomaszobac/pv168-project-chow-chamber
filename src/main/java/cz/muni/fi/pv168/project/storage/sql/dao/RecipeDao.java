@@ -1,5 +1,9 @@
 package cz.muni.fi.pv168.project.storage.sql.dao;
 
+import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
+import cz.muni.fi.pv168.project.storage.sql.entity.RecipeEntity;
+import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,13 +13,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
-import cz.muni.fi.pv168.project.storage.sql.entity.RecipeEntity;
-import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 /**
  * DAO for {@link RecipeEntity} entity.
@@ -49,11 +46,9 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
                     category,
                     time,
                     portions,
-                    ingredients,
-                    numberOfIngredients,
                     instructions
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+                VALUES (?, ?, ?, ?, ?, ?);
                 """;
         try (
                 var connection = connections.get();
@@ -64,9 +59,7 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
             statement.setString(3, newRecipe.category().getCategory());
             statement.setTime(4, Time.valueOf(newRecipe.time()));
             statement.setInt(5, newRecipe.portions());
-            statement.setString(6, newRecipe.ingredients().toString());
-            statement.setInt(7, newRecipe.ingredients().size());
-            statement.setString(8, newRecipe.instructions());
+            statement.setString(6, newRecipe.instructions());
             statement.executeUpdate();
 
             try (var keyResultSet = statement.getGeneratedKeys()) {
@@ -103,8 +96,6 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
                         category,
                         time,
                         portions,
-                        ingredients,
-                        numberOfIngredients,
                         instructions
                 FROM Recipe
                 """;
@@ -143,8 +134,6 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
                         category,
                         time,
                         portions,
-                        ingredients,
-                        numberOfIngredients,
                         instructions
                 FROM Recipe
                 WHERE id = ?
@@ -181,8 +170,6 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
                         category,
                         time,
                         portions,
-                        ingredients,
-                        numberOfIngredients,
                         instructions
                 FROM Recipe
                 WHERE guid = ?
@@ -219,8 +206,6 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
                     category = ?,
                     time = ?,
                     portions = ?,
-                    ingredients = ?,
-                    numberOfIngredients = ?,
                     instructions = ?
                 WHERE id = ?
                 """;
@@ -233,9 +218,7 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
             statement.setString(3, entity.category().getCategory());
             statement.setString(4, entity.time().toString());
             statement.setInt(5, entity.portions());
-            statement.setObject(6, entity.ingredients());
-            statement.setInt(7, entity.ingredients().size());
-            statement.setString(8, entity.instructions());
+            statement.setString(6, entity.instructions());
             statement.executeUpdate();
 
             int rowsUpdated = statement.executeUpdate();
@@ -331,20 +314,14 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
      * @throws SQLException if there is an error accessing the ResultSet
      */
     private static RecipeEntity recipeFromResultSet(ResultSet resultSet) throws SQLException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return new RecipeEntity(
+        return new RecipeEntity(
                     resultSet.getLong("id"),
                     resultSet.getString("guid"),
                     resultSet.getString("name"),
                     RecipeCategory.valueOf(resultSet.getString("category")),
                     resultSet.getTimestamp("time").toLocalDateTime().toLocalTime(),
                     resultSet.getInt("portions"),
-                    objectMapper.readValue(resultSet.getString("ingredients"), new TypeReference<>(){}),
                     resultSet.getString("instructions")
-            );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        );
     }
 }

@@ -1,8 +1,5 @@
 package cz.muni.fi.pv168.project.storage.sql;
 
-import java.util.List;
-import java.util.Optional;
-
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.repository.Repository;
 import cz.muni.fi.pv168.project.storage.sql.dao.DataAccessObject;
@@ -10,11 +7,14 @@ import cz.muni.fi.pv168.project.storage.sql.dao.DataStorageException;
 import cz.muni.fi.pv168.project.storage.sql.entity.UnitEntity;
 import cz.muni.fi.pv168.project.storage.sql.entity.mapper.EntityMapper;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * Implementation of {@link Repository} for {@link Unit} entity using SQL database.
  * <p>
  * Original by:
- * @author Vojtech Sassmann
+ * @author Vojtech Sassmann //TODO: Delete this xD
  */
 public class UnitSqlRepository implements Repository<Unit> {
 

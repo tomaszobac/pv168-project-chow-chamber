@@ -2,6 +2,7 @@ package cz.muni.fi.pv168.project.wiring;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.repository.Repository;
 import cz.muni.fi.pv168.project.business.service.crud.CrudService;
@@ -24,6 +25,8 @@ public interface DependencyProvider {
 
     Repository<Unit> getUnitRepository();
 
+    Repository<RecipeIngredient> getRecipeIngredientRepository();
+
     TransactionExecutor getTransactionExecutor();
 
     CrudService<Recipe> getRecipeCrudService();
@@ -31,6 +34,8 @@ public interface DependencyProvider {
     CrudService<Ingredient> getIngredientCrudService();
 
     CrudService<Unit> getUnitCrudService();
+
+    CrudService<RecipeIngredient> getRecipeIngredientCrudService();
 
     ImportService getImportService();
 
@@ -41,5 +46,7 @@ public interface DependencyProvider {
     Validator<Ingredient> getIngredientValidator();
 
     Validator<Unit> getUnitValidator();
+
+    Validator<RecipeIngredient> getRecipeIngredientValidator();
 }
 

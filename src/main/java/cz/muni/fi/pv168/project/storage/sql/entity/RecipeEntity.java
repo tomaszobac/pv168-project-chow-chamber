@@ -1,10 +1,8 @@
 package cz.muni.fi.pv168.project.storage.sql.entity;
 
-import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -17,7 +15,6 @@ public record RecipeEntity(
         RecipeCategory category,
         LocalTime time,
         int portions,
-        ArrayList<RecipeIngredient> ingredients,
         String instructions) {
     public RecipeEntity(
             Long id,
@@ -26,7 +23,6 @@ public record RecipeEntity(
             RecipeCategory category,
             LocalTime time,
             int portions,
-            ArrayList<RecipeIngredient> ingredients,
             String instructions) {
         this.id = id;
         this.guid = Objects.requireNonNull(guid, "guid must not be null");
@@ -34,7 +30,6 @@ public record RecipeEntity(
         this.category = Objects.requireNonNull(category, "category must not be null");
         this.time = Objects.requireNonNull(time, "time must not be null");
         this.portions = portions;
-        this.ingredients = Objects.requireNonNull(ingredients, "ingredients must not be null");
         this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
     }
 
@@ -44,8 +39,7 @@ public record RecipeEntity(
             RecipeCategory category,
             LocalTime time,
             int portions,
-            ArrayList<RecipeIngredient> ingredients,
             String instructions) {
-        this(null, guid, name, category, time, portions, ingredients, instructions);
+        this(null, guid, name, category, time, portions, instructions);
     }
 }

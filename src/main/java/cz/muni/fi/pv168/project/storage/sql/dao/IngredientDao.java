@@ -1,5 +1,9 @@
 package cz.muni.fi.pv168.project.storage.sql.dao;
 
+import cz.muni.fi.pv168.project.business.model.Unit;
+import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
+import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,10 +12,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import cz.muni.fi.pv168.project.business.model.Unit;
-import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
-import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
 
 /**
  * DAO for {@link IngredientEntity} entity.
@@ -171,7 +171,8 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
     public IngredientEntity update(IngredientEntity entity) {
         var sql = """
                 UPDATE Ingredient
-                SET name = ?,
+                SET guid = ?,
+                    name = ?,
                     calories = ?,
                     unit = ?
                 WHERE id = ?
@@ -184,6 +185,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
             statement.setString(2, entity.name());
             statement.setDouble(3, entity.calories());
             statement.setObject(4, entity.unit());
+            statement.setObject(5, entity.id());
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {
                 throw new DataStorageException("Ingredient not found, id: " + entity.id());

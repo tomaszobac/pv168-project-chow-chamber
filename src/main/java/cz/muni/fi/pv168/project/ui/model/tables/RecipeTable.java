@@ -122,6 +122,8 @@ public class RecipeTable extends MyTable {
         JPanel instructionTab = new JPanel(new GridBagLayout());
 
         JTextArea textArea = new JTextArea(recipe.getInstructions());
+        textArea.setFont(textArea.getFont().deriveFont(15f));
+        textArea.setLineWrap(true);
         textArea.setEnabled(false);
         textArea.setDisabledTextColor(new Color(255, 255, 255));
         textArea.setPreferredSize(new Dimension(200, 300));

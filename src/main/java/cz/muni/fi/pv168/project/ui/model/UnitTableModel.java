@@ -1,8 +1,7 @@
 package cz.muni.fi.pv168.project.ui.model;
 
-import cz.muni.fi.pv168.project.business.model.Entity;
 import cz.muni.fi.pv168.project.business.model.Unit;
-import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
 import javax.swing.table.AbstractTableModel;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class UnitTableModel extends AbstractTableModel implements EntityTableModel<Unit> {
     private List<Unit> units;
-    private final UnitCrudService unitCrudService;
+    private final CrudService<Unit> unitCrudService;
     private final List<Column<Unit, ?>> columns = List.of(
             Column.readonly("Unit", Unit.class, Unit -> Unit),
             Column.readonly("Name", String.class, Unit::getName),
@@ -30,7 +29,7 @@ public class UnitTableModel extends AbstractTableModel implements EntityTableMod
         };
     }
 
-    public UnitTableModel(UnitCrudService unitCrudService) {
+    public UnitTableModel(CrudService<Unit> unitCrudService) {
         this.unitCrudService = unitCrudService;
         this.units = new ArrayList<>(unitCrudService.findAll());
     }

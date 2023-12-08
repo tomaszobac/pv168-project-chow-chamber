@@ -1,7 +1,7 @@
 package cz.muni.fi.pv168.project.ui.model;
 
 import cz.muni.fi.pv168.project.business.model.Ingredient;
-import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class IngredientTableModel extends AbstractTableModel implements EntityTableModel<Ingredient> {
     private  List<Ingredient> ingredients;
-    private final IngredientCrudService ingredientCrudService;
+    private final CrudService<Ingredient> ingredientCrudService;
     private final List<Column<Ingredient, ?>> columns = List.of(
             Column.readonly("Ingredient", Ingredient.class, Ingredient -> Ingredient),
             Column.readonly("Name", String.class, Ingredient::getName),
@@ -26,7 +26,7 @@ public class IngredientTableModel extends AbstractTableModel implements EntityTa
         };
     }
 
-    public IngredientTableModel(IngredientCrudService ingredientCrudService) {
+    public IngredientTableModel(CrudService<Ingredient> ingredientCrudService) {
         this.ingredientCrudService = ingredientCrudService;
         this.ingredients = new ArrayList<>(ingredientCrudService.findAll());
     }

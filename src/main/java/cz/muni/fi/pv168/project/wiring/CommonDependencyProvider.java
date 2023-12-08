@@ -1,5 +1,6 @@
 package cz.muni.fi.pv168.project.wiring;
 
+import cz.muni.fi.pv168.project.business.model.GuidProvider;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
@@ -63,6 +64,7 @@ public class CommonDependencyProvider implements DependencyProvider {
     private final IngredientValidator ingredientValidator;
     private final UnitValidator unitValidator;
     private final RecipeIngredientValidator recipeIngredientValidator;
+    private final GuidProvider guidProvider;
 
     public CommonDependencyProvider(DatabaseManager databaseManager) {
         this.recipeValidator = new RecipeValidator();
@@ -70,7 +72,7 @@ public class CommonDependencyProvider implements DependencyProvider {
         this.unitValidator = new UnitValidator();
         this.recipeIngredientValidator = new RecipeIngredientValidator();
 
-        var guidProvider = new UuidGuidProvider();
+        this.guidProvider = new UuidGuidProvider();
 
         this.databaseManager = databaseManager;
         var transactionManager = new TransactionManagerImpl(databaseManager);
@@ -163,6 +165,11 @@ public class CommonDependencyProvider implements DependencyProvider {
     @Override
     public ExportService getExportService() {
         return import_exportService;
+    }
+
+    @Override
+    public GuidProvider getGuidProvider() {
+        return guidProvider;
     }
 
     @Override

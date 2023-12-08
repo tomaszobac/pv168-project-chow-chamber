@@ -4,7 +4,7 @@ import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.repository.Repository;
-import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
+import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class RecipeIngredientsTableModel extends AbstractTableModel implements EntityTableModel<RecipeIngredient> {
     private List<RecipeIngredient> ingredients;
-    private final RecipeIngredientCrudService recipeIngredientCrudService;
+    private final CrudService<RecipeIngredient> recipeIngredientCrudService;
     private final Repository<Recipe> recipeRepository;
     private final Repository<Ingredient> ingredientRepository;
     private final List<Column<RecipeIngredient, ?>> columns;
@@ -28,7 +28,7 @@ public class RecipeIngredientsTableModel extends AbstractTableModel implements E
         };
     }
 
-    public RecipeIngredientsTableModel(RecipeIngredientCrudService recipeIngredientCrudService,
+    public RecipeIngredientsTableModel(CrudService<RecipeIngredient> recipeIngredientCrudService,
                                        Repository<Recipe> recipeRepository,
                                        Repository<Ingredient> ingredientRepository) {
         this.recipeIngredientCrudService = Objects.requireNonNull(recipeIngredientCrudService, "recipeIngredientCrudService cannot be null");

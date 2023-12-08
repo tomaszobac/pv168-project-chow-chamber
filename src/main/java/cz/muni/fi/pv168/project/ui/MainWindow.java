@@ -1,23 +1,5 @@
 package cz.muni.fi.pv168.project.ui;
 
-import cz.muni.fi.pv168.project.business.model.Ingredient;
-import cz.muni.fi.pv168.project.business.model.Recipe;
-import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
-import cz.muni.fi.pv168.project.business.model.Unit;
-import cz.muni.fi.pv168.project.business.model.UuidGuidProvider;
-import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
-import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
-import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
-import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
-import cz.muni.fi.pv168.project.business.service.import_export.GenericExportService;
-import cz.muni.fi.pv168.project.business.service.import_export.GenericImportService;
-import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonExporter;
-import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonImporter;
-import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
-import cz.muni.fi.pv168.project.business.service.validation.RecipeIngredientValidator;
-import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
-import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
-import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
 import cz.muni.fi.pv168.project.ui.action.ConvertAction;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
@@ -61,7 +43,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.util.List;
 
 public class MainWindow {
     private final MyFrame mainFrame;
@@ -88,41 +69,24 @@ public class MainWindow {
         mainFrame = MainWindowUtilities.createFrame(null, null, "ChowChamber");
         mainFrame.setIconImage(new ImageIcon("src/main/resources/cz/muni/fi/pv168/project/ui/resources/chowcham-logo1.png").getImage());
 
-        InMemoryRepository<Recipe> recipeRepository = new InMemoryRepository<>(List.of());
-        InMemoryRepository<Unit> unitRepository = new InMemoryRepository<>(List.of());
-        InMemoryRepository<Ingredient> ingredientRepository = new InMemoryRepository<>(List.of());
-        InMemoryRepository<RecipeIngredient> recipeIngredientRepository = new InMemoryRepository<>(List.of());
-
-        RecipeValidator recipeValidator = new RecipeValidator();
-        UnitValidator unitValidator = new UnitValidator();
-        IngredientValidator ingredientValidator = new IngredientValidator();
-        RecipeIngredientValidator recipeIngredientValidator = new RecipeIngredientValidator();
-
-        UuidGuidProvider guidProvider = new UuidGuidProvider();
-
-        RecipeCrudService recipeCrudService = new RecipeCrudService(recipeRepository, recipeValidator, guidProvider);
-        UnitCrudService unitCrudService = new UnitCrudService(unitRepository, unitValidator, guidProvider);
-        IngredientCrudService ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator, guidProvider);
-        RecipeIngredientCrudService recipeIngredientCrudService = new RecipeIngredientCrudService(recipeIngredientRepository, recipeIngredientValidator, guidProvider);
-
-        GenericExportService exportService = new GenericExportService(recipeCrudService,
-                unitCrudService,
-                ingredientCrudService,
-                recipeIngredientCrudService,
-                List.of(new BatchJsonExporter()));
-
-        GenericImportService importService = new GenericImportService(recipeCrudService,
-                unitCrudService,
-                ingredientCrudService,
-                recipeIngredientCrudService,
-                List.of(new BatchJsonImporter()));
-
-        importService.importData(null);
-
-        recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(new RecipeTableModel(recipeCrudService), 0, this::rowSelectionChanged);
-        unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(new UnitTableModel(unitCrudService), 3, this::rowSelectionChanged);
-        ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(new IngredientTableModel(ingredientCrudService), 1, this::rowSelectionChanged);
-        recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(new RecipeIngredientsTableModel(recipeIngredientCrudService, recipeRepository, ingredientRepository), 2, this::rowSelectionChanged);
+        recipeTable = (RecipeTable) MainWindowUtilities.createTableFromModel(
+                new RecipeTableModel(dependencyProvider.getRecipeCrudService()),
+                0,
+                this::rowSelectionChanged);
+        unitTable = (UnitTable) MainWindowUtilities.createTableFromModel(
+                new UnitTableModel(dependencyProvider.getUnitCrudService()),
+                3,
+                this::rowSelectionChanged);
+        ingredientTable = (IngredientsTable) MainWindowUtilities.createTableFromModel(
+                new IngredientTableModel(dependencyProvider.getIngredientCrudService()),
+                1,
+                this::rowSelectionChanged);
+        recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(
+                new RecipeIngredientsTableModel(dependencyProvider.getRecipeIngredientCrudService(),
+                        dependencyProvider.getRecipeRepository(),
+                        dependencyProvider.getIngredientRepository()),
+                2,
+                this::rowSelectionChanged);
 
         MainWindowUtilities.hideFirstColumn(recipeTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
@@ -152,11 +116,14 @@ public class MainWindow {
         addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);
         deleteAction = new DeleteRecipeAction(recipeTable);
-        importAction = new ImportAction(importService, this::refresh);
-        exportAction = new ExportAction(exportService);
+
+        importAction = new ImportAction(dependencyProvider.getImportService(), this::refresh, dependencyProvider.getTransactionExecutor());
+        exportAction = new ExportAction(dependencyProvider.getExportService());
+
         filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
         convertAction = new ConvertAction(unitTable);
-        quitAction = new QuitAction(exportService);
+
+        quitAction = new QuitAction(dependencyProvider.getExportService());
 
         JTabbedPane mainFrameTabs = new JTabbedPane();
         mainFrameTabs.setOpaque(true);
@@ -171,7 +138,11 @@ public class MainWindow {
         this.menubar = createMenuBar();
         mainFrame.setJMenuBar(this.menubar);
 
-        recipeTable.setMouseListener(recipeTable, recipeIngredientCrudService, ingredientRepository, recipeRepository, guidProvider);
+        recipeTable.setMouseListener(recipeTable,
+                dependencyProvider.getRecipeIngredientCrudService(),
+                dependencyProvider.getIngredientRepository(),
+                dependencyProvider.getRecipeRepository(),
+                dependencyProvider.getGuidProvider());
         unitTable.setMouseListener(unitTable);
         ingredientTable.setMouseListener(ingredientTable);
 

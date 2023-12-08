@@ -113,7 +113,7 @@ public class IngredientsTable extends MyTable {
         infoPanel.add(MainWindowUtilities.createLabel("Calories:", 0));
         infoPanel.add(MainWindowUtilities.createLabel(Double.toString(ingredient.getCalories()), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Unit:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(ingredient.getUnit().toString(), 1));
+        infoPanel.add(MainWindowUtilities.createLabel(ingredient.getUnit().getName(), 1));
         return infoPanel;
     }
 

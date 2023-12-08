@@ -3,9 +3,8 @@ package cz.muni.fi.pv168.project.ui.dialog;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
+import cz.muni.fi.pv168.project.ui.renderers.CategoryRenderer;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -21,10 +20,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.time.DateTimeException;
 import java.time.LocalTime;
+import java.util.Arrays;
 
 public class RecipeDialog extends EntityDialog<Recipe> {
     private final JTextField nameField = new JTextField();
-    private final ComboBoxModel<RecipeCategory> categoryField = new DefaultComboBoxModel<>(RecipeCategory.values());
+    private JComboBox<RecipeCategory> categoryComboBox;
     private final JTextField timeField = new JTextField();
     private final JTextField portionsField = new JTextField();
     private final JTextArea instructionsArea = new JTextArea("Instructions go here!");
@@ -39,7 +39,11 @@ public class RecipeDialog extends EntityDialog<Recipe> {
 
     private void setValues() {
         nameField.setText(recipe.getName());
-        categoryField.setSelectedItem(recipe.getCategory());
+
+        categoryComboBox = new JComboBox<>();
+        Arrays.stream(RecipeCategory.values()).forEach(categoryComboBox::addItem);
+        categoryComboBox.setRenderer(new CategoryRenderer());
+
         timeField.setText(recipe.getTime().toString());
         portionsField.setText(Integer.toString(recipe.getPortions()));
         instructionsArea.addFocusListener(new FocusAdapter() {
@@ -61,7 +65,6 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     }
 
     private void addFields(JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
-        var categoryComboBox = new JComboBox<>(categoryField);
         add("Name:", nameField);
         add("Category:", categoryComboBox);
         add("Time:", timeField);
@@ -151,7 +154,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     Recipe getEntity() {
         returnedOK = true;
         recipe.setName(nameField.getText());
-        recipe.setCategory((RecipeCategory) categoryField.getSelectedItem());
+        recipe.setCategory((RecipeCategory) categoryComboBox.getSelectedItem());
         recipe.setInstructions(instructionsArea.getText());
         try {
             recipe.setTime(getTime(timeField));

@@ -93,6 +93,11 @@ public class MainWindow {
         MainWindowUtilities.hideFirstColumn(unitTable);
         MainWindowUtilities.hideFirstColumn(recipeIngredientsTable);
 
+        recipeTable.getTableHeader().setReorderingAllowed(false);
+        ingredientTable.getTableHeader().setReorderingAllowed(false);
+        unitTable.getTableHeader().setReorderingAllowed(false);
+        recipeIngredientsTable.getTableHeader().setReorderingAllowed(false);
+
         TableRowSorter<RecipeTableModel> recipeRowSorter = new TableRowSorter<>((RecipeTableModel) recipeTable.getModel());
         RecipeTableFilter recipeFilter = new RecipeTableFilter(recipeRowSorter);
         recipeTable.setRowSorter(recipeRowSorter);

@@ -39,13 +39,19 @@ public class FilterUnitDialog extends EntityDialog<UnitTableFilter> {
         return FilterComboboxBuilder.create(SpecialFilterUnitTypeValues.class, UnitType.values())
                 .setSpecialValuesRenderer(new SpecialFilterUnitTypeValuesRenderer())
                 .setValuesRenderer(new UnitTypeRenderer())
-                .setFilter(unitTableFilter::filterUnitType)
                 .build();
     }
 
     @Override
     UnitTableFilter getEntity() {
         try {
+            Either<SpecialFilterUnitTypeValues, UnitType> selectedUnitType =
+                    (Either<SpecialFilterUnitTypeValues, UnitType>) unitTypeComboBox.getSelectedItem();
+
+            if (selectedUnitType != null) {
+                unitTableFilter.filterUnitType(selectedUnitType);
+            }
+            
             unitTableFilter.filterName(nameField.getText());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(FilterUnitDialog.this,

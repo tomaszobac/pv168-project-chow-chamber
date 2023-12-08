@@ -72,7 +72,6 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
         return FilterComboboxBuilder.create(SpecialFilterCategoryValues.class, RecipeCategory.values())
                 .setSpecialValuesRenderer(new SpecialFilterCategoryValuesRenderer())
                 .setValuesRenderer(new CategoryRenderer())
-                .setFilter(recipeTableFilter::filterCategory)
                 .build();
     }
 
@@ -111,6 +110,13 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
     @Override
     RecipeTableFilter getEntity() {
         try {
+            Either<SpecialFilterCategoryValues, RecipeCategory> selectedCategory =
+                    (Either<SpecialFilterCategoryValues, RecipeCategory>) categoryComboBox.getSelectedItem();
+
+            if (selectedCategory != null) {
+                recipeTableFilter.filterCategory(selectedCategory);
+            }
+
             String fromPortionsString = fromPortionsField.getText();
             String toPortionsString = toPortionsField.getText();
             int fromPortions = fromPortionsString.isEmpty() ? 0 : Integer.parseInt(fromPortionsString);

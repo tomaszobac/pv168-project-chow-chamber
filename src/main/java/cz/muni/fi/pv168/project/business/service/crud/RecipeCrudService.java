@@ -49,6 +49,10 @@ public final class RecipeCrudService implements CrudService<Recipe> {
         return validationResult;
     }
 
+    public String getNewGuid() {
+        return guidProvider.newGuid();
+    }
+
     @Override
     public ValidationResult update(Recipe entity) {
         var validationResult = recipeValidator.validate(entity);

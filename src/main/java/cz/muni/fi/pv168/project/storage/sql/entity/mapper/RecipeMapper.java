@@ -21,9 +21,9 @@ public class RecipeMapper implements EntityMapper<RecipeEntity, Recipe> {
                 entity.category(),
                 entity.time(),
                 entity.portions(),
-                entity.ingredients(),
                 entity.instructions()
         );
+
     }
 
     /**
@@ -65,7 +65,6 @@ public class RecipeMapper implements EntityMapper<RecipeEntity, Recipe> {
                 entity.getCategory(),
                 entity.getTime(),
                 entity.getPortions(),
-                entity.getIngredients(),
                 entity.getInstructions()
         );
     }

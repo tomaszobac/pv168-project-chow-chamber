@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -161,7 +160,6 @@ public class RecipeCrudServiceUnitTest {
                 RecipeCategory.HLAVNI_JIDLO,
                 LocalTime.NOON,
                 1,
-                new ArrayList<>(),
                 "Hello there traveler"
         );
     }

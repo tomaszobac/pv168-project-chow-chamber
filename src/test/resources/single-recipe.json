@@ -1,3 +1,4 @@
-{"recipes":[{"name":"Krtkův dort","instructions":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","category":"ZAKUSEK","time":"12:00","portions":"2","ingredients":[],"numberOfIngredients":"0"}],
-  "units":[],
-  "ingredients":[]}
+{"recipes":[{"guid":"9ed6ad0b-a514-4073-aebd-5d710b9eea8b","name":"Jeden recept","instructions":"Tohle je jenom jeden recept bez ničeho","category":"HLAVNI_JIDLO","time":"23:10","portions":"1000"}],
+"units":[],
+"ingredients":[],
+"recipeIngredients":[]}

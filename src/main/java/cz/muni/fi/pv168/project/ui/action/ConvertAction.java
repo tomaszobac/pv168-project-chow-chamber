@@ -13,7 +13,7 @@ public class ConvertAction extends AbstractAction {
     private final UnitTable unitTable;
 
     public ConvertAction(UnitTable unitTable) {
-        super("Convert", Icons.ADD_ICON); // TODO: Get an ICON for Convert
+        super("Convert", Icons.BALANCE_ICON);
         putValue(SHORT_DESCRIPTION, "Converting calculator");
         putValue(MNEMONIC_KEY, KeyEvent.VK_K);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl K"));

@@ -5,15 +5,10 @@ import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
 import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.GridLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -69,26 +64,11 @@ public class ConverterDialog extends EntityDialog<UnitTable> {
             }
         });
 
-        fromUnitComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                updateResult();
-            }
-        });
+        fromUnitComboBox.addItemListener(e -> updateResult());
 
-        toUnitComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                updateResult();
-            }
-        });
+        toUnitComboBox.addItemListener(e -> updateResult());
 
-        unitTypeComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                updateUnitComboBoxes();
-            }
-        });
+        unitTypeComboBox.addItemListener(e -> updateUnitComboBoxes());
     }
 
     private void updateUnitComboBoxes() {

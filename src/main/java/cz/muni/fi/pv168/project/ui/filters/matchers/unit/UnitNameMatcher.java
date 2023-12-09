@@ -4,7 +4,7 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.business.model.Unit;
 
 public class UnitNameMatcher extends EntityMatcher<Unit> {
-    String name;
+    final private String name;
 
     public UnitNameMatcher(String name) {
         this.name = name;

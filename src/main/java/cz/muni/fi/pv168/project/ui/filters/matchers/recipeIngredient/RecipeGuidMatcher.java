@@ -4,7 +4,7 @@ import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 
 public class RecipeGuidMatcher extends EntityMatcher<RecipeIngredient> {
-    String guid;
+    final private String guid;
 
     public RecipeGuidMatcher(String guid) {
         this.guid = guid;

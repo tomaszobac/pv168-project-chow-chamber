@@ -55,7 +55,7 @@ public class RecipeTable extends MyTable<Recipe> {
 
         RecipeIngredientValidator validator = new RecipeIngredientValidator();
         RecipeIngredientCrudService crud = new RecipeIngredientCrudService(new InMemoryRepository<>(List.of()), validator, provider);
-        RecipeIngredientsTableModel recIngTableModel = new RecipeIngredientsTableModel(crud , recRepository, ingRepository);
+        RecipeIngredientsTableModel recIngTableModel = new RecipeIngredientsTableModel(crud, ingRepository);
         getIngredients(recipe, recIngCrud).forEach(recIngTableModel::addRow);
         JTable table = MainWindowUtilities.createTableFromModel(recIngTableModel, 2, null);
         JScrollPane recipeIngredientsScrollPane = new JScrollPane(table);

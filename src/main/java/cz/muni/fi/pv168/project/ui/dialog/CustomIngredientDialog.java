@@ -20,7 +20,6 @@ public class CustomIngredientDialog extends JDialog {
     private final JComboBox<Ingredient> ingredientComboBox = new JComboBox<>();
     private final JComboBox<Unit> unitComboBox = new JComboBox<>();
     private final JTextField amountTextField = new JTextField();
-    private final Action deleteAction;
     private final List<RecipeIngredient> newRecipeIngredients = new ArrayList<>();
     private boolean exitThroughDone = false;
 
@@ -35,9 +34,7 @@ public class CustomIngredientDialog extends JDialog {
         if (ingredientComboBox.getItemCount() > 0) {
             ingredientComboBox.setSelectedIndex(0);
         }
-        ingredientComboBox.addActionListener( e -> {
-            updateUnitComboBox(unitTable, false);
-        });
+        ingredientComboBox.addActionListener( e -> updateUnitComboBox(unitTable, false));
 
         updateUnitComboBox(unitTable, true);
         unitComboBox.setRenderer(new UnitComboBoxRenderer());
@@ -59,7 +56,7 @@ public class CustomIngredientDialog extends JDialog {
 
         filter.filterGuid(recipe.getGuid());
 
-        deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
+        Action deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
         add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
         addButton.addActionListener(e -> {
             Ingredient selectedIngredient = (Ingredient) ingredientComboBox.getSelectedItem();

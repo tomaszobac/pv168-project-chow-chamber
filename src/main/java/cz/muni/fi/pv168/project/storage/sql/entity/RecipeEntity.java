@@ -32,14 +32,4 @@ public record RecipeEntity(
         this.portions = portions;
         this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
     }
-
-    public RecipeEntity(
-            String guid,
-            String name,
-            RecipeCategory category,
-            LocalTime time,
-            int portions,
-            String instructions) {
-        this(null, guid, name, category, time, portions, instructions);
-    }
 }

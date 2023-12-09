@@ -83,10 +83,7 @@ public class MainWindow {
                 this::rowSelectionChanged);
         recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(
                 new RecipeIngredientsTableModel(dependencyProvider.getRecipeIngredientCrudService(),
-                        dependencyProvider.getRecipeRepository(),
-                        dependencyProvider.getIngredientRepository()),
-                2,
-                this::rowSelectionChanged);
+                        dependencyProvider.getIngredientRepository()), 2, this::rowSelectionChanged);
 
         MainWindowUtilities.hideFirstColumn(recipeTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
@@ -122,7 +119,7 @@ public class MainWindow {
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);
         deleteAction = new DeleteRecipeAction(recipeTable);
 
-        importAction = new ImportAction(dependencyProvider.getImportService(), this::refresh, dependencyProvider.getTransactionExecutor());
+        importAction = new ImportAction(dependencyProvider.getImportService(), this::refresh);
         exportAction = new ExportAction(dependencyProvider.getExportService());
 
         filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);

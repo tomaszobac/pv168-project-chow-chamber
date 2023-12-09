@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RecipeIngredient extends Entity {
-    String recipeGuid;
-    String ingredientGuid;
-    Unit unit;
-    double amount;
+    final private String recipeGuid;
+    final private String ingredientGuid;
+    final private Unit unit;
+    final private double amount;
 
     @JsonCreator
     public RecipeIngredient(@JsonProperty("guid") String guid,

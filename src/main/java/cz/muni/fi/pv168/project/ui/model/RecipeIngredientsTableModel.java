@@ -1,7 +1,6 @@
 package cz.muni.fi.pv168.project.ui.model;
 
 import cz.muni.fi.pv168.project.business.model.Ingredient;
-import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.business.repository.Repository;
 import cz.muni.fi.pv168.project.business.service.crud.CrudService;
@@ -14,8 +13,6 @@ import java.util.Objects;
 public class RecipeIngredientsTableModel extends AbstractTableModel implements EntityTableModel<RecipeIngredient> {
     private List<RecipeIngredient> ingredients;
     private final CrudService<RecipeIngredient> recipeIngredientCrudService;
-    private final Repository<Recipe> recipeRepository;
-    private final Repository<Ingredient> ingredientRepository;
     private final List<Column<RecipeIngredient, ?>> columns;
 
     @Override
@@ -29,11 +26,8 @@ public class RecipeIngredientsTableModel extends AbstractTableModel implements E
     }
 
     public RecipeIngredientsTableModel(CrudService<RecipeIngredient> recipeIngredientCrudService,
-                                       Repository<Recipe> recipeRepository,
                                        Repository<Ingredient> ingredientRepository) {
         this.recipeIngredientCrudService = Objects.requireNonNull(recipeIngredientCrudService, "recipeIngredientCrudService cannot be null");
-        this.recipeRepository = Objects.requireNonNull(recipeRepository, "recipeRepository must not be null");
-        this.ingredientRepository = Objects.requireNonNull(ingredientRepository, "ingredientRepository must not be null");
         this.ingredients = new ArrayList<>(recipeIngredientCrudService.findAll());
         this.columns = List.of(
                 Column.readonly("RecipeIngredient", RecipeIngredient.class, recipeIngredient -> recipeIngredient),
@@ -87,12 +81,6 @@ public class RecipeIngredientsTableModel extends AbstractTableModel implements E
         int newRowIndex = ingredients.size();
         ingredients.add(ingredient);
         fireTableRowsInserted(newRowIndex, newRowIndex);
-    }
-
-    public void updateRow(RecipeIngredient ingredient) {
-        recipeIngredientCrudService.update(ingredient);
-        int rowIndex = ingredients.indexOf(ingredient);
-        fireTableRowsUpdated(rowIndex, rowIndex);
     }
 
     public void deleteAll() {

@@ -19,7 +19,7 @@ public class FilterUnitDialog extends EntityDialog<UnitTableFilter> {
 
     public FilterUnitDialog(UnitTableFilter unitTableFilter) {
         this.unitTableFilter = unitTableFilter;
-        this.unitTypeComboBox = createUnitTypeFilter(unitTableFilter);
+        this.unitTypeComboBox = createUnitTypeFilter();
         setValues();
         addFields();
     }
@@ -34,8 +34,7 @@ public class FilterUnitDialog extends EntityDialog<UnitTableFilter> {
         add("Unit Type:", unitTypeComboBox);
     }
 
-    private static JComboBox<Either<SpecialFilterUnitTypeValues, UnitType>> createUnitTypeFilter(
-            UnitTableFilter unitTableFilter) {
+    private static JComboBox<Either<SpecialFilterUnitTypeValues, UnitType>> createUnitTypeFilter() {
         return FilterComboboxBuilder.create(SpecialFilterUnitTypeValues.class, UnitType.values())
                 .setSpecialValuesRenderer(new SpecialFilterUnitTypeValuesRenderer())
                 .setValuesRenderer(new UnitTypeRenderer())

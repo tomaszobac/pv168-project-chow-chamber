@@ -4,7 +4,7 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
 
 public class IngredientNameMatcher extends EntityMatcher<Ingredient> {
-    String name;
+    final private String name;
 
     public IngredientNameMatcher(String name) {
         this.name = name;

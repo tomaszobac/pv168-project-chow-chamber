@@ -24,11 +24,6 @@ public class Column<E, T> {
         this.valueSetter = valueSetter;
     }
 
-    public static <E, T> Column<E, T> editable(String name, Class<T> columnClass, Function<E, T> valueGetter,
-                                               BiConsumer<E, T> valueSetter) {
-        return new Column<>(name, columnClass, valueGetter, Objects.requireNonNull(valueSetter, "value setter cannot be null"));
-    }
-
     public static <E, T> Column<E, T> readonly(String name, Class<T> columnClass, Function<E, T> valueGetter) {
         return new Column<>(name, columnClass, valueGetter, null);
     }

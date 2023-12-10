@@ -13,9 +13,20 @@ import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.AbstractTableModel;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.List;
 import java.util.stream.Collectors;
 

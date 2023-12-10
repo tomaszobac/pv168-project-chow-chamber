@@ -8,7 +8,9 @@ import cz.muni.fi.pv168.project.ui.renderers.CategoryRenderer;
 import cz.muni.fi.pv168.project.ui.renderers.SpecialFilterCategoryValuesRenderer;
 import cz.muni.fi.pv168.project.util.Either;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;

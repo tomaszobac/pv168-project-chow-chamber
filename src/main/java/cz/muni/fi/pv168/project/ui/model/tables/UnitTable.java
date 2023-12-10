@@ -4,9 +4,13 @@ import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.table.AbstractTableModel;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
 public class UnitTable extends MyTable<Unit> {
     public UnitTable(AbstractTableModel model) {

@@ -8,7 +8,7 @@ import java.io.Serial;
 public class DataStorageException extends RuntimeException {
 
     @Serial
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 8327016682762284789L;
 
     public DataStorageException(String message) {
         this(message, null);

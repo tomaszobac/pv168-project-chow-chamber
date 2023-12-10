@@ -6,7 +6,7 @@ import java.io.Serial;
 public class FatalDataStorageException extends DataStorageException implements FatalError {
 
     @Serial
-    private static final long serialVersionUID = -7034897190745766939L;
+    private static final long serialVersionUID = 4512050973972830440L;
 
     public FatalDataStorageException(String message) {
         super(message);

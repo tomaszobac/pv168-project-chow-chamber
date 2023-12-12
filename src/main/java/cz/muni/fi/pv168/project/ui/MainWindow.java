@@ -5,14 +5,17 @@ import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
 import cz.muni.fi.pv168.project.ui.action.QuitAction;
 import cz.muni.fi.pv168.project.ui.action.ingredient.AddIngredientAction;
+import cz.muni.fi.pv168.project.ui.action.ingredient.ClearFilterIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.ingredient.DeleteIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.ingredient.EditIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.ingredient.FilterIngredientAction;
 import cz.muni.fi.pv168.project.ui.action.recipe.AddRecipeAction;
+import cz.muni.fi.pv168.project.ui.action.recipe.ClearFilterRecipeAction;
 import cz.muni.fi.pv168.project.ui.action.recipe.DeleteRecipeAction;
 import cz.muni.fi.pv168.project.ui.action.recipe.EditRecipeAction;
 import cz.muni.fi.pv168.project.ui.action.recipe.FilterRecipeAction;
 import cz.muni.fi.pv168.project.ui.action.unit.AddUnitAction;
+import cz.muni.fi.pv168.project.ui.action.unit.ClearFilterUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.DeleteUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.EditUnitAction;
 import cz.muni.fi.pv168.project.ui.action.unit.FilterUnitAction;
@@ -54,6 +57,7 @@ public class MainWindow {
     private final Action exportAction;
     private final Action convertAction;
     private Action filterAction;
+    private Action clearFilterAction;
     private JToolBar toolbar;
     private JMenuBar menubar;
     private final RecipeTable recipeTable;
@@ -122,7 +126,8 @@ public class MainWindow {
         importAction = new ImportAction(dependencyProvider.getImportService(), this::refresh);
         exportAction = new ExportAction(dependencyProvider.getExportService());
 
-        filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
+        clearFilterAction = new ClearFilterRecipeAction(recipeTableFilter);
+        filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterAction);
         convertAction = new ConvertAction(unitTable);
 
         quitAction = new QuitAction(dependencyProvider.getExportService());
@@ -162,19 +167,22 @@ public class MainWindow {
                 addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter);
                 editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter);
                 deleteAction = new DeleteRecipeAction(recipeTable);
-                filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter);
+                clearFilterAction = new ClearFilterRecipeAction(recipeTableFilter);
+                filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterAction);
                 break;
             case 1:  // Units tab
                 addAction = new AddUnitAction(unitTable);
                 editAction = new EditUnitAction(unitTable);
                 deleteAction = new DeleteUnitAction(unitTable);
-                filterAction = new FilterUnitAction(unitTable, unitTableFilter);
+                clearFilterAction = new ClearFilterUnitAction(unitTableFilter);
+                filterAction = new FilterUnitAction(unitTable, unitTableFilter, clearFilterAction);
                 break;
             case 2:  // Ingredients tab
                 addAction = new AddIngredientAction(ingredientTable, unitTable);
                 editAction = new EditIngredientAction(ingredientTable, unitTable);
                 deleteAction = new DeleteIngredientAction(ingredientTable);
-                filterAction = new FilterIngredientAction(ingredientTable, ingredientTableFilter);
+                clearFilterAction = new ClearFilterIngredientAction(ingredientTableFilter);
+                filterAction = new FilterIngredientAction(ingredientTable, ingredientTableFilter, clearFilterAction);
                 break;
         }
 
@@ -200,6 +208,7 @@ public class MainWindow {
         toolbar.add(exportAction);
         toolbar.addSeparator();
         toolbar.add(filterAction);
+        toolbar.add(clearFilterAction);
         toolbar.addSeparator();
         toolbar.add(convertAction);
 

@@ -43,6 +43,12 @@ public class IngredientTableFilter {
         return caloriesTo;
     }
 
+    public void resetFilter() {
+        filterName("");
+        filterCalories(0.0, Double.MAX_VALUE);
+        ingredientCompoundMatcher.resetMatchers();
+    }
+
     /**
      * Container class for all matchers for the UnitTable.
      *
@@ -66,6 +72,12 @@ public class IngredientTableFilter {
 
         private void setCaloriesMatcher(EntityMatcher<Ingredient> caloriesMatcher) {
             this.caloriesMatcher = caloriesMatcher;
+            rowSorter.sort();
+        }
+
+        private void resetMatchers() {
+            nameMatcher = EntityMatchers.all();
+            caloriesMatcher = EntityMatchers.all();
             rowSorter.sort();
         }
 

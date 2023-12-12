@@ -43,6 +43,12 @@ public class UnitTableFilter {
         return selectedUnitType;
     }
 
+    public void resetFilter() {
+        filterName("");
+        filterUnitType(Either.left(SpecialFilterUnitTypeValues.ALL));
+        unitCompoundMatcher.resetMatchers();
+    }
+
     /**
      * Container class for all matchers for the UnitTable.
      *
@@ -66,6 +72,12 @@ public class UnitTableFilter {
 
         private void setUnitTypeMatcher(EntityMatcher<Unit> unitTypeMatcher) {
             this.unitTypeMatcher = unitTypeMatcher;
+            rowSorter.sort();
+        }
+
+        private void resetMatchers() {
+            nameMatcher = EntityMatchers.all();
+            unitTypeMatcher = EntityMatchers.all();
             rowSorter.sort();
         }
 

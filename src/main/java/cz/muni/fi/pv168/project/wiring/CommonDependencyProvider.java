@@ -81,8 +81,9 @@ public class CommonDependencyProvider implements DependencyProvider {
         var transactionConnectionSupplier = new TransactionConnectionSupplier(transactionManager, databaseManager);
 
         var recipeDao = new RecipeDao(transactionConnectionSupplier);
-        var ingredientDao = new IngredientDao(transactionConnectionSupplier);
         var unitDao = new UnitDao(transactionConnectionSupplier);
+        var ingredientDao = new IngredientDao(transactionConnectionSupplier, unitDao);
+        var recipeIngredientDao = new RecipeIngredientDao(transactionConnectionSupplier, recipeDao, ingredientDao, unitDao);
 
         this.recipes = new RecipeSqlRepository(
                 recipeDao,
@@ -97,7 +98,7 @@ public class CommonDependencyProvider implements DependencyProvider {
                 new UnitMapper()
         );
         this.recipeIngredients = new RecipeIngredientSqlRepository(
-                new RecipeIngredientDao(transactionConnectionSupplier, recipeDao, ingredientDao, unitDao),
+                recipeIngredientDao,
                 new RecipeIngredientMapper()
         );
 

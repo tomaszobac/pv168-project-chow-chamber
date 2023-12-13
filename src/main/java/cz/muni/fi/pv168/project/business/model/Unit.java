@@ -29,10 +29,10 @@ public class Unit extends Entity implements Serializable {
                 @JsonProperty("name") String name,
                 @JsonProperty("type") UnitType type,
                 @JsonProperty("conversionToBase") double conversionToBase) {
-        super(guid);
-        this.name = name;
+        super(Objects.requireNonNull(guid));
+        this.name = Objects.requireNonNull(name);
         this.conversionToBase = conversionToBase;
-        this.type = type;
+        this.type = Objects.requireNonNull(type);
     }
 
     /**

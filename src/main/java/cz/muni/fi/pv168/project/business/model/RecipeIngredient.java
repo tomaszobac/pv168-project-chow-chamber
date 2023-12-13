@@ -3,6 +3,8 @@ package cz.muni.fi.pv168.project.business.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class RecipeIngredient extends Entity {
     final private String recipeGuid;
     final private String ingredientGuid;
@@ -15,17 +17,17 @@ public class RecipeIngredient extends Entity {
                             @JsonProperty("ingredientGuid") String ingredientGuid,
                             @JsonProperty("unit") Unit unit,
                             @JsonProperty("amount") double amount) {
-        super(guid);
-        this.recipeGuid = recipeGuid;
-        this.ingredientGuid = ingredientGuid;
-        this.unit = unit;
+        super(Objects.requireNonNull(guid));
+        this.recipeGuid = Objects.requireNonNull(recipeGuid);
+        this.ingredientGuid = Objects.requireNonNull(ingredientGuid);
+        this.unit = Objects.requireNonNull(unit);
         this.amount = amount;
     }
 
     public RecipeIngredient(String recipeGuid, String ingredientGuid, Unit unit, double amount) {
-        this.recipeGuid = recipeGuid;
-        this.ingredientGuid = ingredientGuid;
-        this.unit = unit;
+        this.recipeGuid = Objects.requireNonNull(recipeGuid);
+        this.ingredientGuid = Objects.requireNonNull(ingredientGuid);
+        this.unit = Objects.requireNonNull(unit);
         this.amount = amount;
     }
 

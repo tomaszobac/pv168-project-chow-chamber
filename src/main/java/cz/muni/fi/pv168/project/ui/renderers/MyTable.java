@@ -1,7 +1,6 @@
 package cz.muni.fi.pv168.project.ui.renderers;
 
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
-import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -67,7 +66,7 @@ public class MyTable<T> extends JTable {
             }
         });
     }
-    public void setMouseListener(MyTable<T> table, JTable recIncTable, RecipeIngredientTableFilter filter) {
+    public void setMouseListener(MyTable<T> table, JTable recIncTable) {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -79,7 +78,7 @@ public class MyTable<T> extends JTable {
                     } else{
                         inTabs++;
                         infoTables.add((T) getValueAt(getSelectedRow(), 0));
-                        openInfoWindow(table, recIncTable, filter);
+                        openInfoWindow(table, recIncTable);
                     }
                 }
             }
@@ -136,7 +135,7 @@ public class MyTable<T> extends JTable {
     protected void openInfoWindow(MyTable<T> table) {
         // Meant to be overriden
     }
-    protected void openInfoWindow(MyTable<T> table, JTable recIncTable, RecipeIngredientTableFilter filter) {
+    protected void openInfoWindow(MyTable<T> table, JTable recIncTable) {
         // Meant to be overriden
     }
 }

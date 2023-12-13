@@ -3,6 +3,8 @@ package cz.muni.fi.pv168.project.storage.sql.dao;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
 import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
+import cz.muni.fi.pv168.project.storage.sql.entity.UnitEntity;
+import cz.muni.fi.pv168.project.storage.sql.entity.mapper.UnitMapper;
 
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
@@ -19,7 +21,7 @@ import java.util.function.Supplier;
  * DAO for {@link IngredientEntity} entity.
  */
 public final class IngredientDao implements DataAccessObject<IngredientEntity> {
-
+    private final UnitDao unitDao;
     private final Supplier<ConnectionHandler> connections;
 
     /**
@@ -27,8 +29,9 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      *
      * @param connections the Supplier of ConnectionHandler to be used by the IngredientDao
      */
-    public IngredientDao(Supplier<ConnectionHandler> connections) {
+    public IngredientDao(Supplier<ConnectionHandler> connections, UnitDao unitDao) {
         this.connections = connections;
+        this.unitDao = unitDao;
     }
 
     /**
@@ -40,7 +43,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      */
     @Override
     public IngredientEntity create(IngredientEntity newIngredient) {
-        var sql = "INSERT INTO Ingredient (guid, name, calories, unit) VALUES (?, ?, ?, ?);";
+        var sql = "INSERT INTO Ingredient (guid, name, calories, unitGuid) VALUES (?, ?, ?, ?);";
 
         try (
                 var connection = connections.get();
@@ -49,7 +52,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
             statement.setString(1, newIngredient.guid());
             statement.setString(2, newIngredient.name());
             statement.setDouble(3, newIngredient.calories());
-            statement.setObject(4, newIngredient.unit());
+            statement.setString(4, newIngredient.unit().getGuid());
             statement.executeUpdate();
 
             try (ResultSet keyResultSet = statement.getGeneratedKeys()) {
@@ -80,7 +83,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
     @Override
     public Collection<IngredientEntity> findAll() {
         var sql = """
-                SELECT id, guid, name, calories, unit
+                SELECT id, guid, name, calories, unitGuid
                 FROM Ingredient
                 """;
         try (
@@ -111,7 +114,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
     @Override
     public Optional<IngredientEntity> findById(long id) {
         var sql = """
-                SELECT id, guid, name, calories, unit
+                SELECT id, guid, name, calories, unitGuid
                 FROM Ingredient
                 WHERE id = ?
                 """;
@@ -141,7 +144,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
     @Override
     public Optional<IngredientEntity> findByGuid(String guid) {
         var sql = """
-                SELECT id, guid, name, calories, unit
+                SELECT id, guid, name, calories, unitGuid
                 FROM Ingredient
                 WHERE guid = ?
                 """;
@@ -176,7 +179,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
                 SET guid = ?,
                     name = ?,
                     calories = ?,
-                    unit = ?
+                    unitGuid = ?
                 WHERE id = ?
                 """;
         try (
@@ -186,8 +189,8 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
             statement.setString(1, entity.guid());
             statement.setString(2, entity.name());
             statement.setDouble(3, entity.calories());
-            statement.setObject(4, entity.unit());
-            statement.setObject(5, entity.id());
+            statement.setString(4, entity.unit().getGuid());
+            statement.setLong(5, entity.id());
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {
                 throw new DataStorageException("Ingredient not found, id: " + entity.id());
@@ -289,13 +292,15 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      * @return a new IngredientEntity object with data from the ResultSet
      * @throws SQLException if an error occurs while retrieving data from the ResultSet
      */
-    private static IngredientEntity ingredientFromResultSet(ResultSet resultSet) throws SQLException {
+    private IngredientEntity ingredientFromResultSet(ResultSet resultSet) throws SQLException {
+        UnitEntity unitEntity = unitDao.findByGuid(resultSet.getString("unitGuid")).orElseThrow();
+        Unit unit = new UnitMapper().mapToBusiness(unitEntity);
         return new IngredientEntity(
                 resultSet.getLong("id"),
                 resultSet.getString("guid"),
                 resultSet.getString("name"),
                 resultSet.getDouble("calories"),
-                resultSet.getObject("unit", Unit.class)
+                unit
         );
     }
 }

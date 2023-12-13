@@ -9,15 +9,6 @@ CREATE TABLE IF NOT EXISTS "Recipe"
     `instructions`          LONGTEXT     NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "Ingredient"
-(
-    `id`        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    `guid`      VARCHAR         NOT NULL UNIQUE,
-    `name`      VARCHAR(150)    NOT NULL,
-    `calories`  DOUBLE          NOT NULL,
-    `unit`      OBJECT          NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS "Unit"
 (
     `id`                BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -25,6 +16,16 @@ CREATE TABLE IF NOT EXISTS "Unit"
     `name`              VARCHAR(150)    NOT NULL,
     `type`              VARCHAR(150)    NOT NULL,
     `conversionToBase`  DOUBLE          NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "Ingredient"
+(
+    `id`        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    `guid`      VARCHAR         NOT NULL UNIQUE,
+    `name`      VARCHAR(150)    NOT NULL,
+    `calories`  DOUBLE          NOT NULL,
+    `unitGuid`  VARCHAR         NOT NULL,
+    FOREIGN KEY (`unitGuid`) REFERENCES "Unit"(`guid`)
 );
 
 CREATE TABLE IF NOT EXISTS "RecipeIngredient"

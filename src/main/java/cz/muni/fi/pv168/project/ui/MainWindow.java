@@ -56,7 +56,6 @@ import java.util.Objects;
 
 public class MainWindow {
     private final MyFrame mainFrame;
-    private final Action quitAction;
     private Action addAction;
     private Action editAction;
     private Action deleteAction;
@@ -142,8 +141,6 @@ public class MainWindow {
         currClearFilterAction = clearFilterRecipeAction;
         filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterRecipeAction);
         convertAction = new ConvertAction(unitTable);
-
-        quitAction = new QuitAction();
 
         JTabbedPane mainFrameTabs = new JTabbedPane();
         mainFrameTabs.setOpaque(true);

@@ -46,6 +46,9 @@ public class AddRecipeAction extends AbstractAction {
         if (!dialog.getReturnedOK()) {
             clearAddedRecipeIngredients(recipe);
             deleteNewRecipe(recipeTableModel, recipe);
+        } else {
+            recipeTableModel.fireTableDataChanged();
+            recipeTableModel.updateRow(recipe);
         }
         recipeTableModel.fireTableDataChanged();
     }
@@ -62,10 +65,8 @@ public class AddRecipeAction extends AbstractAction {
 
     private void deleteNewRecipe(RecipeTableModel model, Recipe recipe) {
         for (int i = 0; i < model.getRowCount(); i++) {
-            System.out.println("Checking: " + Integer.toString(i));
             Recipe checking = (Recipe) model.getValueAt(i, 0);
             if (checking.getGuid().equals(recipe.getGuid())) {
-                System.out.println("Found match! Deleting");
                 model.fireTableDataChanged();
                 model.deleteRow(i);
                 return;
@@ -82,7 +83,6 @@ public class AddRecipeAction extends AbstractAction {
                 4);
 
         recipe.setGuid(((RecipeTableModel) recipeTable.getModel()).getNewGuid());
-        System.out.println("PREFILLED RECIPE GUID: " + recipe.getGuid());
         return recipe;
     }
 }

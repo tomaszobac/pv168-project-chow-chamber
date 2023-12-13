@@ -8,8 +8,8 @@ import java.util.Objects;
 public class RecipeIngredient extends Entity {
     final private String recipeGuid;
     final private String ingredientGuid;
-    final private Unit unit;
-    final private double amount;
+    private Unit unit;
+    private double amount;
 
     @JsonCreator
     public RecipeIngredient(@JsonProperty("guid") String guid,
@@ -17,7 +17,7 @@ public class RecipeIngredient extends Entity {
                             @JsonProperty("ingredientGuid") String ingredientGuid,
                             @JsonProperty("unit") Unit unit,
                             @JsonProperty("amount") double amount) {
-        super(Objects.requireNonNull(guid));
+        super(guid);
         this.recipeGuid = Objects.requireNonNull(recipeGuid);
         this.ingredientGuid = Objects.requireNonNull(ingredientGuid);
         this.unit = Objects.requireNonNull(unit);
@@ -29,10 +29,6 @@ public class RecipeIngredient extends Entity {
         this.ingredientGuid = Objects.requireNonNull(ingredientGuid);
         this.unit = Objects.requireNonNull(unit);
         this.amount = amount;
-    }
-
-    public double getAmount() {
-        return amount;
     }
 
     public double getCaloriesPerSetAmount(Unit inUnit, double inCalories) {
@@ -51,6 +47,17 @@ public class RecipeIngredient extends Entity {
         return unit;
     }
 
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
     @Override
     public String toString() {
         return String.format("RecipeIngredient{guid: %s; recipeGuid: %s; ingredientGuid: %s; unit: %s; amount: %.2f}",

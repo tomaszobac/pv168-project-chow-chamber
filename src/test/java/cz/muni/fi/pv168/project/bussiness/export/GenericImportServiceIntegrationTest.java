@@ -1,28 +1,13 @@
 package cz.muni.fi.pv168.project.bussiness.export;
 
-import cz.muni.fi.pv168.project.business.model.Ingredient;
-import cz.muni.fi.pv168.project.business.model.Recipe;
-import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
-import cz.muni.fi.pv168.project.business.model.Unit;
-import cz.muni.fi.pv168.project.business.model.UuidGuidProvider;
-import cz.muni.fi.pv168.project.business.service.crud.IngredientCrudService;
 import cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService;
-import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
-import cz.muni.fi.pv168.project.business.service.crud.UnitCrudService;
 import cz.muni.fi.pv168.project.business.service.import_export.GenericImportService;
-import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonImporter;
-import cz.muni.fi.pv168.project.business.service.validation.IngredientValidator;
-import cz.muni.fi.pv168.project.business.service.validation.RecipeIngredientValidator;
-import cz.muni.fi.pv168.project.business.service.validation.RecipeValidator;
-import cz.muni.fi.pv168.project.business.service.validation.UnitValidator;
 import cz.muni.fi.pv168.project.business.service.validation.ValidationException;
-import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -39,33 +24,33 @@ class GenericImportServiceIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        var recipeRepository = new InMemoryRepository<Recipe>(List.of());
-        var recipeValidator = new RecipeValidator();
-        var uuidGuidProvider = new UuidGuidProvider();
-        recipeCrudService = new RecipeCrudService(recipeRepository, recipeValidator, uuidGuidProvider);
-
-        var ingredientRepository = new InMemoryRepository<Ingredient>(List.of());
-        var ingredientValidator = new IngredientValidator();
-        var ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator,
-                uuidGuidProvider);
-
-        var unitRepository = new InMemoryRepository<Unit>(List.of());
-        var unitValidator = new UnitValidator();
-        var unitCrudService = new UnitCrudService(unitRepository, unitValidator,
-                uuidGuidProvider);
-
-        var recipeIngredientRepository = new InMemoryRepository<RecipeIngredient>(List.of());
-        var recipeIngredientValidator = new RecipeIngredientValidator();
-        var recipeIngredientsCrudService = new RecipeIngredientCrudService(recipeIngredientRepository,
-                recipeIngredientValidator, uuidGuidProvider);
-
-        genericImportService = new GenericImportService(
-                recipeCrudService,
-                unitCrudService,
-                ingredientCrudService,
-                recipeIngredientsCrudService,
-                List.of(new BatchJsonImporter())
-        );
+//        var recipeRepository = new InMemoryRepository<Recipe>(List.of());
+//        var recipeValidator = new RecipeValidator();
+//        var uuidGuidProvider = new UuidGuidProvider();
+//        recipeCrudService = new RecipeCrudService(recipeRepository, recipeValidator, uuidGuidProvider);
+//
+//        var ingredientRepository = new InMemoryRepository<Ingredient>(List.of());
+//        var ingredientValidator = new IngredientValidator();
+//        var ingredientCrudService = new IngredientCrudService(ingredientRepository, ingredientValidator,
+//                uuidGuidProvider);
+//
+//        var unitRepository = new InMemoryRepository<Unit>(List.of());
+//        var unitValidator = new UnitValidator();
+//        var unitCrudService = new UnitCrudService(unitRepository, unitValidator,
+//                uuidGuidProvider);
+//
+//        var recipeIngredientRepository = new InMemoryRepository<RecipeIngredient>(List.of());
+//        var recipeIngredientValidator = new RecipeIngredientValidator();
+//        var recipeIngredientsCrudService = new RecipeIngredientCrudService(recipeIngredientRepository,
+//                recipeIngredientValidator, uuidGuidProvider);
+//
+//        genericImportService = new GenericImportService(
+//                recipeCrudService,
+//                unitCrudService,
+//                ingredientCrudService,
+//                recipeIngredientsCrudService,
+//                List.of(new BatchJsonImporter())
+//        );
     }
 
     @Test

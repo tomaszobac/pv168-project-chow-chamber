@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -32,6 +34,7 @@ import java.util.Objects;
 
 public class CustomIngredientDialog extends JDialog {
     private final JComboBox<Ingredient> ingredientComboBox = new JComboBox<>();
+    private final JTextField ingredientTextField = new JTextField();
     private final JComboBox<Unit> unitComboBox = new JComboBox<>();
     private final JTextField amountTextField = new JTextField();
     private final List<RecipeIngredient> newRecipeIngredients = new ArrayList<>();
@@ -43,7 +46,7 @@ public class CustomIngredientDialog extends JDialog {
 
         setupComboBoxes(ingredientTable, unitTable);
 
-        JPanel topPanel = createTopPanel(recipe, recipeIngredientsTable);
+        JPanel topPanel = createTopPanel(recipe, recipeIngredientsTable, ingredientTable);
 
         filter.filterGuid(recipe.getGuid());
         add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
@@ -75,10 +78,25 @@ public class CustomIngredientDialog extends JDialog {
         return bottomPanel;
     }
 
-    private JPanel createTopPanel(Recipe recipe, JTable recipeIngredientsTable) {
+    private JPanel createTopPanel(Recipe recipe, JTable recipeIngredientsTable, JTable ingredientTable) {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout());
         topPanel.add(new JLabel("Select Ingredient: "));
+        topPanel.add(ingredientTextField);
+        ingredientTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterComboBox(ingredientTable);
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterComboBox(ingredientTable);
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterComboBox(ingredientTable);
+            }
+        });
         topPanel.add(ingredientComboBox);
         topPanel.add(new JLabel("amount:"));
         topPanel.add(amountTextField);
@@ -162,6 +180,17 @@ public class CustomIngredientDialog extends JDialog {
             Unit unit = (Unit) unitTable.getValueAt(i, 0);
             if(all || selectedItem.getUnit().getType().equals(unit.getType())) {
                 unitComboBox.addItem(unit);
+            }
+        }
+    }
+
+    private void filterComboBox(JTable ingredientTable) {
+        ingredientComboBox.removeAllItems();
+        String search = ingredientTextField.getText();
+        for (int i = 0; i < ingredientTable.getRowCount(); i++) {
+            Ingredient ingredient = (Ingredient) ingredientTable.getModel().getValueAt(i, 0);
+            if (ingredient.getName().contains(search)) {
+                ingredientComboBox.addItem(ingredient);
             }
         }
     }

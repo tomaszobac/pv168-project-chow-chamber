@@ -35,7 +35,7 @@ public class RecipeTable extends MyTable<Recipe> {
      * @param recipeTable represents table of stored recipes.
      */
     @Override
-    protected void openInfoWindow(MyTable<Recipe> recipeTable, JTable recIncTable, RecipeIngredientTableFilter filter) {
+    protected void openInfoWindow(MyTable<Recipe> recipeTable, JTable recIncTable) {
         if (infoFrame == null) {
             infoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
             infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -45,9 +45,6 @@ public class RecipeTable extends MyTable<Recipe> {
         Recipe recipe = (Recipe) recipeTable.getValueAt(recipeTable.getSelectedRow(), 0);
 
         JTabbedPane singleRecipeInfo = new JTabbedPane();
-        singleRecipeInfo.addChangeListener( e -> {
-            filter.filterGuid(recipe.getGuid());
-        });
 
         JPanel infoPanel = createInfoPanel(recipe);
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
@@ -57,7 +54,7 @@ public class RecipeTable extends MyTable<Recipe> {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        JPanel ingredientsTab = createIngredientsTab(gbc, recIncTable, filter, recipe);
+        JPanel ingredientsTab = createIngredientsTab(gbc, recIncTable, recipe);
         singleRecipeInfo.addTab("Ingredients", null, ingredientsTab, "Second Tab");
 
         JPanel instructionTab = createInstructionsTab(gbc, recipe);
@@ -89,13 +86,13 @@ public class RecipeTable extends MyTable<Recipe> {
         return instructionTab;
     }
 
-    private JPanel createIngredientsTab(GridBagConstraints gbc, JTable table, RecipeIngredientTableFilter filter, Recipe recipe) {
+    private JPanel createIngredientsTab(GridBagConstraints gbc, JTable table, Recipe recipe) {
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
 
 
 
         var model = (RecipeIngredientsTableModel) table.getModel();
-        var rowSorter = new TableRowSorter<>((RecipeIngredientsTableModel) model);
+        var rowSorter = new TableRowSorter<>(model);
         var newTable = new RecipeIngredientsTable(model);
         var newFilter = new RecipeIngredientTableFilter(rowSorter);
         newTable.setRowSorter(rowSorter);

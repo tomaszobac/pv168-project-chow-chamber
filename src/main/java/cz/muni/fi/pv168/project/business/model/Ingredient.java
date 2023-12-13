@@ -33,7 +33,7 @@ public class Ingredient extends Entity {
                       @JsonProperty("name") String name,
                       @JsonProperty("calories") double calories,
                       @JsonProperty("unit") Unit unit) {
-        super(Objects.requireNonNull(guid));
+        super(guid);
         this.name = Objects.requireNonNull(name, "Name must not be null");
         this.calories = calories;
         this.unit = Objects.requireNonNull(unit, "Unit must not be null");

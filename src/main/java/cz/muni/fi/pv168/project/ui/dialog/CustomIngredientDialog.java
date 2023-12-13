@@ -7,6 +7,7 @@ import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.ui.action.recipeIngredient.DeleteRecipeIngredientAction;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
+import cz.muni.fi.pv168.project.ui.model.tables.RecipeIngredientsTable;
 import cz.muni.fi.pv168.project.ui.renderers.IngredientComboBoxRenderer;
 import cz.muni.fi.pv168.project.ui.renderers.UnitComboBoxRenderer;
 
@@ -90,9 +91,20 @@ public class CustomIngredientDialog extends JDialog {
             Unit selectedUnit = (Unit) unitComboBox.getSelectedItem();
             String amount = amountTextField.getText();
             if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getType().equals(selectedUnit.getType()))) {
-                RecipeIngredient newIngredient = new RecipeIngredient(recipe.getGuid(),  selectedIngredient.getGuid(), selectedUnit, Double.parseDouble(amountTextField.getText()));
-                newRecipeIngredients.add(newIngredient);
-                ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).addRow(newIngredient);
+                int row = doesRecipeIngredientExist(recipe.getGuid(), selectedIngredient.getGuid(), (RecipeIngredientsTable) recipeIngredientsTable);
+                if (row == -1) {
+                    RecipeIngredient newIngredient = new RecipeIngredient(recipe.getGuid(), selectedIngredient.getGuid(), selectedUnit, Double.parseDouble(amountTextField.getText()));
+                    newRecipeIngredients.add(newIngredient);
+                    ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).addRow(newIngredient);
+                } else {
+                    RecipeIngredientsTableModel model = (RecipeIngredientsTableModel) recipeIngredientsTable.getModel();
+                    RecipeIngredient recIng = (RecipeIngredient) model.getValueAt(row, 0);
+                    model.deleteRow(row);
+                    recIng.setUnit(selectedUnit);
+                    recIng.setAmount(Double.parseDouble(amountTextField.getText()));
+                    model.addRow(recIng);
+                }
+                ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).refresh();
             } else {
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -153,6 +165,17 @@ public class CustomIngredientDialog extends JDialog {
                 unitComboBox.addItem(unit);
             }
         }
+    }
+
+    private int doesRecipeIngredientExist(String recipeGuid, String ingredientGuid, RecipeIngredientsTable recIngTable) {
+        RecipeIngredientsTableModel model = (RecipeIngredientsTableModel) recIngTable.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            RecipeIngredient recIng = (RecipeIngredient) model.getValueAt(i, 0);
+            if (recIng.getRecipeGuid().equals(recipeGuid) && recIng.getIngredientGuid().equals(ingredientGuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public boolean getExitThroughDone() {

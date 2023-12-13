@@ -36,7 +36,7 @@ public class Recipe extends Entity {
                   @JsonProperty("time") LocalTime time,
                   @JsonProperty("portions") int portions,
                   @JsonProperty("instructions") String instructions) {
-        super(Objects.requireNonNull(guid));
+        super(guid);
         this.name = Objects.requireNonNull(name, "name must not be null");
         this.category = Objects.requireNonNull(category, "category must not be null");
         this.time = Objects.requireNonNull(time, "time must not be null");

@@ -4,8 +4,10 @@ import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
 import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
 
+import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -227,6 +229,9 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
                 throw new DataStorageException("More then 1 ingredient (rows=%d) has been deleted: %s"
                         .formatted(rowsUpdated, guid));
             }
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            JOptionPane.showMessageDialog(null, "Deletion contains ingredients that are still being used");
+            throw new DataStorageException("Failed to delete Ingredient, guid: " + guid, ex);
         } catch (SQLException ex) {
             throw new DataStorageException("Failed to delete ingredient, guid: " + guid, ex);
         }

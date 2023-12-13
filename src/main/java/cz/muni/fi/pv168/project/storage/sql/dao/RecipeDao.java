@@ -244,10 +244,21 @@ public final class RecipeDao implements DataAccessObject<RecipeEntity> {
      */
     @Override
     public void deleteByGuid(String guid) {
-        var sql = "DELETE FROM Recipe WHERE guid = ?";
+        var deleteRecipeIngredientSql = "DELETE FROM RecipeIngredient WHERE recipeGuid = ?";
         try (
                 var connection = connections.get();
-                var statement = connection.use().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+                var statement = connection.use().prepareStatement(deleteRecipeIngredientSql, Statement.RETURN_GENERATED_KEYS)
+        ) {
+            statement.setString(1, guid);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataStorageException("Failed to delete recipe, guid: " + guid, ex);
+        }
+
+        var deleteRecipeSql = "DELETE FROM Recipe WHERE guid = ?";
+        try (
+                var connection = connections.get();
+                var statement = connection.use().prepareStatement(deleteRecipeSql, Statement.RETURN_GENERATED_KEYS)
         ) {
             statement.setString(1, guid);
             int rowsUpdated = statement.executeUpdate();

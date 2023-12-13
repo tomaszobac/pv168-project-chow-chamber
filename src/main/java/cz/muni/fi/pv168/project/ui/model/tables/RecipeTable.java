@@ -1,16 +1,10 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
-import cz.muni.fi.pv168.project.business.model.GuidProvider;
-import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
-import cz.muni.fi.pv168.project.business.repository.Repository;
 import cz.muni.fi.pv168.project.business.service.crud.CrudService;
-import cz.muni.fi.pv168.project.business.service.crud.RecipeIngredientCrudService;
-import cz.muni.fi.pv168.project.business.service.validation.RecipeIngredientValidator;
-import cz.muni.fi.pv168.project.storage.memory.InMemoryRepository;
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
-import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
+import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
 import javax.swing.BorderFactory;
@@ -43,7 +37,7 @@ public class RecipeTable extends MyTable<Recipe> {
      * @param recipeTable represents table of stored recipes.
      */
     @Override
-    protected void openInfoWindow(MyTable<Recipe> recipeTable, CrudService<RecipeIngredient> recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
+    protected void openInfoWindow(MyTable<Recipe> recipeTable, JTable recIncTable, RecipeIngredientTableFilter filter) {
         if (infoFrame == null) {
             infoFrame = MainWindowUtilities.createFrame(new Dimension(400, 200), new Dimension(960, 540), "Recipe");
             infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -64,13 +58,9 @@ public class RecipeTable extends MyTable<Recipe> {
 
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
 
-        RecipeIngredientValidator validator = new RecipeIngredientValidator();
-        RecipeIngredientCrudService crud = new RecipeIngredientCrudService(new InMemoryRepository<>(List.of()), validator, provider);
-        RecipeIngredientsTableModel recIngTableModel = new RecipeIngredientsTableModel(crud, ingRepository);
-        getIngredients(recipe, recIngCrud).forEach(recIngTableModel::addRow);
-        JTable table = MainWindowUtilities.createTableFromModel(recIngTableModel, 2, null);
-        JScrollPane recipeIngredientsScrollPane = new JScrollPane(table);
-        MainWindowUtilities.hideFirstColumn(table);
+
+        JScrollPane recipeIngredientsScrollPane = new JScrollPane(recIncTable);
+        filter.filterGuid(recipe.getGuid());
 
         ingredientsTab.add(recipeIngredientsScrollPane, gbc);
 
@@ -117,9 +107,10 @@ public class RecipeTable extends MyTable<Recipe> {
 
 
     private List<RecipeIngredient> getIngredients(Recipe recipe, CrudService<RecipeIngredient> crud) {
+        crud.findAll().forEach(thing -> System.out.println(thing.toString()));
         return crud.findAll()
                 .stream()
-                .filter(recipeIngredient -> recipeIngredient.getRecipeGuid().equals(recipe.getGuid()))
+                .filter(recipeIngredient -> recipeIngredient.getRecipe().getGuid().equals(recipe.getGuid()))
                 .collect(Collectors.toList());
     }
 }

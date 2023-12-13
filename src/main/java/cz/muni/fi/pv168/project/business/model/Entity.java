@@ -7,7 +7,7 @@ public abstract class Entity {
     protected String guid;
 
     protected Entity(String guid) {
-        this.guid = guid;
+        this.guid = Objects.requireNonNull(guid);
     }
 
     protected Entity() { }
@@ -21,7 +21,7 @@ public abstract class Entity {
 
     public void setGuid(String guid)
     {
-        this.guid = guid;
+        this.guid = Objects.requireNonNull(guid);
     }
 
     @Override

@@ -6,27 +6,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 public class RecipeIngredient extends Entity {
-    final private String recipeGuid;
-    final private String ingredientGuid;
+    final private Recipe recipe;
+    final private Ingredient ingredient;
     private Unit unit;
     private double amount;
 
     @JsonCreator
     public RecipeIngredient(@JsonProperty("guid") String guid,
-                            @JsonProperty("recipeGuid") String recipeGuid,
-                            @JsonProperty("ingredientGuid") String ingredientGuid,
+                            @JsonProperty("recipe") Recipe recipe,
+                            @JsonProperty("ingredient") Ingredient ingredient,
                             @JsonProperty("unit") Unit unit,
                             @JsonProperty("amount") double amount) {
         super(guid);
-        this.recipeGuid = Objects.requireNonNull(recipeGuid);
-        this.ingredientGuid = Objects.requireNonNull(ingredientGuid);
+        this.recipe = Objects.requireNonNull(recipe);
+        this.ingredient = Objects.requireNonNull(ingredient);
         this.unit = Objects.requireNonNull(unit);
         this.amount = amount;
     }
 
-    public RecipeIngredient(String recipeGuid, String ingredientGuid, Unit unit, double amount) {
-        this.recipeGuid = Objects.requireNonNull(recipeGuid);
-        this.ingredientGuid = Objects.requireNonNull(ingredientGuid);
+    public RecipeIngredient(Recipe recipe, Ingredient ingredient, Unit unit, double amount) {
+        System.out.println("Creating: RGuid: " + recipe.getGuid() + " | IGuid: " + ingredient.getGuid());
+        Objects.requireNonNull(recipe.getGuid());
+        Objects.requireNonNull(ingredient.getGuid());
+        this.recipe = Objects.requireNonNull(recipe);
+        this.ingredient = Objects.requireNonNull(ingredient);
         this.unit = Objects.requireNonNull(unit);
         this.amount = amount;
     }
@@ -35,12 +38,12 @@ public class RecipeIngredient extends Entity {
         return inCalories * (amount * unit.getConversionToBase()) / inUnit.getConversionToBase();
     }
 
-    public String getRecipeGuid() {
-        return recipeGuid;
+    public Recipe getRecipe() {
+        return recipe;
     }
 
-    public String getIngredientGuid() {
-        return ingredientGuid;
+    public Ingredient getIngredient() {
+        return ingredient;
     }
 
     public Unit getUnit() {
@@ -61,6 +64,6 @@ public class RecipeIngredient extends Entity {
     @Override
     public String toString() {
         return String.format("RecipeIngredient{guid: %s; recipeGuid: %s; ingredientGuid: %s; unit: %s; amount: %.2f}",
-                getGuid(), recipeGuid, ingredientGuid, unit.getName(), amount);
+                getGuid(), recipe.getGuid(), ingredient.getGuid(), unit.getName(), amount);
     }
 }

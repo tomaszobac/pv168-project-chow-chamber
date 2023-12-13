@@ -93,7 +93,7 @@ public class CustomIngredientDialog extends JDialog {
             if (selectedIngredient != null && !amount.isEmpty() && (selectedIngredient.getUnit().getType().equals(selectedUnit.getType()))) {
                 int row = doesRecipeIngredientExist(recipe.getGuid(), selectedIngredient.getGuid(), (RecipeIngredientsTable) recipeIngredientsTable);
                 if (row == -1) {
-                    RecipeIngredient newIngredient = new RecipeIngredient(recipe.getGuid(), selectedIngredient.getGuid(), selectedUnit, Double.parseDouble(amountTextField.getText()));
+                    RecipeIngredient newIngredient = new RecipeIngredient(recipe, selectedIngredient, selectedUnit, Double.parseDouble(amountTextField.getText()));
                     newRecipeIngredients.add(newIngredient);
                     ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).addRow(newIngredient);
                 } else {
@@ -104,7 +104,6 @@ public class CustomIngredientDialog extends JDialog {
                     recIng.setAmount(Double.parseDouble(amountTextField.getText()));
                     model.addRow(recIng);
                 }
-                ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).refresh();
             } else {
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -171,7 +170,7 @@ public class CustomIngredientDialog extends JDialog {
         RecipeIngredientsTableModel model = (RecipeIngredientsTableModel) recIngTable.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
             RecipeIngredient recIng = (RecipeIngredient) model.getValueAt(i, 0);
-            if (recIng.getRecipeGuid().equals(recipeGuid) && recIng.getIngredientGuid().equals(ingredientGuid)) {
+            if (recIng.getRecipe().getGuid().equals(recipeGuid) && recIng.getIngredient().getGuid().equals(ingredientGuid)) {
                 return i;
             }
         }

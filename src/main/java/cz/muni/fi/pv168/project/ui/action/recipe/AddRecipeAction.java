@@ -39,19 +39,36 @@ public class AddRecipeAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         var recipeTableModel = (RecipeTableModel) this.recipeTable.getModel();
-        var dialog = new RecipeDialog(createPrefilledRecipe(), ingredientTable, unitTable, recipeIngredientsTable, filter);
-        dialog.show(recipeTable, "Add recipe")
-                .ifPresent(recipeTableModel::addRow);
+        Recipe recipe = createPrefilledRecipe();
+        recipeTableModel.addRowNoRefresh(recipe);
+        var dialog = new RecipeDialog(recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
+        dialog.show(recipeTable, "Add recipe");
         if (!dialog.getReturnedOK()) {
-            clearAddedRecipeIngredients(recipeIngredientsTable, dialog.getRecipeGuid());
+            clearAddedRecipeIngredients(recipe);
+            deleteNewRecipe(recipeTableModel, recipe);
+        }
+        recipeTableModel.fireTableDataChanged();
+    }
+
+    private void clearAddedRecipeIngredients(Recipe recipe) {
+        var model = (RecipeIngredientsTableModel) recipeIngredientsTable.getModel();
+        for (int i = model.getRowCount() - 1; i >= 0; i--) {
+            RecipeIngredient recipeIngredient = (RecipeIngredient) model.getValueAt(i, 0);
+            if (recipeIngredient.getRecipe().equals(recipe)) {
+                model.deleteRow(i);
+            }
         }
     }
 
-    private void clearAddedRecipeIngredients(JTable recipeIngredientsTable, String guid) {
-        for (int i = recipeIngredientsTable.getRowCount() - 1; i >= 0; i--) {
-            RecipeIngredient recipeIngredient = (RecipeIngredient) recipeIngredientsTable.getModel().getValueAt(i, 0);
-            if (recipeIngredient.getRecipeGuid().equals(guid)) {
-                ((RecipeIngredientsTableModel) recipeIngredientsTable.getModel()).deleteRow(i);
+    private void deleteNewRecipe(RecipeTableModel model, Recipe recipe) {
+        for (int i = 0; i < model.getRowCount(); i++) {
+            System.out.println("Checking: " + Integer.toString(i));
+            Recipe checking = (Recipe) model.getValueAt(i, 0);
+            if (checking.getGuid().equals(recipe.getGuid())) {
+                System.out.println("Found match! Deleting");
+                model.fireTableDataChanged();
+                model.deleteRow(i);
+                return;
             }
         }
     }
@@ -65,6 +82,7 @@ public class AddRecipeAction extends AbstractAction {
                 4);
 
         recipe.setGuid(((RecipeTableModel) recipeTable.getModel()).getNewGuid());
+        System.out.println("PREFILLED RECIPE GUID: " + recipe.getGuid());
         return recipe;
     }
 }

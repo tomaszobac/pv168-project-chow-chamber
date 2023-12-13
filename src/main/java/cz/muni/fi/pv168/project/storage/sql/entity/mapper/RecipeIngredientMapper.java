@@ -18,8 +18,8 @@ public final class RecipeIngredientMapper implements EntityMapper<RecipeIngredie
     public RecipeIngredient mapToBusiness(RecipeIngredientEntity entity) {
         return new RecipeIngredient(
                 entity.guid(),
-                entity.recipeGuid(),
-                entity.ingredientGuid(),
+                entity.recipe(),
+                entity.ingredient(),
                 entity.unit(),
                 entity.amount()
         );
@@ -59,8 +59,8 @@ public final class RecipeIngredientMapper implements EntityMapper<RecipeIngredie
         return new RecipeIngredientEntity(
                 dbId,
                 entity.getGuid(),
-                entity.getRecipeGuid(),
-                entity.getIngredientGuid(),
+                entity.getRecipe(),
+                entity.getIngredient(),
                 entity.getUnit(),
                 entity.getAmount()
         );

@@ -3,6 +3,7 @@ package cz.muni.fi.pv168.project.business.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Objects;
  *
  * @see Entity
  */
-public class Ingredient extends Entity {
+public class Ingredient extends Entity implements Serializable {
     private String name;
     private double calories;
     private Unit unit;

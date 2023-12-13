@@ -4,8 +4,10 @@ import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
 import cz.muni.fi.pv168.project.storage.sql.entity.UnitEntity;
 import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 
+import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -225,6 +227,9 @@ public final class UnitDao implements DataAccessObject<UnitEntity> {
                 throw new DataStorageException("More then 1 unit (rows=%d) has been deleted: %s"
                         .formatted(rowsUpdated, guid));
             }
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            JOptionPane.showMessageDialog(null, "Deletion includes units which are still being used");
+            throw new DataStorageException("Failed to delete unit, guid: " + guid, ex);
         } catch (SQLException ex) {
             throw new DataStorageException("Failed to delete unit, guid: " + guid, ex);
         }

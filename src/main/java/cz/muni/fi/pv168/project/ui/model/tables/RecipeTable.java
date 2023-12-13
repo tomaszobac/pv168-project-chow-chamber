@@ -3,6 +3,7 @@ package cz.muni.fi.pv168.project.ui.model.tables;
 import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
+import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.renderers.MyTable;
 
 import javax.swing.BorderFactory;
@@ -13,6 +14,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -90,8 +92,15 @@ public class RecipeTable extends MyTable<Recipe> {
     private JPanel createIngredientsTab(GridBagConstraints gbc, JTable table, RecipeIngredientTableFilter filter, Recipe recipe) {
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
 
-        JScrollPane recipeIngredientsScrollPane = new JScrollPane(table);
-        filter.filterGuid(recipe.getGuid());
+
+
+        var model = (RecipeIngredientsTableModel) table.getModel();
+        var rowSorter = new TableRowSorter<>((RecipeIngredientsTableModel) model);
+        var newTable = new RecipeIngredientsTable(model);
+        var newFilter = new RecipeIngredientTableFilter(rowSorter);
+        newTable.setRowSorter(rowSorter);
+        JScrollPane recipeIngredientsScrollPane = new JScrollPane(newTable);
+        newFilter.filterGuid(recipe.getGuid());
 
         ingredientsTab.add(recipeIngredientsScrollPane, gbc);
         return ingredientsTab;

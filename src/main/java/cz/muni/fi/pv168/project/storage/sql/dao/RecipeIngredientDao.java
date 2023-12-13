@@ -1,8 +1,16 @@
 package cz.muni.fi.pv168.project.storage.sql.dao;
 
+import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.storage.sql.db.ConnectionHandler;
+import cz.muni.fi.pv168.project.storage.sql.entity.IngredientEntity;
+import cz.muni.fi.pv168.project.storage.sql.entity.RecipeEntity;
 import cz.muni.fi.pv168.project.storage.sql.entity.RecipeIngredientEntity;
+import cz.muni.fi.pv168.project.storage.sql.entity.UnitEntity;
+import cz.muni.fi.pv168.project.storage.sql.entity.mapper.IngredientMapper;
+import cz.muni.fi.pv168.project.storage.sql.entity.mapper.RecipeMapper;
+import cz.muni.fi.pv168.project.storage.sql.entity.mapper.UnitMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,16 +25,25 @@ import java.util.function.Supplier;
  * DAO for {@link RecipeIngredientEntity} entity.
  */
 public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredientEntity> {
-
     private final Supplier<ConnectionHandler> connections;
+    private final RecipeDao recipeDao;
+    private final IngredientDao ingredientDao;
+    private final UnitDao unitDao;
+
 
     /**
      * Constructs a new RecipeIngredientDao object with the given Supplier of ConnectionHandler.
      *
      * @param connections the Supplier of ConnectionHandler to be used by the RecipeIngredientDao
      */
-    public RecipeIngredientDao(Supplier<ConnectionHandler> connections) {
+    public RecipeIngredientDao(Supplier<ConnectionHandler> connections,
+                               RecipeDao recipeDao,
+                               IngredientDao ingredientDao,
+                               UnitDao unitDao) {
         this.connections = connections;
+        this.recipeDao = recipeDao;
+        this.ingredientDao = ingredientDao;
+        this.unitDao = unitDao;
     }
 
     /**
@@ -38,16 +55,16 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      */
     @Override
     public RecipeIngredientEntity create(RecipeIngredientEntity newRecipeIngredient) {
-        var sql = "INSERT INTO RecipeIngredient (guid, recipeGuid, ingredientGuid, unit, amount) VALUES (?, ?, ?, ?, ?);";
+        var sql = "INSERT INTO RecipeIngredient (guid, recipeGuid, ingredientGuid, unitGuid, amount) VALUES (?, ?, ?, ?, ?);";
 
         try (
                 var connection = connections.get();
                 var statement = connection.use().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
             statement.setString(1, newRecipeIngredient.guid());
-            statement.setString(2, newRecipeIngredient.recipeGuid());
-            statement.setString(3, newRecipeIngredient.ingredientGuid());
-            statement.setObject(4, newRecipeIngredient.unit());
+            statement.setString(2, newRecipeIngredient.recipe().getGuid());
+            statement.setString(3, newRecipeIngredient.ingredient().getGuid());
+            statement.setString(4, newRecipeIngredient.unit().getGuid());
             statement.setDouble(5, newRecipeIngredient.amount());
             statement.executeUpdate();
 
@@ -79,7 +96,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
     @Override
     public Collection<RecipeIngredientEntity> findAll() {
         var sql = """
-                SELECT id, guid, recipeGuid, ingredientGuid, unit, amount
+                SELECT id, guid, recipeGuid, ingredientGuid, unitGuid, amount
                 FROM RecipeIngredient
                 """;
         try (
@@ -110,7 +127,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
     @Override
     public Optional<RecipeIngredientEntity> findById(long id) {
         var sql = """
-                SELECT id, guid, recipeGuid, ingredientGuid, unit, amount
+                SELECT id, guid, recipeGuid, ingredientGuid, unitGuid, amount
                 FROM RecipeIngredient
                 WHERE id = ?
                 """;
@@ -140,7 +157,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
     @Override
     public Optional<RecipeIngredientEntity> findByGuid(String guid) {
         var sql = """
-                SELECT id, guid, recipeGuid, ingredientGuid, unit, amount
+                SELECT id, guid, recipeGuid, ingredientGuid, unitGuid, amount
                 FROM RecipeIngredient
                 WHERE guid = ?
                 """;
@@ -174,7 +191,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
                 UPDATE RecipeIngredient
                 SET recipeGuid = ?,
                     ingredientGuid = ?,
-                    unit = ?,
+                    unitGuid = ?,
                     amount = ?,
                 WHERE id = ?
                 """;
@@ -183,9 +200,9 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
                 var statement = connection.use().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
             statement.setString(1, entity.guid());
-            statement.setString(2, entity.recipeGuid());
-            statement.setString(3, entity.ingredientGuid());
-            statement.setObject(4, entity.unit());
+            statement.setString(2, entity.recipe().getGuid());
+            statement.setString(3, entity.ingredient().getGuid());
+            statement.setString(4, entity.unit().getGuid());
             statement.setDouble(5, entity.amount());
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated == 0) {
@@ -285,13 +302,21 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      * @return a new RecipeIngredientEntity object with data from the ResultSet
      * @throws SQLException if an error occurs while retrieving data from the ResultSet
      */
-    private static RecipeIngredientEntity recipeIngredientFromResultSet(ResultSet resultSet) throws SQLException {
+    private RecipeIngredientEntity recipeIngredientFromResultSet(ResultSet resultSet) throws SQLException {
+        RecipeEntity recipeEntity = recipeDao.findByGuid(resultSet.getString("recipeGuid")).orElseThrow();
+        IngredientEntity ingredientEntity = ingredientDao.findByGuid(resultSet.getString("ingredientGuid")).orElseThrow();
+        UnitEntity unitEntity = unitDao.findByGuid(resultSet.getString("unitGuid")).orElseThrow();
+
+        Recipe recipe = new RecipeMapper().mapToBusiness(recipeEntity);
+        Ingredient ingredient = new IngredientMapper().mapToBusiness(ingredientEntity);
+        Unit unit = new UnitMapper().mapToBusiness(unitEntity);
+
         return new RecipeIngredientEntity(
                 resultSet.getLong("id"),
                 resultSet.getString("guid"),
-                resultSet.getString("recipeGuid"),
-                resultSet.getString("ingredientGuid"),
-                resultSet.getObject("unit", Unit.class),
+                recipe,
+                ingredient,
+                unit,
                 resultSet.getDouble("amount")
         );
     }

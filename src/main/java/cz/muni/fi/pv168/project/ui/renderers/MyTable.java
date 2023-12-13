@@ -1,12 +1,7 @@
 package cz.muni.fi.pv168.project.ui.renderers;
 
-import cz.muni.fi.pv168.project.business.model.GuidProvider;
-import cz.muni.fi.pv168.project.business.model.Ingredient;
-import cz.muni.fi.pv168.project.business.model.Recipe;
-import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
-import cz.muni.fi.pv168.project.business.repository.Repository;
-import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
+import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -72,7 +67,7 @@ public class MyTable<T> extends JTable {
             }
         });
     }
-    public void setMouseListener(MyTable<T> table, CrudService<RecipeIngredient> recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
+    public void setMouseListener(MyTable<T> table, JTable recIncTable, RecipeIngredientTableFilter filter) {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -84,7 +79,7 @@ public class MyTable<T> extends JTable {
                     } else{
                         inTabs++;
                         infoTables.add((T) getValueAt(getSelectedRow(), 0));
-                        openInfoWindow(table, recIngCrud, ingRepository, recRepository, provider);
+                        openInfoWindow(table, recIncTable, filter);
                     }
                 }
             }
@@ -141,7 +136,7 @@ public class MyTable<T> extends JTable {
     protected void openInfoWindow(MyTable<T> table) {
         // Meant to be overriden
     }
-    protected void openInfoWindow(MyTable<T> table, CrudService<RecipeIngredient> recIngCrud, Repository<Ingredient> ingRepository, Repository<Recipe> recRepository, GuidProvider provider) {
+    protected void openInfoWindow(MyTable<T> table, JTable recIncTable, RecipeIngredientTableFilter filter) {
         // Meant to be overriden
     }
 }

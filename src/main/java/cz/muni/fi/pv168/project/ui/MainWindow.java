@@ -96,8 +96,7 @@ public class MainWindow {
                 1,
                 this::rowSelectionChanged);
         recipeIngredientsTable = (RecipeIngredientsTable) MainWindowUtilities.createTableFromModel(
-                new RecipeIngredientsTableModel(dependencyProvider.getRecipeIngredientCrudService(),
-                        dependencyProvider.getIngredientRepository()), 2, this::rowSelectionChanged);
+                new RecipeIngredientsTableModel(dependencyProvider.getRecipeIngredientCrudService()), 2, this::rowSelectionChanged);
 
         MainWindowUtilities.hideFirstColumn(recipeTable);
         MainWindowUtilities.hideFirstColumn(ingredientTable);
@@ -159,11 +158,7 @@ public class MainWindow {
         this.menubar = createMenuBar(dependencyProvider);
         mainFrame.setJMenuBar(this.menubar);
 
-        recipeTable.setMouseListener(recipeTable,
-                dependencyProvider.getRecipeIngredientCrudService(),
-                dependencyProvider.getIngredientRepository(),
-                dependencyProvider.getRecipeRepository(),
-                dependencyProvider.getGuidProvider());
+        recipeTable.setMouseListener(recipeTable, recipeIngredientsTable, recipeIngredientFilter);
         unitTable.setMouseListener(unitTable);
         ingredientTable.setMouseListener(ingredientTable);
 

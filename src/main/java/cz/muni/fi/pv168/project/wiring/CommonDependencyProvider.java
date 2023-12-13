@@ -80,20 +80,24 @@ public class CommonDependencyProvider implements DependencyProvider {
         this.transactionExecutor = new TransactionExecutorImpl(transactionManager::beginTransaction);
         var transactionConnectionSupplier = new TransactionConnectionSupplier(transactionManager, databaseManager);
 
+        var recipeDao = new RecipeDao(transactionConnectionSupplier);
+        var ingredientDao = new IngredientDao(transactionConnectionSupplier);
+        var unitDao = new UnitDao(transactionConnectionSupplier);
+
         this.recipes = new RecipeSqlRepository(
-                new RecipeDao(transactionConnectionSupplier),
+                recipeDao,
                 new RecipeMapper()
         );
         this.ingredients = new IngredientSqlRepository(
-                new IngredientDao(transactionConnectionSupplier),
+                ingredientDao,
                 new IngredientMapper()
         );
         this.units = new UnitSqlRepository(
-                new UnitDao(transactionConnectionSupplier),
+                unitDao,
                 new UnitMapper()
         );
         this.recipeIngredients = new RecipeIngredientSqlRepository(
-                new RecipeIngredientDao(transactionConnectionSupplier),
+                new RecipeIngredientDao(transactionConnectionSupplier, recipeDao, ingredientDao, unitDao),
                 new RecipeIngredientMapper()
         );
 

@@ -16,7 +16,7 @@ public class RecipeValidator implements Validator<Recipe> {
     public ValidationResult validate(Recipe model) {
         var validators = List.of(
                 extracting(Recipe::getName, new StringLengthValidator(2, 150, "Recipe name")),
-                extracting(Recipe::getInstructions, new StringLengthValidator(2, 2000, "Instructions"))
+                extracting(Recipe::getInstructions, new StringLengthValidator(0, 20000, "Instructions"))
         );
 
         return Validator.compose(validators).validate(model);

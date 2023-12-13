@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import java.util.Objects;
  * Represents a Recipe entity.
  * Extends the Entity class.
  */
-public class Recipe extends Entity {
+public class Recipe extends Entity implements Serializable {
     private String name;
     private String instructions;
     private RecipeCategory category;

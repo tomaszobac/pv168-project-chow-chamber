@@ -1,8 +1,6 @@
 package cz.muni.fi.pv168.project.ui.model;
 
-import cz.muni.fi.pv168.project.business.model.Ingredient;
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
-import cz.muni.fi.pv168.project.business.repository.Repository;
 import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 
 import javax.swing.table.AbstractTableModel;
@@ -25,16 +23,15 @@ public class RecipeIngredientsTableModel extends AbstractTableModel implements E
         };
     }
 
-    public RecipeIngredientsTableModel(CrudService<RecipeIngredient> recipeIngredientCrudService,
-                                       Repository<Ingredient> ingredientRepository) {
+    public RecipeIngredientsTableModel(CrudService<RecipeIngredient> recipeIngredientCrudService) {
         this.recipeIngredientCrudService = Objects.requireNonNull(recipeIngredientCrudService, "recipeIngredientCrudService cannot be null");
         this.ingredients = new ArrayList<>(recipeIngredientCrudService.findAll());
         this.columns = List.of(
                 Column.readonly("RecipeIngredient", RecipeIngredient.class, recipeIngredient -> recipeIngredient),
-                Column.readonly("Name", String.class, recipeIngredient -> ingredientRepository.findByGuid(recipeIngredient.getIngredientGuid()).orElseThrow().getName()),
+                Column.readonly("Name", String.class, recipeIngredient -> recipeIngredient.getIngredient().getName()),
                 Column.readonly("Amount", Double.class, RecipeIngredient::getAmount),
                 Column.readonly("Unit", String.class, recipeIngredient -> recipeIngredient.getUnit().getName()),
-                Column.readonly("Calories", Double.class, recipeIngredient -> recipeIngredient.getCaloriesPerSetAmount(ingredientRepository.findByGuid(recipeIngredient.getIngredientGuid()).orElseThrow().getUnit(), ingredientRepository.findByGuid(recipeIngredient.getIngredientGuid()).orElseThrow().getCalories()))
+                Column.readonly("Calories", Double.class, recipeIngredient -> recipeIngredient.getCaloriesPerSetAmount(recipeIngredient.getIngredient().getUnit(), recipeIngredient.getIngredient().getCalories()))
         );
     }
 

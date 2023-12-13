@@ -147,9 +147,9 @@ public class BatchJsonExporter implements BatchExporter {
     public void createJsonRecipeIngredientLine(StringBuilder line, RecipeIngredient recipeIngredient) {
         line.append("{");
         line.append("\"recipeGuid\":");
-        line.append("\"" + recipeIngredient.getRecipeGuid() + "\",");
+        line.append("\"" + recipeIngredient.getRecipe().getGuid() + "\",");
         line.append("\"ingredientGuid\":");
-        line.append("\"" + recipeIngredient.getIngredientGuid() + "\",");
+        line.append("\"" + recipeIngredient.getIngredient().getGuid() + "\",");
         line.append("\"unit\":");
         createJsonUnitLine(line, recipeIngredient.getUnit());
         line.append(",");

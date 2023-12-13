@@ -40,18 +40,41 @@ public class CustomIngredientDialog extends JDialog {
         super(parentFrame, "Recipe ingredients", true);
         setLayout(new BorderLayout());
 
-        for (int i = 0; i < ingredientTable.getRowCount(); i++) {
-            ingredientComboBox.addItem((Ingredient) ingredientTable.getValueAt(i, 0));
-        }
-        ingredientComboBox.setRenderer(new IngredientComboBoxRenderer());
-        if (ingredientComboBox.getItemCount() > 0) {
-            ingredientComboBox.setSelectedIndex(0);
-        }
-        ingredientComboBox.addActionListener( e -> updateUnitComboBox(unitTable, false));
+        setupComboBoxes(ingredientTable, unitTable);
 
-        updateUnitComboBox(unitTable, true);
-        unitComboBox.setRenderer(new UnitComboBoxRenderer());
+        JPanel topPanel = createTopPanel(recipe, recipeIngredientsTable);
 
+        filter.filterGuid(recipe.getGuid());
+        add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
+
+        JPanel bottomPanel = createBottomPanel();
+
+        add(topPanel, BorderLayout.NORTH);
+        add(bottomPanel, BorderLayout.SOUTH);
+        pack();
+        setLocationRelativeTo(parentFrame);
+        updateUnitComboBox(unitTable, false);
+    }
+
+    private JPanel createBottomPanel() {
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(e -> dispose());
+
+        JButton doneButton = new JButton("Done");
+        doneButton.addActionListener(e -> {
+            exitThroughDone = true;
+            dispose();
+        });
+
+        bottomPanel.add(doneButton);
+        bottomPanel.add(closeButton);
+        return bottomPanel;
+    }
+
+    private JPanel createTopPanel(Recipe recipe, JTable recipeIngredientsTable) {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout());
         topPanel.add(new JLabel("Select Ingredient: "));
@@ -61,16 +84,7 @@ public class CustomIngredientDialog extends JDialog {
         topPanel.add(new JLabel("in unit:"));
         topPanel.add(unitComboBox);
 
-        JButton addButton = new JButton("Add Ingredient");
-        addButton.setForeground(Color.WHITE);
-        Font buttonFont = addButton.getFont();
-        addButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
-        addButton.setBackground(new Color(42, 162, 26));
-
-        filter.filterGuid(recipe.getGuid());
-
-        Action deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
-        add(new JScrollPane(recipeIngredientsTable), BorderLayout.CENTER);
+        JButton addButton = createButton("Add Ingredient", new Color(42, 162, 26));
         addButton.addActionListener(e -> {
             Ingredient selectedIngredient = (Ingredient) ingredientComboBox.getSelectedItem();
             Unit selectedUnit = (Unit) unitComboBox.getSelectedItem();
@@ -83,13 +97,9 @@ public class CustomIngredientDialog extends JDialog {
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, amount.isEmpty() ? "Please fill in amount" : "Selected unit type must match ingredient unit type", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        topPanel.add(addButton, BorderLayout.SOUTH);
 
-        JButton deleteButton = new JButton("Delete Ingredient");
-        deleteButton.setForeground(Color.WHITE);
-        deleteButton.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
-        deleteButton.setBackground(new Color(182, 28, 28));
-        topPanel.add(deleteButton, BorderLayout.SOUTH);
+        JButton deleteButton = createButton("Delete Ingredient", new Color(182, 28, 28));
+        Action deleteAction = new DeleteRecipeIngredientAction(recipeIngredientsTable);
         deleteButton.addActionListener(deleteAction);
         deleteButton.addActionListener(e -> {
             int selectedRow = recipeIngredientsTable.getSelectedRow();
@@ -102,25 +112,33 @@ public class CustomIngredientDialog extends JDialog {
                 JOptionPane.showMessageDialog(CustomIngredientDialog.this, "Please select an ingredient to delete", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        add(topPanel, BorderLayout.NORTH);
 
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        topPanel.add(addButton, BorderLayout.SOUTH);
+        topPanel.add(deleteButton, BorderLayout.SOUTH);
+        return topPanel;
+    }
 
-        JButton closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> dispose());
-        JButton doneButton = new JButton("Done");
-        doneButton.addActionListener(e -> {
-            exitThroughDone = true;
-            dispose();
-        });
-        bottomPanel.add(doneButton);
-        bottomPanel.add(closeButton);
+    private JButton createButton(String name, Color color) {
+        JButton button = new JButton(name);
+        button.setForeground(Color.WHITE);
+        Font buttonFont = button.getFont();
+        button.setFont(new Font(buttonFont.getFontName(), Font.BOLD, buttonFont.getSize()));
+        button.setBackground(color);
+        return button;
+    }
 
-        add(bottomPanel, BorderLayout.SOUTH);
-        pack();
-        setLocationRelativeTo(parentFrame);
-        updateUnitComboBox(unitTable, false);
+    private void setupComboBoxes(JTable ingredientTable, JTable unitTable) {
+        for (int i = 0; i < ingredientTable.getRowCount(); i++) {
+            ingredientComboBox.addItem((Ingredient) ingredientTable.getValueAt(i, 0));
+        }
+        ingredientComboBox.setRenderer(new IngredientComboBoxRenderer());
+        if (ingredientComboBox.getItemCount() > 0) {
+            ingredientComboBox.setSelectedIndex(0);
+        }
+        ingredientComboBox.addActionListener( e -> updateUnitComboBox(unitTable, false));
+
+        updateUnitComboBox(unitTable, true);
+        unitComboBox.setRenderer(new UnitComboBoxRenderer());
     }
 
     private void updateUnitComboBox(JTable unitTable, boolean all) {

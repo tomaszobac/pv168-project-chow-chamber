@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS "RecipeIngredient"
     `guid`              VARCHAR         NOT NULL UNIQUE,
     `recipeGuid`        VARCHAR         NOT NULL,
     `ingredientGuid`    VARCHAR         NOT NULL,
-    `unit`              OBJECT          NOT NULL,
-    `amount`            DOUBLE          NOT NULL
-)
+    `unitGuid`          VARCHAR         NOT NULL,
+    `amount`            DOUBLE          NOT NULL,
+    FOREIGN KEY (`recipeGuid`) REFERENCES "Recipe"(`guid`),
+    FOREIGN KEY (`ingredientGuid`) REFERENCES "Ingredient"(`guid`),
+    FOREIGN KEY (`unitGuid`) REFERENCES "Unit"(`guid`)
+);

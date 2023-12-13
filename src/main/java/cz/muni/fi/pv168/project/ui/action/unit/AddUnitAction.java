@@ -16,7 +16,7 @@ public class AddUnitAction extends AbstractAction {
     private final JTable unitTable;
 
     public AddUnitAction(JTable unitTable) {
-        super("Add", Icons.ADD_ICON);
+        super("Add Unit", Icons.ADD_ICON);
         putValue(SHORT_DESCRIPTION, "Adds new unit");
         putValue(MNEMONIC_KEY, KeyEvent.VK_A);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl N"));

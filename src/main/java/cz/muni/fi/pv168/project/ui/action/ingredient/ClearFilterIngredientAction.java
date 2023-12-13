@@ -13,7 +13,7 @@ public class ClearFilterIngredientAction extends AbstractAction {
     private final IngredientTableFilter filter;
 
     public ClearFilterIngredientAction(IngredientTableFilter filter) {
-        super("Clear filter", Icons.CLEAR_FIlTER_ICON);
+        super("Clear ingredient filter", Icons.CLEAR_FIlTER_ICON);
         putValue(SHORT_DESCRIPTION, "Clears filters for ingredients");
         putValue(MNEMONIC_KEY, KeyEvent.VK_F);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("shift F"));

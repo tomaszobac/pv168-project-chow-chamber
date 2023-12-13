@@ -8,17 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 public final class QuitAction extends AbstractAction {
-    private final ExportService exportService;
-    public QuitAction(ExportService exportService) {
+    public QuitAction() {
         super("Quit", Icons.QUIT_ICON);
-        this.exportService = exportService;
         putValue(SHORT_DESCRIPTION, "Terminates the application");
         putValue(MNEMONIC_KEY, KeyEvent.VK_Q);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        exportService.exportData("src/main/resources/database.json");
         System.exit(0);
     }
 }

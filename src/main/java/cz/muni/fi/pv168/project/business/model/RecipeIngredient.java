@@ -25,7 +25,6 @@ public class RecipeIngredient extends Entity {
     }
 
     public RecipeIngredient(Recipe recipe, Ingredient ingredient, Unit unit, double amount) {
-        System.out.println("Creating: RGuid: " + recipe.getGuid() + " | IGuid: " + ingredient.getGuid());
         Objects.requireNonNull(recipe.getGuid());
         Objects.requireNonNull(ingredient.getGuid());
         this.recipe = Objects.requireNonNull(recipe);

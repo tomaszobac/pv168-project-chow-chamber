@@ -25,7 +25,7 @@ public class AddRecipeAction extends AbstractAction {
     private final RecipeIngredientTableFilter filter;
 
     public AddRecipeAction(JTable recipeTable, JTable ingredientTable, JTable unitTable, JTable recipeIngredientsTable, RecipeIngredientTableFilter filter) {
-        super("Add", Icons.ADD_ICON);
+        super("Add Recipe", Icons.ADD_ICON);
         putValue(SHORT_DESCRIPTION, "Adds new recipe");
         putValue(MNEMONIC_KEY, KeyEvent.VK_A);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl N"));

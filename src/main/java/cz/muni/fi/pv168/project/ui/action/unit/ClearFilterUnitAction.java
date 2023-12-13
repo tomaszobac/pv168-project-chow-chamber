@@ -15,7 +15,7 @@ public class ClearFilterUnitAction extends AbstractAction {
     private final UnitTableFilter filter;
 
     public ClearFilterUnitAction(UnitTableFilter filter) {
-        super("Clear filter", Icons.CLEAR_FIlTER_ICON);
+        super("Clear unit filter", Icons.CLEAR_FIlTER_ICON);
         putValue(SHORT_DESCRIPTION, "Clears filters for units");
         putValue(MNEMONIC_KEY, KeyEvent.VK_F);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("shift F"));

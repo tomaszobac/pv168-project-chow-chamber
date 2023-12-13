@@ -16,7 +16,7 @@ public class FilterUnitAction extends AbstractAction {
     private final UnitTableFilter filter;
     private final Action clearFilterAction;
     public FilterUnitAction(UnitTable unitTable, UnitTableFilter filter, Action clearFilterAction) {
-        super("Filter", Icons.FILTER_ICON);
+        super("Filter units", Icons.FILTER_ICON);
         putValue(SHORT_DESCRIPTION, "Filters recipes");
         putValue(MNEMONIC_KEY, KeyEvent.VK_F);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl F"));

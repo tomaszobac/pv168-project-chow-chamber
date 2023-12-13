@@ -16,7 +16,7 @@ public class ClearFilterRecipeAction extends AbstractAction {
     private final RecipeTableFilter filter;
 
     public ClearFilterRecipeAction(RecipeTableFilter filter) {
-        super("Clear filter", Icons.CLEAR_FIlTER_ICON);
+        super("Clear recipe filter", Icons.CLEAR_FIlTER_ICON);
         putValue(SHORT_DESCRIPTION, "Clears filters for recipes");
         putValue(MNEMONIC_KEY, KeyEvent.VK_F);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("shift F"));

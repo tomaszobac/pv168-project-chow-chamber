@@ -1,5 +1,6 @@
 package cz.muni.fi.pv168.project.ui;
 
+import cz.muni.fi.pv168.project.ui.action.ClearAllFiltersAction;
 import cz.muni.fi.pv168.project.ui.action.ConvertAction;
 import cz.muni.fi.pv168.project.ui.action.ExportAction;
 import cz.muni.fi.pv168.project.ui.action.ImportAction;
@@ -34,10 +35,12 @@ import cz.muni.fi.pv168.project.ui.model.tables.UnitTable;
 import cz.muni.fi.pv168.project.ui.renderers.MyFrame;
 import cz.muni.fi.pv168.project.wiring.DependencyProvider;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
@@ -46,6 +49,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class MainWindow {
     private final MyFrame mainFrame;
@@ -57,7 +64,10 @@ public class MainWindow {
     private final Action exportAction;
     private final Action convertAction;
     private Action filterAction;
-    private Action clearFilterAction;
+    private Action currClearFilterAction;
+    private final Action clearFilterRecipeAction;
+    private final Action clearFilterIngredientAction;
+    private final Action clearFilterUnitAction;
     private JToolBar toolbar;
     private JMenuBar menubar;
     private final RecipeTable recipeTable;
@@ -126,11 +136,15 @@ public class MainWindow {
         importAction = new ImportAction(dependencyProvider.getImportService(), this::refresh);
         exportAction = new ExportAction(dependencyProvider.getExportService());
 
-        clearFilterAction = new ClearFilterRecipeAction(recipeTableFilter);
-        filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterAction);
+        clearFilterRecipeAction = new ClearFilterRecipeAction(recipeTableFilter);
+        clearFilterIngredientAction = new ClearFilterIngredientAction(ingredientTableFilter);
+        clearFilterUnitAction = new ClearFilterUnitAction(unitTableFilter);
+
+        currClearFilterAction = clearFilterRecipeAction;
+        filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterRecipeAction);
         convertAction = new ConvertAction(unitTable);
 
-        quitAction = new QuitAction(dependencyProvider.getExportService());
+        quitAction = new QuitAction();
 
         JTabbedPane mainFrameTabs = new JTabbedPane();
         mainFrameTabs.setOpaque(true);
@@ -142,7 +156,7 @@ public class MainWindow {
         this.toolbar = createToolbar();
         mainFrame.add(this.toolbar, BorderLayout.BEFORE_FIRST_LINE);
 
-        this.menubar = createMenuBar();
+        this.menubar = createMenuBar(dependencyProvider);
         mainFrame.setJMenuBar(this.menubar);
 
         recipeTable.setMouseListener(recipeTable,
@@ -160,37 +174,34 @@ public class MainWindow {
 
     private void updateActions(int selectedIndex) {
         mainFrame.remove(this.toolbar);
-        mainFrame.remove(this.menubar);
 
         switch (selectedIndex) {
             case 0:  // Recipes tab
                 addAction = new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter);
                 editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter);
                 deleteAction = new DeleteRecipeAction(recipeTable);
-                clearFilterAction = new ClearFilterRecipeAction(recipeTableFilter);
-                filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterAction);
+                currClearFilterAction = clearFilterRecipeAction;
+                filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, currClearFilterAction);
                 break;
             case 1:  // Units tab
                 addAction = new AddUnitAction(unitTable);
                 editAction = new EditUnitAction(unitTable);
                 deleteAction = new DeleteUnitAction(unitTable);
-                clearFilterAction = new ClearFilterUnitAction(unitTableFilter);
-                filterAction = new FilterUnitAction(unitTable, unitTableFilter, clearFilterAction);
+                currClearFilterAction = clearFilterUnitAction;
+                filterAction = new FilterUnitAction(unitTable, unitTableFilter, currClearFilterAction);
                 break;
             case 2:  // Ingredients tab
                 addAction = new AddIngredientAction(ingredientTable, unitTable);
                 editAction = new EditIngredientAction(ingredientTable, unitTable);
                 deleteAction = new DeleteIngredientAction(ingredientTable);
-                clearFilterAction = new ClearFilterIngredientAction(ingredientTableFilter);
-                filterAction = new FilterIngredientAction(ingredientTable, ingredientTableFilter, clearFilterAction);
+                currClearFilterAction = clearFilterIngredientAction;
+                filterAction = new FilterIngredientAction(ingredientTable, ingredientTableFilter, currClearFilterAction);
                 break;
         }
 
         toolbar = createToolbar();
-        menubar = createMenuBar();
 
         mainFrame.add(toolbar, BorderLayout.BEFORE_FIRST_LINE);
-        mainFrame.setJMenuBar(menubar);
         mainFrame.validate();
     }
 
@@ -208,7 +219,7 @@ public class MainWindow {
         toolbar.add(exportAction);
         toolbar.addSeparator();
         toolbar.add(filterAction);
-        toolbar.add(clearFilterAction);
+        toolbar.add(currClearFilterAction);
         toolbar.addSeparator();
         toolbar.add(convertAction);
 
@@ -219,27 +230,60 @@ public class MainWindow {
         return toolbar;
     }
 
-    private JMenuBar createMenuBar() {
+    private JMenuBar createMenuBar(DependencyProvider dependencyProvider) {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu editMenu = new JMenu("Edit");
         editMenu.setMnemonic('e');
-        editMenu.add(addAction);
-        editMenu.add(editAction);
-        editMenu.add(deleteAction);
-        editMenu.addSeparator();
-        editMenu.add(quitAction);
+
+        ArrayList<AbstractAction> list = new ArrayList<>();
+        list.add(new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter));
+        list.add(new AddIngredientAction(ingredientTable, unitTable));
+        list.add(new AddUnitAction(unitTable));
+        list.add(new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterRecipeAction));
+        list.add(new FilterIngredientAction(ingredientTable, ingredientTableFilter, clearFilterIngredientAction));
+        list.add(new FilterUnitAction(unitTable, unitTableFilter, clearFilterUnitAction));
+        list.add(new ClearAllFiltersAction(recipeTableFilter, ingredientTableFilter, unitTableFilter,
+                                            clearFilterRecipeAction, clearFilterIngredientAction, clearFilterUnitAction));
+        list.add(new QuitAction());
+
+        addToMenu(list, editMenu, List.of(2,5,6));
+        list.clear();
 
         JMenu dataMenu = new JMenu("Data");
         dataMenu.setMnemonic('d');
-        dataMenu.add(importAction);
-        dataMenu.add(exportAction);
-        dataMenu.addSeparator();
-        dataMenu.add(filterAction);
+
+        list.add(new ImportAction(dependencyProvider.getImportService(), this::refresh));
+        list.add(new ExportAction(dependencyProvider.getExportService()));
+
+        addToMenu(list, dataMenu, List.of());
 
         menuBar.add(editMenu);
         menuBar.add(dataMenu);
         return menuBar;
+    }
+
+    private void addToMenu(List<AbstractAction> list, JMenu menu, List<Integer> separators) {
+        int separator_index = 0;
+
+        for (int i = 0; i < list.size(); i++) {
+            AbstractAction action = list.get(i);
+            action.putValue(Action.SMALL_ICON, null);
+            action.putValue(Action.MNEMONIC_KEY, null);
+            action.putValue(Action.ACCELERATOR_KEY, null);
+            menu.add(action);
+            if (separator_index < separators.size() && i == separators.get(separator_index)) {
+                separator_index++;
+                menu.addSeparator();
+            }
+        }
+
+        for (int i = 0; i < menu.getItemCount(); i++) {
+            JMenuItem item = menu.getItem(i);
+            if (!Objects.isNull(item)) {
+                item.setMargin(new Insets(5, -10, 5, 0));
+            }
+        }
     }
 
     private void rowSelectionChanged(ListSelectionEvent listSelectionEvent) {

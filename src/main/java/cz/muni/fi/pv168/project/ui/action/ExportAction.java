@@ -34,8 +34,22 @@ public class ExportAction extends AbstractAction {
 
         int dialogResult = fileChooser.showSaveDialog(null);
         if (dialogResult == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
 
-            String exportFile = fileChooser.getSelectedFile().getAbsolutePath();
+            if (selectedFile.exists()) {
+                int overwriteOption = JOptionPane.showConfirmDialog(
+                        null,
+                        "The file already exists. Do you want to overwrite it?",
+                        "File Exists",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (overwriteOption != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+
+            String exportFile = selectedFile.getAbsolutePath();
             var filter = fileChooser.getFileFilter();
             if (filter instanceof Filter) {
                 exportFile = ((Filter) filter).decorate(exportFile);

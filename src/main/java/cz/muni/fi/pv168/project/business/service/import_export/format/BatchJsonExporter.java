@@ -27,26 +27,10 @@ public class BatchJsonExporter implements BatchExporter {
         try (var writer = Files.newBufferedWriter(Path.of(filePath), StandardCharsets.UTF_8)) {
             String data = "{";
             writer.write(data);
-            String recipes = "\"recipes\":[";
-            writer.write(recipes);
-            boolean start = true;
-
-            for (var recipe : batch.recipes()) {
-                StringBuilder line = new StringBuilder();
-                if (!start){
-                    line.append(",");
-                }
-                createJsonRecipeLine(line, recipe);
-                writer.write(line.toString());
-                start = false;
-            }
-            String ending = "],";
-            writer.write(ending);
-            writer.newLine();
 
             String units = "\"units\":[";
             writer.write(units);
-            start = true;
+            boolean start = true;
 
             for (var unit : batch.units()) {
                 StringBuilder line = new StringBuilder();
@@ -57,6 +41,7 @@ public class BatchJsonExporter implements BatchExporter {
                 writer.write(line.toString());
                 start = false;
             }
+            String ending = "],";
             writer.write(ending);
             writer.newLine();
 
@@ -70,6 +55,22 @@ public class BatchJsonExporter implements BatchExporter {
                     line.append(",");
                 }
                 createJsonIngredientLine(line, ingredient);
+                writer.write(line.toString());
+                start = false;
+            }
+            writer.write(ending);
+            writer.newLine();
+
+            String recipes = "\"recipes\":[";
+            writer.write(recipes);
+            start = true;
+
+            for (var recipe : batch.recipes()) {
+                StringBuilder line = new StringBuilder();
+                if (!start){
+                    line.append(",");
+                }
+                createJsonRecipeLine(line, recipe);
                 writer.write(line.toString());
                 start = false;
             }
@@ -133,23 +134,20 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"calories\":");
         line.append("\"" + ingredient.getCalories() + "\",");
         line.append("\"unit\":");
-        line.append("{");
-        line.append("\"name\":");
-        line.append("\"" + ingredient.getUnit().getName() + "\",");
-        line.append("\"type\":");
-        line.append("\"" + ingredient.getUnit().getType().toString() + "\",");
-        line.append("\"conversionToBase\":");
-        line.append("\"" + ingredient.getUnit().getConversionToBase() + "\"");
-        line.append("}");
+        createJsonUnitLine(line, ingredient.getUnit());
         line.append("}");
     }
 
     public void createJsonRecipeIngredientLine(StringBuilder line, RecipeIngredient recipeIngredient) {
         line.append("{");
-        line.append("\"recipeGuid\":");
-        line.append("\"" + recipeIngredient.getRecipe().getGuid() + "\",");
-        line.append("\"ingredientGuid\":");
-        line.append("\"" + recipeIngredient.getIngredient().getGuid() + "\",");
+        line.append("\"guid\":");
+        line.append("\"" + recipeIngredient.getGuid() + "\",");
+        line.append("\"recipe\":");
+        createJsonRecipeLine(line, recipeIngredient.getRecipe());
+        line.append(",");
+        line.append("\"ingredient\":");
+        createJsonIngredientLine(line, recipeIngredient.getIngredient());
+        line.append(",");
         line.append("\"unit\":");
         createJsonUnitLine(line, recipeIngredient.getUnit());
         line.append(",");

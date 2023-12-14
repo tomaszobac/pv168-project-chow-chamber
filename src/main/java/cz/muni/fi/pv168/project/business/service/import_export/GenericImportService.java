@@ -41,10 +41,10 @@ public class GenericImportService implements ImportService {
 
     @Override
     public void importData(String filePath) {
-        recipeCrudService.deleteAll();
-        unitCrudService.deleteAll();
-        ingredientCrudService.deleteAll();
         recipeIngredientCrudService.deleteAll();
+        recipeCrudService.deleteAll();
+        ingredientCrudService.deleteAll();
+        unitCrudService.deleteAll();
 
         BatchJsonImporter batchJsonImporter = new BatchJsonImporter();
         Batch batch = batchJsonImporter.importBatch(

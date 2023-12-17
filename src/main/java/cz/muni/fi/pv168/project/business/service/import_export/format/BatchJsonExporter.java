@@ -104,7 +104,8 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"name\":");
         line.append("\"" + recipe.getName() + "\",");
         line.append("\"instructions\":");
-        line.append("\"" + recipe.getInstructions() + "\",");
+        //line.append("\"" + recipe.getInstructions().replaceAll("(\\r|\\n|\\t)", "").replaceAll("\"", "\\\"")+ "\",");
+        line.append("\"" + addExtraBackslashes(recipe.getInstructions()).replaceAll("(\\r|\\n|\\t)", "") + "\",");
         line.append("\"category\":");
         line.append("\"" + recipe.getCategory() + "\",");
         line.append("\"time\":");
@@ -154,5 +155,25 @@ public class BatchJsonExporter implements BatchExporter {
         line.append("\"amount\":");
         line.append("\"" + recipeIngredient.getAmount() + "\"");
         line.append("}");
+    }
+    public String addExtraBackslashes(String input) {
+        StringBuilder result = new StringBuilder();
+
+        for (char c : input.toCharArray()) {
+            if (c == '\\' || c == '\"' || c == '\'') {
+                result.append("\\");
+            }
+            if (c == '\n') {
+                result.append("\\n");
+                continue;
+            }
+            if (c == '\t'){
+                result.append("\\t");
+                continue;
+            }
+            result.append(c);
+        }
+
+        return result.toString();
     }
 }

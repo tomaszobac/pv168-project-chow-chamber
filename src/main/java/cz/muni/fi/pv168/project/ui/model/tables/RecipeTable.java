@@ -105,9 +105,9 @@ public class RecipeTable extends MyTable<Recipe> {
 
     private JPanel createInfoPanel(Recipe recipe) {
         JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 300, 20));
         infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
-        infoPanel.add(MainWindowUtilities.createLabel(recipe.getName(), 0), 1);
+        infoPanel.add(MainWindowUtilities.createLabel(recipe.getName(), 1), 1);
         infoPanel.add(MainWindowUtilities.createLabel("Category:", 0));
         infoPanel.add(MainWindowUtilities.createLabel(recipe.getCategoryName(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Time:", 0));

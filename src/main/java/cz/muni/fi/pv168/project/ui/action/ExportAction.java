@@ -2,23 +2,28 @@ package cz.muni.fi.pv168.project.ui.action;
 
 import cz.muni.fi.pv168.project.business.service.import_export.ExportService;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
+import cz.muni.fi.pv168.project.ui.workers.AsyncExporter;
 import cz.muni.fi.pv168.project.util.Filter;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class ExportAction extends AbstractAction {
 
-    private final ExportService exportService;
+    private final AsyncExporter exporter;
 
-    public ExportAction(ExportService exportService) {
+    public ExportAction(Component parent, ExportService exportService) {
         super("Export", Icons.EXPORT_ICON);
-        this.exportService = exportService;
+        this.exporter = new AsyncExporter(
+                exportService,
+                () -> JOptionPane.showMessageDialog(parent, "Export has successfully finished."));
+
 
         putValue(SHORT_DESCRIPTION, "Exports data");
         putValue(MNEMONIC_KEY, KeyEvent.VK_E);
@@ -30,7 +35,7 @@ public class ExportAction extends AbstractAction {
         var fileChooser = new JFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        exportService.getFormats().forEach(f -> fileChooser.addChoosableFileFilter(new Filter(f)));
+        exporter.getFormats().forEach(f -> fileChooser.addChoosableFileFilter(new Filter(f)));
 
         int dialogResult = fileChooser.showSaveDialog(null);
         if (dialogResult == JFileChooser.APPROVE_OPTION) {
@@ -55,9 +60,7 @@ public class ExportAction extends AbstractAction {
                 exportFile = ((Filter) filter).decorate(exportFile);
             }
 
-            exportService.exportData(exportFile);
-
-            JOptionPane.showMessageDialog(null, "Export has successfully finished.");
+            exporter.exportData(exportFile);
         }
     }
 }

@@ -132,7 +132,7 @@ public class MainWindow {
         deleteAction = new DeleteRecipeAction(recipeTable);
 
         importAction = new ImportAction(dependencyProvider.getImportService(), this::refresh);
-        exportAction = new ExportAction(dependencyProvider.getExportService());
+        exportAction = new ExportAction(recipeTable, dependencyProvider.getExportService());
 
         clearFilterRecipeAction = new ClearFilterRecipeAction(recipeTableFilter);
         clearFilterIngredientAction = new ClearFilterIngredientAction(ingredientTableFilter);
@@ -246,7 +246,7 @@ public class MainWindow {
         dataMenu.setMnemonic('d');
 
         list.add(new ImportAction(dependencyProvider.getImportService(), this::refresh));
-        list.add(new ExportAction(dependencyProvider.getExportService()));
+        list.add(new ExportAction(recipeTable, dependencyProvider.getExportService()));
 
         addToMenu(list, dataMenu, List.of());
 

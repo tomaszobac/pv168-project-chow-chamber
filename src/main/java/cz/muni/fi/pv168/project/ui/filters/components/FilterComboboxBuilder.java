@@ -10,7 +10,6 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.ListModel;
-import java.util.function.Consumer;
 
 /**
  * Builder for {@link JComboBox} with {@link Either} as elements.
@@ -24,7 +23,6 @@ public class FilterComboboxBuilder<L extends Enum<L>, R> {
     private AbstractRenderer<L> specialValuesRenderer;
     private AbstractRenderer<R> valuesRenderer;
     private Either<L, R> selectedItem;
-    private Consumer<Either<L, R>> filter;
 
     private FilterComboboxBuilder(Class<L> clazz, ComboBoxModel<R> values) {
         this.clazz = clazz;
@@ -42,7 +40,7 @@ public class FilterComboboxBuilder<L extends Enum<L>, R> {
     public JComboBox<Either<L, R>> build() {
         var comboBox = new JComboBox<>(CustomValuesModelDecorator.addCustomValues(clazz, values));
         comboBox.setRenderer(EitherRenderer.create(specialValuesRenderer, valuesRenderer));
-        comboBox.addActionListener(e -> filter.accept(comboBox.getItemAt(comboBox.getSelectedIndex())));
+        comboBox.addActionListener(e -> comboBox.getItemAt(comboBox.getSelectedIndex()));
         if (selectedItem != null) {
             comboBox.setSelectedItem(selectedItem);
         }
@@ -67,11 +65,6 @@ public class FilterComboboxBuilder<L extends Enum<L>, R> {
 
     public FilterComboboxBuilder<L, R> setSelectedItem(R selectedItem) {
         this.selectedItem = Either.right(selectedItem);
-        return this;
-    }
-
-    public FilterComboboxBuilder<L, R> setFilter(Consumer<Either<L, R>> filter) {
-        this.filter = filter;
         return this;
     }
 }

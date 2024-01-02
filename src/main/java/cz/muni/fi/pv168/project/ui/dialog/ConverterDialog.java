@@ -12,8 +12,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.GridLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -69,26 +67,11 @@ public class ConverterDialog extends EntityDialog<UnitTable> {
             }
         });
 
-        fromUnitComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                updateResult();
-            }
-        });
+        fromUnitComboBox.addItemListener(e -> updateResult());
 
-        toUnitComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                updateResult();
-            }
-        });
+        toUnitComboBox.addItemListener(e -> updateResult());
 
-        unitTypeComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                updateUnitComboBoxes();
-            }
-        });
+        unitTypeComboBox.addItemListener(e -> updateUnitComboBoxes());
     }
 
     private void updateUnitComboBoxes() {

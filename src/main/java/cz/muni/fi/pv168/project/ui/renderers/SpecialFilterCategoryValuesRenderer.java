@@ -4,6 +4,7 @@ import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.Objects;
 
 public class SpecialFilterCategoryValuesRenderer extends AbstractRenderer<SpecialFilterCategoryValues> {
     public SpecialFilterCategoryValuesRenderer() {
@@ -11,8 +12,8 @@ public class SpecialFilterCategoryValuesRenderer extends AbstractRenderer<Specia
     }
 
     protected void updateLabel(JLabel label, SpecialFilterCategoryValues value) {
-        switch (value) {
-            case ALL -> renderBoth(label);
+        if (Objects.requireNonNull(value) == SpecialFilterCategoryValues.ALL) {
+            renderBoth(label);
         }
     }
 

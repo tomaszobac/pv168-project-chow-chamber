@@ -1,11 +1,14 @@
 package cz.muni.fi.pv168.project.storage;
 
+import java.io.Serial;
+
 /**
  * Exception that is thrown if there is some problem with data storage
  */
 public class DataStorageException extends RuntimeException {
 
-    private static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 8327016682762284789L;
 
     public DataStorageException(String message) {
         this(message, null);

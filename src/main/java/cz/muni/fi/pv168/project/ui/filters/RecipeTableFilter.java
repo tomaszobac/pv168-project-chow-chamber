@@ -1,5 +1,6 @@
 package cz.muni.fi.pv168.project.ui.filters;
 
+import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.EntityMatchers;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeCategoryMatcher;
@@ -8,7 +9,6 @@ import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipeNameMatcher;
 import cz.muni.fi.pv168.project.ui.filters.matchers.recipe.RecipePortionsMatcher;
 import cz.muni.fi.pv168.project.ui.filters.values.SpecialFilterCategoryValues;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
-import cz.muni.fi.pv168.project.business.model.Recipe;
 import cz.muni.fi.pv168.project.ui.model.enums.RecipeCategory;
 import cz.muni.fi.pv168.project.util.Either;
 
@@ -79,6 +79,14 @@ public class RecipeTableFilter {
         return name;
     }
 
+    public void resetFilter() {
+        filterName("");
+        filterCategory(Either.left(SpecialFilterCategoryValues.ALL));
+        filterPortions(0, Integer.MAX_VALUE);
+        filterTime(LocalTime.MIN, LocalTime.MAX);
+        recipeCompoundMatcher.resetMatchers();
+    }
+
     /**
      * Container class for all matchers for the RecipeTable.
      *
@@ -114,6 +122,14 @@ public class RecipeTableFilter {
 
         private  void setNameMatcher(EntityMatcher<Recipe> nameMatcher) {
             this.nameMatcher = nameMatcher;
+            rowSorter.sort();
+        }
+
+        private void resetMatchers() {
+            nameMatcher = EntityMatchers.all();
+            categoryMatcher = EntityMatchers.all();
+            timeMatcher = EntityMatchers.all();
+            portionsMatcher = EntityMatchers.all();
             rowSorter.sort();
         }
 

@@ -24,6 +24,9 @@ public final class Filter extends FileFilter {
 
     @Override
     public boolean accept(File pathname) {
+        if (pathname.isDirectory()) {
+            return true;
+        }
         var extension = getExtension(pathname.getName());
         return extensions.stream()
                 .anyMatch(extension::equals);

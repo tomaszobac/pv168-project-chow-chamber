@@ -12,7 +12,7 @@ public class CategoryRenderer extends AbstractRenderer<RecipeCategory> {
     @Override
     protected void updateLabel(JLabel label, RecipeCategory category) {
         if (category != null) {
-            label.setText(category.toString());
+            label.setText(category.getCategory());
         }
     }
 }

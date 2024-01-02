@@ -1,16 +1,15 @@
 package cz.muni.fi.pv168.project.business.service.import_export;
 
-import cz.muni.fi.pv168.project.business.model.Recipe;
-import cz.muni.fi.pv168.project.business.model.Unit;
 import cz.muni.fi.pv168.project.business.model.Ingredient;
+import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
+import cz.muni.fi.pv168.project.business.model.Unit;
+import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 import cz.muni.fi.pv168.project.business.service.import_export.batch.Batch;
 import cz.muni.fi.pv168.project.business.service.import_export.batch.BatchImporter;
 import cz.muni.fi.pv168.project.business.service.import_export.format.BatchJsonImporter;
 import cz.muni.fi.pv168.project.business.service.import_export.format.Format;
 import cz.muni.fi.pv168.project.business.service.import_export.format.FormatMapping;
-import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
-import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
-import cz.muni.fi.pv168.project.ui.model.UnitTableModel;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,39 +20,55 @@ import java.util.Objects;
  */
 public class GenericImportService implements ImportService {
 
-    private final RecipeTableModel recipeTableModel;
-    private final UnitTableModel unitTableModel;
-    private final IngredientTableModel ingredientTableModel;
+    private final CrudService<Recipe> recipeCrudService;
+    private final CrudService<Unit> unitCrudService;
+    private final CrudService<Ingredient> ingredientCrudService;
+    private final CrudService<RecipeIngredient> recipeIngredientCrudService;
     private final FormatMapping<BatchImporter> importers;
 
     public GenericImportService(
-            RecipeTableModel recipeTableModel,
-            UnitTableModel unitTableModel,
-            IngredientTableModel ingredientTableModel,
+            CrudService<Recipe> recipeCrudService,
+            CrudService<Unit> unitCrudService,
+            CrudService<Ingredient> ingredientCrudService,
+            CrudService<RecipeIngredient> recipeIngredientCrudService,
             List<BatchImporter> importers) {
-        this.recipeTableModel = recipeTableModel;
-        this.unitTableModel = unitTableModel;
-        this.ingredientTableModel = ingredientTableModel;
+        this.recipeCrudService = recipeCrudService;
+        this.unitCrudService = unitCrudService;
+        this.ingredientCrudService = ingredientCrudService;
+        this.recipeIngredientCrudService = recipeIngredientCrudService;
         this.importers = new FormatMapping<>(importers);
     }
 
     @Override
     public void importData(String filePath) {
-        recipeTableModel.deleteAll();
-        ingredientTableModel.deleteAll();
-        unitTableModel.deleteAll();
+        recipeIngredientCrudService.deleteAll();
+        recipeCrudService.deleteAll();
+        ingredientCrudService.deleteAll();
+        unitCrudService.deleteAll();
 
         BatchJsonImporter batchJsonImporter = new BatchJsonImporter();
         Batch batch = batchJsonImporter.importBatch(
                 Objects.requireNonNullElse(filePath, "src/main/resources/database.json"));
 
-        batch.units().forEach(this::createUnit);
-        batch.ingredients().forEach(this::createIngredients);
-        batch.recipes().forEach(this::createRecipe);
+        Collection<Unit> units = batch.units();
+        if (units != null) {
+            units.forEach(this::createUnit);
+        }
 
-        recipeTableModel.refresh();
-        ingredientTableModel.refresh();
-        unitTableModel.refresh();
+        Collection<Ingredient> ingredients = batch.ingredients();
+        if (ingredients != null) {
+            ingredients.forEach(this::createIngredients);
+        }
+
+        Collection<Recipe> recipes = batch.recipes();
+        if (recipes != null) {
+            recipes.forEach(this::createRecipe);
+        }
+
+        Collection<RecipeIngredient> recipeIngredients = batch.recipeIngredients();
+        if (recipeIngredients != null) {
+            recipeIngredients.forEach(this::createRecipeIngredient);
+        }
     }
 
     @Override
@@ -61,15 +76,21 @@ public class GenericImportService implements ImportService {
         return importers.getFormats();
     }
 
-    private void createUnit(Unit unit) {
-        unitTableModel.addRow(unit);
-    }
-
-    private void createIngredients(Ingredient ingredient) {
-        ingredientTableModel.addRow(ingredient);
-    }
-
     private void createRecipe(Recipe recipe) {
-        recipeTableModel.addRow(recipe);
+        recipeCrudService.create(recipe)
+                .intoException();
     }
+    private void createIngredients(Ingredient ingredient) {
+        ingredientCrudService.create(ingredient)
+                .intoException();
+    }
+    private void createUnit(Unit unit) {
+        unitCrudService.create(unit)
+                .intoException();
+    }
+    private void createRecipeIngredient(RecipeIngredient recipeIngredient) {
+        recipeIngredientCrudService.create(recipeIngredient)
+                .intoException();
+    }
+
 }

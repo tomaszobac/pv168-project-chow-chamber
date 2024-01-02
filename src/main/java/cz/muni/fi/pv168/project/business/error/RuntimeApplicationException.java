@@ -5,7 +5,7 @@ import java.io.Serial;
 public class RuntimeApplicationException extends RuntimeException implements ApplicationException {
 
     @Serial
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 4965352568199481033L;
     private static final String DEFAULT_USER_MESSAGE = "Oops, something went wrong!";
 
     private final String userMessage;

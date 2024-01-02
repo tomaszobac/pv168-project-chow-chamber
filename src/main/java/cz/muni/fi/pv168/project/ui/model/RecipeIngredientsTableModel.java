@@ -1,32 +1,38 @@
 package cz.muni.fi.pv168.project.ui.model;
 
 import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
+import cz.muni.fi.pv168.project.business.service.crud.CrudService;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-// TODO: I don't know if we should implement EntityTableModel and method refresh here as well
-public class RecipeIngredientsTableModel extends AbstractTableModel {
-    private final List<RecipeIngredient> ingredients;
-    private final List<Column<RecipeIngredient, ?>> columns = List.of(
-            Column.readonly("Name", String.class, RecipeIngredient::getName),
-            Column.readonly("Amount", Double.class, RecipeIngredient::getAmount),
-            Column.readonly("Unit", String.class, recipeIngredient -> recipeIngredient.getUnit().getName()),
-            Column.readonly("Calories", Double.class, RecipeIngredient::getCaloriesPerSetAmount)
-    );
+public class RecipeIngredientsTableModel extends AbstractTableModel implements EntityTableModel<RecipeIngredient> {
+    private List<RecipeIngredient> ingredients;
+    private final CrudService<RecipeIngredient> recipeIngredientCrudService;
+    private final List<Column<RecipeIngredient, ?>> columns;
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return switch (columnIndex) {
-            case 0, 2 -> String.class;
-            case 1, 3 -> Double.class;
+            case 0 -> RecipeIngredient.class;
+            case 1, 3 -> String.class;
+            case 2, 4 -> Double.class;
             default -> super.getColumnClass(columnIndex);
         };
     }
 
-    public RecipeIngredientsTableModel(List<RecipeIngredient> ingredients) {
-        this.ingredients = new ArrayList<>(ingredients);
+    public RecipeIngredientsTableModel(CrudService<RecipeIngredient> recipeIngredientCrudService) {
+        this.recipeIngredientCrudService = Objects.requireNonNull(recipeIngredientCrudService, "recipeIngredientCrudService cannot be null");
+        this.ingredients = new ArrayList<>(recipeIngredientCrudService.findAll());
+        this.columns = List.of(
+                Column.readonly("RecipeIngredient", RecipeIngredient.class, recipeIngredient -> recipeIngredient),
+                Column.readonly("Name", String.class, recipeIngredient -> recipeIngredient.getIngredient().getName()),
+                Column.readonly("Amount", Double.class, RecipeIngredient::getAmount),
+                Column.readonly("Unit", String.class, recipeIngredient -> recipeIngredient.getUnit().getName()),
+                Column.readonly("Calories", Double.class, recipeIngredient -> recipeIngredient.getCaloriesPerSetAmount(recipeIngredient.getIngredient().getUnit(), recipeIngredient.getIngredient().getCalories()))
+        );
     }
 
     @Override
@@ -62,14 +68,26 @@ public class RecipeIngredientsTableModel extends AbstractTableModel {
     }
 
     public void deleteRow(int rowIndex) {
+        recipeIngredientCrudService.deleteByGuid(ingredients.get(rowIndex).getGuid());
         ingredients.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
 
     public void addRow(RecipeIngredient ingredient) {
+        recipeIngredientCrudService.create(ingredient).intoException();
         int newRowIndex = ingredients.size();
         ingredients.add(ingredient);
         fireTableRowsInserted(newRowIndex, newRowIndex);
+    }
+
+    public void deleteAll() {
+        recipeIngredientCrudService.deleteAll();
+        refresh();
+    }
+
+    public void refresh() {
+        this.ingredients = new ArrayList<>(recipeIngredientCrudService.findAll());
+        fireTableDataChanged();
     }
 
     public RecipeIngredient getEntity(int rowIndex) {

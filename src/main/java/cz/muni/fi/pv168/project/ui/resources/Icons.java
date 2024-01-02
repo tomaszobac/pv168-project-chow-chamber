@@ -12,6 +12,8 @@ public class Icons {
     public static final Icon IMPORT_ICON = createIcon("mat3importW.png");
     public static final Icon EXPORT_ICON = createIcon("mat3exportW.png");
     public static final Icon FILTER_ICON = createIcon("mat3filterW.png");
+    public static final Icon CLEAR_FIlTER_ICON = createIcon("mat3clear-filterW.png");
+    public static final Icon BALANCE_ICON = createIcon("mat3balanceW.png");
 
     private Icons() {
         throw new AssertionError("This class is not instantiable");

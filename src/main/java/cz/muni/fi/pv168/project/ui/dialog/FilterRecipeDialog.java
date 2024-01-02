@@ -16,7 +16,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
@@ -30,7 +29,7 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
 
     public FilterRecipeDialog(RecipeTableFilter recipeTableFilter) {
         this.recipeTableFilter = recipeTableFilter;
-        this.categoryComboBox = createCategoryFilter(recipeTableFilter);
+        this.categoryComboBox = createCategoryFilter();
         setNumericWithSeparatorFilter(fromPortionsField, false);
         setNumericWithSeparatorFilter(toPortionsField, false);
         setNumericWithSeparatorFilter(fromTimeField, true);
@@ -67,16 +66,13 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
         add("Portions to:", toPortionsField);
     }
 
-    private static JComboBox<Either<SpecialFilterCategoryValues, RecipeCategory>> createCategoryFilter(
-            RecipeTableFilter recipeTableFilter) {
+    private static JComboBox<Either<SpecialFilterCategoryValues, RecipeCategory>> createCategoryFilter() {
         return FilterComboboxBuilder.create(SpecialFilterCategoryValues.class, RecipeCategory.values())
                 .setSpecialValuesRenderer(new SpecialFilterCategoryValuesRenderer())
                 .setValuesRenderer(new CategoryRenderer())
-                .setFilter(recipeTableFilter::filterCategory)
                 .build();
     }
 
-    // Set a DocumentFilter to allow only numeric input with a configurable decimal point
     public static void setNumericWithSeparatorFilter(JTextField textField, boolean allowSeparator) {
         Document doc = new PlainDocument() {
             @Override
@@ -90,13 +86,13 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
                 for (int i = 0; i < str.length(); i++) {
                     char c = str.charAt(i);
                     if (c == ':' && !allowSeparator) {
-                        return; // Separator not allowed
+                        return;
                     }
                     if (!Character.isDigit(c) && c != ':') {
-                        return; // Non-numeric character
+                        return;
                     }
                     if (c == ':' && currentText.contains(":")) {
-                        return; // Already contains a decimal point
+                        return;
                     }
                     newText.insert(offs + i, c);
                 }
@@ -109,26 +105,66 @@ public class FilterRecipeDialog extends EntityDialog<RecipeTableFilter> {
         textField.setDocument(doc);
     }
 
+    private LocalTime getTime(String timeString) {
+        int hours = 0;
+        int minutes = 0;
+        if (timeString.isBlank()) {
+            return LocalTime.of(hours, minutes);
+        }
+        try {
+
+            if (timeString.matches("\\d+")) {
+                minutes = Integer.parseInt(timeString);
+            } else {
+                String[] parts = timeString.split(":");
+
+                if (parts.length == 2) {
+                    hours = Integer.parseInt(parts[0]);
+                    minutes = Integer.parseInt(parts[1]);
+                } else {
+                    throw new IllegalArgumentException("Invalid time format: " + timeString);
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid time format: " + timeString, e);
+        }
+
+        if (minutes > 59) {
+            hours += minutes / 60;
+            minutes = minutes % 60;
+        } else if (minutes < 0)
+            minutes = 0;
+
+        if (hours > 23)
+            hours = 23;
+        else if (hours < 0)
+            hours = 0;
+
+        return LocalTime.of(hours, minutes);
+    }
+
     @Override
     RecipeTableFilter getEntity() {
         try {
-            // Portions
+            Either<SpecialFilterCategoryValues, RecipeCategory> selectedCategory =
+                    (Either<SpecialFilterCategoryValues, RecipeCategory>) categoryComboBox.getSelectedItem();
+
+            if (selectedCategory != null) {
+                recipeTableFilter.filterCategory(selectedCategory);
+            }
+
             String fromPortionsString = fromPortionsField.getText();
             String toPortionsString = toPortionsField.getText();
             int fromPortions = fromPortionsString.isEmpty() ? 0 : Integer.parseInt(fromPortionsString);
             int toPortions = toPortionsString.isEmpty() ? Integer.MAX_VALUE : Integer.parseInt(toPortionsString);
             recipeTableFilter.filterPortions(fromPortions, toPortions);
 
-            // Times
             String fromTimeString = fromTimeField.getText();
             String toTimeString = toTimeField.getText();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            LocalTime fromTime = fromTimeString.isEmpty() ? LocalTime.of(0, 0) : LocalTime.parse(fromTimeString, formatter);
-            LocalTime toTime = fromTimeString.isEmpty() ? LocalTime.of(23, 59) : LocalTime.parse(toTimeString, formatter);
+            LocalTime fromTime = fromTimeString.isEmpty() ? LocalTime.of(0, 0) : getTime(fromTimeString);
+            LocalTime toTime = fromTimeString.isEmpty() ? LocalTime.of(23, 59) : getTime(toTimeString);
             recipeTableFilter.filterTime(fromTime, toTime);
-
-            // Name
             recipeTableFilter.filterName(nameField.getText());
 
         } catch (NumberFormatException | DateTimeParseException e) {

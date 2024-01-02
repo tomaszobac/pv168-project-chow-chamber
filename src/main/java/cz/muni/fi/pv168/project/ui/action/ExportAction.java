@@ -28,12 +28,28 @@ public class ExportAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         var fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         exportService.getFormats().forEach(f -> fileChooser.addChoosableFileFilter(new Filter(f)));
 
         int dialogResult = fileChooser.showSaveDialog(null);
         if (dialogResult == JFileChooser.APPROVE_OPTION) {
-            String exportFile = fileChooser.getSelectedFile().getAbsolutePath();
+            File selectedFile = fileChooser.getSelectedFile();
+
+            if (selectedFile.exists()) {
+                int overwriteOption = JOptionPane.showConfirmDialog(
+                        null,
+                        "The file already exists. Do you want to overwrite it?",
+                        "File Exists",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (overwriteOption != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+
+            String exportFile = selectedFile.getAbsolutePath();
             var filter = fileChooser.getFileFilter();
             if (filter instanceof Filter) {
                 exportFile = ((Filter) filter).decorate(exportFile);

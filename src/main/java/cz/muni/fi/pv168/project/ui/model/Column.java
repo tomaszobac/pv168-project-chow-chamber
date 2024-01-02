@@ -12,16 +12,9 @@ import java.util.function.Function;
  * @param <T> The type of values that this column can store
  */
 public class Column<E, T> {
-    // The name of the column
     private final String name;
-
-    // A function that retrieves the value from an entity
     private final Function<E, T> valueGetter;
-
-    // A function that sets the value for an entity. It may be null
     private final BiConsumer<E, T> valueSetter;
-
-    // The class type of values that this column can store
     private final Class<T> columnType;
 
     private Column(String name, Class<T> columnClass, Function<E, T> valueGetter, BiConsumer<E, T> valueSetter) {
@@ -29,11 +22,6 @@ public class Column<E, T> {
         this.columnType = Objects.requireNonNull(columnClass, "column class cannot be null");
         this.valueGetter = Objects.requireNonNull(valueGetter, "value getter cannot be null");
         this.valueSetter = valueSetter;
-    }
-
-    public static <E, T> Column<E, T> editable(String name, Class<T> columnClass, Function<E, T> valueGetter,
-                                               BiConsumer<E, T> valueSetter) {
-        return new Column<>(name, columnClass, valueGetter, Objects.requireNonNull(valueSetter, "value setter cannot be null"));
     }
 
     public static <E, T> Column<E, T> readonly(String name, Class<T> columnClass, Function<E, T> valueGetter) {
@@ -44,7 +32,7 @@ public class Column<E, T> {
         if (valueSetter == null) {
             throw new UnsupportedOperationException("Cannot set value in readonly column: '" + name + "'");
         }
-        valueSetter.accept(entity, columnType.cast(value)); // see Item 33: Consider type-safe heterogeneous containers
+        valueSetter.accept(entity, columnType.cast(value));
     }
 
     T getValue(E entity) {

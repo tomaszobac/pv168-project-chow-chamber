@@ -5,50 +5,64 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
-public class RecipeIngredient{
-    Ingredient originalIngredient;
-    double amount;
-    Ingredient newIngredient;
+public class RecipeIngredient extends Entity {
+    final private Recipe recipe;
+    final private Ingredient ingredient;
+    private Unit unit;
+    private double amount;
 
     @JsonCreator
-    public RecipeIngredient(@JsonProperty("name") String name,
-                            @JsonProperty("calories") double calories,
+    public RecipeIngredient(@JsonProperty("guid") String guid,
+                            @JsonProperty("recipe") Recipe recipe,
+                            @JsonProperty("ingredient") Ingredient ingredient,
                             @JsonProperty("unit") Unit unit,
                             @JsonProperty("amount") double amount) {
-        this.originalIngredient = new Ingredient(name, calories, unit);
-        this.newIngredient = this.originalIngredient;
+        super(guid);
+        this.recipe = Objects.requireNonNull(recipe);
+        this.ingredient = Objects.requireNonNull(ingredient);
+        this.unit = Objects.requireNonNull(unit);
         this.amount = amount;
     }
 
-    public RecipeIngredient(String name, double calories, Unit unit, double amount, Ingredient originalIngredient) {
-        this.newIngredient = new Ingredient(name, calories, unit);
-        this.originalIngredient = Objects.requireNonNull(originalIngredient) ;
+    public RecipeIngredient(Recipe recipe, Ingredient ingredient, Unit unit, double amount) {
+        Objects.requireNonNull(recipe.getGuid());
+        Objects.requireNonNull(ingredient.getGuid());
+        this.recipe = Objects.requireNonNull(recipe);
+        this.ingredient = Objects.requireNonNull(ingredient);
+        this.unit = Objects.requireNonNull(unit);
         this.amount = amount;
+    }
+
+    public double getCaloriesPerSetAmount(Unit inUnit, double inCalories) {
+        return inCalories * (amount * unit.getConversionToBase()) / inUnit.getConversionToBase();
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
     }
 
     public double getAmount() {
         return amount;
     }
 
-    public double getCaloriesPerSetAmount() {
-        return newIngredient.getCalories() * (amount * newIngredient.getUnit().getConversionToBase()) / newIngredient.getUnit().getConversionToBase();
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
-
-    public String getName() {
-        return newIngredient.getName();
-    }
-
-    public double getCalories() {
-        return newIngredient.getCalories();
-    }
-
-    public Unit getUnit() {
-        return newIngredient.getUnit();
-    }
-
     @Override
     public String toString() {
-        return String.format("RecipeIngredient{name: %s; caloriesPerSet: %.2f; unit: %s; amount: %.2f}",
-                newIngredient.getName(), this.getCaloriesPerSetAmount(), newIngredient.getUnit().getName(), amount);
+        return String.format("RecipeIngredient{guid: %s; recipeGuid: %s; ingredientGuid: %s; unit: %s; amount: %.2f}",
+                getGuid(), recipe.getGuid(), ingredient.getGuid(), unit.getName(), amount);
     }
 }

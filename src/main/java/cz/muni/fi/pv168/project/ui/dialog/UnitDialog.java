@@ -6,8 +6,8 @@ import cz.muni.fi.pv168.project.ui.model.enums.UnitType;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import java.time.DateTimeException;
 
 public class UnitDialog extends EntityDialog<Unit> {
     private final JTextField nameField = new JTextField();
@@ -40,7 +40,8 @@ public class UnitDialog extends EntityDialog<Unit> {
         unit.setType((UnitType) typeField.getSelectedItem());
         try{
             unit.setConversionToBase(Double.parseDouble(baseField.getText()));
-        } catch (DateTimeException | NumberFormatException e){
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this, e.getMessage());
             return null;
         }
         return unit;

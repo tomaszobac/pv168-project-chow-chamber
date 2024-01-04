@@ -1,6 +1,7 @@
 package cz.muni.fi.pv168.project.ui.action;
 
 import cz.muni.fi.pv168.project.business.service.import_export.ExportService;
+import cz.muni.fi.pv168.project.business.service.import_export.GenericExportService;
 import cz.muni.fi.pv168.project.ui.resources.Icons;
 import cz.muni.fi.pv168.project.ui.workers.AsyncExporter;
 import cz.muni.fi.pv168.project.util.Filter;
@@ -21,7 +22,7 @@ public class ExportAction extends AbstractAction {
     public ExportAction(Component parent, ExportService exportService) {
         super("Export", Icons.EXPORT_ICON);
         this.exporter = new AsyncExporter(
-                exportService,
+                (GenericExportService) exportService,
                 () -> JOptionPane.showMessageDialog(parent, "Export has successfully finished."));
 
 

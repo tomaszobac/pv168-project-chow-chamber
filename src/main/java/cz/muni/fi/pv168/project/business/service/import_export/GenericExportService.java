@@ -52,6 +52,11 @@ public class GenericExportService implements ExportService {
         exporter.exportBatch(batch, filePath);
     }
 
+    public Integer getExportEntitiesCount() {
+        return recipeCrudService.findAll().size() + unitCrudService.findAll().size() +
+                ingredientCrudService.findAll().size() + recipeIngredientCrudService.findAll().size();
+    }
+
     private BatchExporter getExporter(String filePath) {
         var extension = filePath.substring(filePath.lastIndexOf('.') + 1);
         var importer = exporters.findByExtension(extension);

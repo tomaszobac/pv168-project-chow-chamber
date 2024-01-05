@@ -35,6 +35,10 @@ public class AsyncExporter {
         return exportService.getFormats();
     }
 
+    public JProgressBar getProgressBar() {
+        return progressBar;
+    }
+
     public void exportData(String filePath) {
         JFrame progressBarWindow = new JFrame("Progress");
         progressBarWindow.setMinimumSize(new Dimension(400, 100));

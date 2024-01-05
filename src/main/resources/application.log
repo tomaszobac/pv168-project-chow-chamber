@@ -1,0 +1,2 @@
+2024-01-05 21:13:30 [main] cz.muni.fi.pv168.project.storage.sql.db.DatabaseManager.createDbFileSystemPath()
+DEBUG: Root directory for the database already exists: C:\Users\Tom\Documents\pv168-project-template\db

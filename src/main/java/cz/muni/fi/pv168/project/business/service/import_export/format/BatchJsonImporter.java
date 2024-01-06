@@ -27,13 +27,10 @@ public class BatchJsonImporter implements BatchImporter {
             objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             return objectMapper.readValue(new File(filePath), Batch.class);
         } catch (JsonParseException e) {
-            // Handle issues related to file reading
             throw new RuntimeException("Error parsing JSON in the file: " + filePath, e);
         } catch (JsonMappingException e) {
-            // Handle issues related to JSON parsing
             throw new RuntimeException("Error mapping JSON to Java objects in the file: " + filePath, e);
         } catch (IOException e) {
-            // Handle issues related to JSON mapping
             throw new RuntimeException("Error reading the file: " + filePath, e);
         }
     }

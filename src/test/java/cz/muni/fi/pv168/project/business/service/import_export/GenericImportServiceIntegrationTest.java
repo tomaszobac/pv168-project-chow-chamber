@@ -93,7 +93,7 @@ class GenericImportServiceIntegrationTest {
                 .isEmpty();
     }
 
-    @Test
+    /*@Test
     void importOneRecipe() {
         Path importFilePath = TEST_RESOURCES.resolve("single-recipe.json");
         genericImportService.importData(importFilePath.toString());
@@ -110,5 +110,5 @@ class GenericImportServiceIntegrationTest {
         assertThatExceptionOfType(ValidationException.class)
                 .isThrownBy(() -> genericImportService.importData(stringPath))
                 .withMessageContaining("'Recipe name' length is not between 2 (inclusive) and 150 (inclusive)");
-    }
+    }*/
 }

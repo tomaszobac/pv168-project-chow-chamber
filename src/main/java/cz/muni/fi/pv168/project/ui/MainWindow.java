@@ -68,7 +68,7 @@ public class MainWindow {
     private final Action clearFilterIngredientAction;
     private final Action clearFilterUnitAction;
     private JToolBar toolbar;
-    private JMenuBar menubar;
+    private final JMenuBar menubar;
     private final RecipeTable recipeTable;
     private final UnitTable unitTable;
     private final IngredientsTable ingredientTable;
@@ -131,7 +131,7 @@ public class MainWindow {
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);
         deleteAction = new DeleteRecipeAction(recipeTable);
 
-        importAction = new ImportAction(dependencyProvider.getImportService(), this::refresh);
+        importAction = new ImportAction(recipeTable, dependencyProvider.getImportService(), this::refresh);
         exportAction = new ExportAction(recipeTable, dependencyProvider.getExportService());
 
         clearFilterRecipeAction = new ClearFilterRecipeAction(recipeTableFilter);
@@ -245,7 +245,7 @@ public class MainWindow {
         JMenu dataMenu = new JMenu("Data");
         dataMenu.setMnemonic('d');
 
-        list.add(new ImportAction(dependencyProvider.getImportService(), this::refresh));
+        list.add(new ImportAction(recipeTable, dependencyProvider.getImportService(), this::refresh));
         list.add(new ExportAction(recipeTable, dependencyProvider.getExportService()));
 
         addToMenu(list, dataMenu, List.of());

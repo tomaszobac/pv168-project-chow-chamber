@@ -1,2 +1,24 @@
-2024-01-05 21:13:30 [main] cz.muni.fi.pv168.project.storage.sql.db.DatabaseManager.createDbFileSystemPath()
+2024-01-06 20:17:00 [AWT-EventQueue-0] cz.muni.fi.pv168.project.storage.sql.db.DatabaseManager.createDbFileSystemPath()
 DEBUG: Root directory for the database already exists: C:\Users\Tom\Documents\pv168-project-template\db
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: d051d017-a9c8-475a-b7c6-d1690321b91b; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: cb2353df-00d4-46ee-a7d3-aca13aaaf707; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: b086ef56-3434-43e3-82f3-a4e9dcf3b3c9; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 10e64361-5a13-4cef-93f6-e57738e88110; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 0c5f2729-0d3a-4800-bad2-cf7d99eb9b32; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 5748ea1f-80ac-418f-abb9-4d3d0d15117c; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 2272f8f3-0b05-4d92-9b5a-7ea0e30f04c0; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 807a099b-a650-4285-b111-1f2f7b264663; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: f51daeeb-ea91-467a-ab78-7e4fcaabec99; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 785e202f-98df-4815-bfa1-82097e6f7864; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}
+2024-01-06 20:17:17 [SwingWorker-pool-2-thread-1] cz.muni.fi.pv168.project.business.service.crud.RecipeCrudService.create()
+INFO: Created new recipe: Recipe{guid: 2e4a790b-84a0-4a37-bc30-d64df994fcd0; category: Příloha; name: Vomáčka2; time: 00:10; portions: 4}

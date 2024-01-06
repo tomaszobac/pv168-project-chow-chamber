@@ -1,48 +1,40 @@
 package cz.muni.fi.pv168.project.ui.workers;
 
-import cz.muni.fi.pv168.project.business.service.import_export.GenericExportService;
+import cz.muni.fi.pv168.project.business.service.import_export.ImportService;
 import cz.muni.fi.pv168.project.business.service.import_export.format.Format;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JProgressBar;
-import javax.swing.SwingWorker;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Collection;
 import java.util.Objects;
-
 import java.util.concurrent.TimeUnit;
 
-
-/**
- * Implementation of asynchronous exporter for UI.
- */
-public class AsyncExporter {
-
-    private final GenericExportService exportService;
+public class AsyncImporter {
+    private final Component parent;
+    private final ImportService importService;
     private final Runnable onFinish;
     private final JProgressBar progressBar = new JProgressBar();
 
 
-    public AsyncExporter(GenericExportService exportService, Runnable onFinish) {
-        this.exportService = Objects.requireNonNull(exportService);
+    public AsyncImporter(Component parent, ImportService importService, Runnable onFinish) {
+        this.parent = parent;
+        this.importService = Objects.requireNonNull(importService);
         this.onFinish = onFinish;
     }
 
     public Collection<Format> getFormats() {
-        return exportService.getFormats();
+        return importService.getFormats();
     }
 
     public JProgressBar getProgressBar() {
         return progressBar;
     }
 
-    public void exportData(String filePath) {
+    public void importData(String filePath) {
         JFrame progressBarWindow = new JFrame("Progress");
-        progressBarWindow.setMinimumSize(new Dimension(400, 100));
-        progressBarWindow.setMaximumSize(new Dimension(400, 100));
+        progressBarWindow.setUndecorated(true);
+        progressBarWindow.setMinimumSize(new Dimension(150, 50));
+        progressBarWindow.setMaximumSize(new Dimension(150, 50));
         progressBarWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -56,13 +48,12 @@ public class AsyncExporter {
         JButton cancelButton = new JButton("Cancel");
         progressBarWindow.add(cancelButton, BorderLayout.SOUTH);
 
-        progressBar.setValue(0);
+        progressBar.setIndeterminate(true);
 
         var asyncWorker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
-                progressBar.setValue(exportService.getExportEntitiesCount());
-                exportService.exportData(filePath);
+                importService.importData(filePath);
                 return null;
             }
 
@@ -70,7 +61,8 @@ public class AsyncExporter {
             protected void done() {
                 super.done();
                 cancelButton.setEnabled(false);
-                progressBar.setValue(0);
+                progressBar.setIndeterminate(false);
+                JOptionPane.showMessageDialog(parent, "Import has successfully finished.");
                 onFinish.run();
                 progressBarWindow.dispose();
             }
@@ -78,13 +70,8 @@ public class AsyncExporter {
 
         cancelButton.addActionListener(e -> {
             asyncWorker.cancel(true);
+            progressBar.setIndeterminate(false);
             progressBarWindow.dispose();
-        });
-
-        asyncWorker.addPropertyChangeListener(evt -> {
-            if ("progress".equals(evt.getPropertyName()) && !asyncWorker.isCancelled()) {
-                progressBar.setValue((Integer) evt.getNewValue());
-            }
         });
 
         progressBarWindow.pack();
@@ -92,4 +79,3 @@ public class AsyncExporter {
         asyncWorker.execute();
     }
 }
-

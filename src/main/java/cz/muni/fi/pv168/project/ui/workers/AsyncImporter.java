@@ -26,10 +26,6 @@ public class AsyncImporter {
         return importService.getFormats();
     }
 
-    public JProgressBar getProgressBar() {
-        return progressBar;
-    }
-
     public void importData(String filePath) {
         JFrame progressBarWindow = new JFrame("Progress");
         progressBarWindow.setUndecorated(true);

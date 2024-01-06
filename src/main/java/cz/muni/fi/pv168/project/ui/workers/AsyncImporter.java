@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class AsyncImporter {
     private final Component parent;

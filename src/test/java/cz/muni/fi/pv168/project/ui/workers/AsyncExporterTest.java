@@ -24,11 +24,10 @@ public class AsyncExporterTest {
     @Mock
     private GenericExportService mockExportService;
     private AsyncExporter asyncExporter;
-    private Runnable onFinishRunnable;
 
     @Before
     public void setUp() {
-        onFinishRunnable = mock(Runnable.class);
+        Runnable onFinishRunnable = mock(Runnable.class);
         mockExportService = mock(GenericExportService.class);
         asyncExporter = new AsyncExporter(mockExportService, onFinishRunnable);
     }

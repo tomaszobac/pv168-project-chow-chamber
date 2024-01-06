@@ -13,8 +13,6 @@ import java.awt.Toolkit;
 import java.util.Collection;
 import java.util.Objects;
 
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * Implementation of asynchronous exporter for UI.

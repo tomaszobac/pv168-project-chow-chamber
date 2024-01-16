@@ -45,9 +45,11 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
             ingredient.setName(nameField.getText());
             ingredient.setCalories(Double.parseDouble(caloryField.getText()));
             ingredient.setUnit((Unit) unitComboBox.getSelectedItem());
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException | NullPointerException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
             return null;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An error has occured");
         }
         return ingredient;
     }

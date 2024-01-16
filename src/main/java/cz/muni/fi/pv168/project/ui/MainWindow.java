@@ -225,8 +225,8 @@ public class MainWindow {
     private JMenuBar createMenuBar(DependencyProvider dependencyProvider) {
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu editMenu = new JMenu("Edit");
-        editMenu.setMnemonic('e');
+        JMenu menuMenu = new JMenu("Menu");
+        menuMenu.setMnemonic('m');
 
         ArrayList<AbstractAction> list = new ArrayList<>();
         list.add(new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter));
@@ -239,7 +239,7 @@ public class MainWindow {
                                             clearFilterRecipeAction, clearFilterIngredientAction, clearFilterUnitAction));
         list.add(new QuitAction());
 
-        addToMenu(list, editMenu, List.of(2,5,6));
+        addToMenu(list, menuMenu, List.of(2,5,6));
         list.clear();
 
         JMenu dataMenu = new JMenu("Data");
@@ -250,7 +250,7 @@ public class MainWindow {
 
         addToMenu(list, dataMenu, List.of());
 
-        menuBar.add(editMenu);
+        menuBar.add(menuMenu);
         menuBar.add(dataMenu);
         return menuBar;
     }

@@ -16,20 +16,26 @@ public class RecipeIngredient extends Entity {
                             @JsonProperty("recipe") Recipe recipe,
                             @JsonProperty("ingredient") Ingredient ingredient,
                             @JsonProperty("unit") Unit unit,
-                            @JsonProperty("amount") double amount) {
+                            @JsonProperty("amount") double amount) throws NumberFormatException {
         super(guid);
         this.recipe = Objects.requireNonNull(recipe);
         this.ingredient = Objects.requireNonNull(ingredient);
         this.unit = Objects.requireNonNull(unit);
+        if (amount <= 0) {
+            throw new NumberFormatException("Amount must be more than 0");
+        }
         this.amount = amount;
     }
 
-    public RecipeIngredient(Recipe recipe, Ingredient ingredient, Unit unit, double amount) {
+    public RecipeIngredient(Recipe recipe, Ingredient ingredient, Unit unit, double amount) throws NumberFormatException {
         Objects.requireNonNull(recipe.getGuid());
         Objects.requireNonNull(ingredient.getGuid());
         this.recipe = Objects.requireNonNull(recipe);
         this.ingredient = Objects.requireNonNull(ingredient);
         this.unit = Objects.requireNonNull(unit);
+        if (amount <= 0) {
+            throw new NumberFormatException("Amount must be more than 0");
+        }
         this.amount = amount;
     }
 
@@ -57,7 +63,10 @@ public class RecipeIngredient extends Entity {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(double amount) throws NumberFormatException {
+        if (amount <= 0) {
+            throw new NumberFormatException("Amount must be more than 0");
+        }
         this.amount = amount;
     }
     @Override

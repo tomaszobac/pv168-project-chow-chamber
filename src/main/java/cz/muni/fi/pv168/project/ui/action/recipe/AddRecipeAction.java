@@ -42,8 +42,8 @@ public class AddRecipeAction extends AbstractAction {
         Recipe recipe = createPrefilledRecipe();
         recipeTableModel.addRowNoRefresh(recipe);
         var dialog = new RecipeDialog(recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
-        dialog.show(recipeTable, "Add recipe");
-        if (!dialog.getReturnedOK()) {
+        var result = dialog.show(recipeTable, "Add recipe");
+        if (!dialog.getReturnedOK() || result.isEmpty()) {
             clearAddedRecipeIngredients(recipe);
             deleteNewRecipe(recipeTableModel, recipe);
         } else {

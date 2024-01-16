@@ -28,6 +28,8 @@ public class Recipe extends Entity implements Serializable {
      * @param time         The cooking time of the recipe.
      * @param portions     The number of portions the recipe yields.
      * @param instructions The cooking instructions for the recipe.
+     *
+     * @throws NumberFormatException Portions were less or equal to 0.
      */
     @JsonCreator
     public Recipe(@JsonProperty("guid") String guid,
@@ -35,11 +37,14 @@ public class Recipe extends Entity implements Serializable {
                   @JsonProperty("category") RecipeCategory category,
                   @JsonProperty("time") LocalTime time,
                   @JsonProperty("portions") int portions,
-                  @JsonProperty("instructions") String instructions) {
+                  @JsonProperty("instructions") String instructions) throws NumberFormatException {
         super(guid);
         this.name = Objects.requireNonNull(name, "name must not be null");
         this.category = Objects.requireNonNull(category, "category must not be null");
         this.time = Objects.requireNonNull(time, "time must not be null");
+        if (portions <= 0) {
+            throw new NumberFormatException("Portions must be bigger than 0.");
+        }
         this.portions = portions;
         this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
     }
@@ -57,6 +62,9 @@ public class Recipe extends Entity implements Serializable {
         this.name = Objects.requireNonNull(name, "name must not be null");
         this.category = Objects.requireNonNull(category, "category must not be null");
         this.time = Objects.requireNonNull(time, "time must not be null");
+        if (portions <= 0) {
+            throw new NumberFormatException("Portions must be bigger than 0.");
+        }
         this.portions = portions;
         this.instructions = Objects.requireNonNull(instructions, "instructions must not be null");
     }
@@ -141,7 +149,10 @@ public class Recipe extends Entity implements Serializable {
      *
      * @param portions the number of portions
      */
-    public void setPortions(int portions) {
+    public void setPortions(int portions) throws NumberFormatException {
+        if (portions <= 0) {
+            throw new NumberFormatException("Portions must be bigger than 0.");
+        }
         this.portions = portions;
     }
 

@@ -16,6 +16,6 @@ public class RecipeLocalTimeMatcher extends EntityMatcher<Recipe> {
 
     @Override
     public boolean evaluate(Recipe recipe) {
-        return this.timeFrom.compareTo(recipe.getTime()) <= 0 && this.timeTo.compareTo(recipe.getTime()) >= 0;
+        return !this.timeFrom.isAfter(recipe.getTime()) && !this.timeTo.isBefore(recipe.getTime());
     }
 }

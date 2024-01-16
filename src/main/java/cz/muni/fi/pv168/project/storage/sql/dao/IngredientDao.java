@@ -42,7 +42,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      * @throws DataStorageException if an error occurs while storing the ingredient
      */
     @Override
-    public IngredientEntity create(IngredientEntity newIngredient) {
+    public IngredientEntity create(IngredientEntity newIngredient) throws DataStorageException {
         var sql = "INSERT INTO Ingredient (guid, name, calories, unitGuid) VALUES (?, ?, ?, ?);";
 
         try (
@@ -81,7 +81,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      * @throws DataStorageException if there is an error retrieving the ingredients from the database
      */
     @Override
-    public Collection<IngredientEntity> findAll() {
+    public Collection<IngredientEntity> findAll() throws DataStorageException {
         var sql = """
                 SELECT id, guid, name, calories, unitGuid
                 FROM Ingredient
@@ -112,7 +112,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      * @throws DataStorageException if there is an error retrieving the ingredient
      */
     @Override
-    public Optional<IngredientEntity> findById(long id) {
+    public Optional<IngredientEntity> findById(long id) throws DataStorageException {
         var sql = """
                 SELECT id, guid, name, calories, unitGuid
                 FROM Ingredient
@@ -142,7 +142,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      * @throws DataStorageException if there was an error accessing the data storage
      */
     @Override
-    public Optional<IngredientEntity> findByGuid(String guid) {
+    public Optional<IngredientEntity> findByGuid(String guid) throws DataStorageException {
         var sql = """
                 SELECT id, guid, name, calories, unitGuid
                 FROM Ingredient
@@ -173,7 +173,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      * @throws DataStorageException if there is an error updating the ingredient
      */
     @Override
-    public IngredientEntity update(IngredientEntity entity) {
+    public IngredientEntity update(IngredientEntity entity) throws DataStorageException {
         var sql = """
                 UPDATE Ingredient
                 SET guid = ?,
@@ -211,10 +211,9 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      *
      * @param guid The GUID of the ingredient to be deleted.
      * @throws DataStorageException If the ingredient is not found or if more than one ingredient is deleted.
-     * @throws SQLException If there is an error executing the SQL statement.
      */
     @Override
-    public void deleteByGuid(String guid) {
+    public void deleteByGuid(String guid) throws DataStorageException {
         var sql = """
                 DELETE FROM Ingredient
                 WHERE guid = ?
@@ -246,7 +245,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      * @throws DataStorageException if there is an error in the data storage or database operation
      */
     @Override
-    public void deleteAll() {
+    public void deleteAll() throws DataStorageException {
         var sql = "DELETE FROM Ingredient";
         try (
                 var connection = connections.get();
@@ -266,7 +265,7 @@ public final class IngredientDao implements DataAccessObject<IngredientEntity> {
      * @throws DataStorageException If an error occurs while checking the existence of the ingredient.
      */
     @Override
-    public boolean existsByGuid(String guid) {
+    public boolean existsByGuid(String guid) throws DataStorageException {
         var sql = """
                 SELECT id
                 FROM Ingredient

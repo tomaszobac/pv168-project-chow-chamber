@@ -53,7 +53,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      * @throws DataStorageException if an error occurs while storing the recipeIngredient
      */
     @Override
-    public RecipeIngredientEntity create(RecipeIngredientEntity newRecipeIngredient) {
+    public RecipeIngredientEntity create(RecipeIngredientEntity newRecipeIngredient) throws DataStorageException {
         var sql = "INSERT INTO RecipeIngredient (guid, recipeGuid, ingredientGuid, unitGuid, amount) VALUES (?, ?, ?, ?, ?);";
 
         try (
@@ -93,7 +93,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      * @throws DataStorageException if there is an error retrieving the recipeIngredients from the database
      */
     @Override
-    public Collection<RecipeIngredientEntity> findAll() {
+    public Collection<RecipeIngredientEntity> findAll() throws DataStorageException {
         var sql = """
                 SELECT id, guid, recipeGuid, ingredientGuid, unitGuid, amount
                 FROM RecipeIngredient
@@ -124,7 +124,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      * @throws DataStorageException if there is an error retrieving the recipeIngredient
      */
     @Override
-    public Optional<RecipeIngredientEntity> findById(long id) {
+    public Optional<RecipeIngredientEntity> findById(long id) throws DataStorageException {
         var sql = """
                 SELECT id, guid, recipeGuid, ingredientGuid, unitGuid, amount
                 FROM RecipeIngredient
@@ -154,7 +154,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      * @throws DataStorageException if there was an error accessing the data storage
      */
     @Override
-    public Optional<RecipeIngredientEntity> findByGuid(String guid) {
+    public Optional<RecipeIngredientEntity> findByGuid(String guid) throws DataStorageException {
         var sql = """
                 SELECT id, guid, recipeGuid, ingredientGuid, unitGuid, amount
                 FROM RecipeIngredient
@@ -185,7 +185,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      * @throws DataStorageException if there is an error updating the recipeIngredient
      */
     @Override
-    public RecipeIngredientEntity update(RecipeIngredientEntity entity) {
+    public RecipeIngredientEntity update(RecipeIngredientEntity entity) throws DataStorageException {
         var sql = """
                 UPDATE RecipeIngredient
                 SET recipeGuid = ?,
@@ -223,10 +223,9 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      *
      * @param guid The GUID of the recipeIngredient to be deleted.
      * @throws DataStorageException If the recipeIngredient is not found or if more than one recipeIngredient is deleted.
-     * @throws SQLException If there is an error executing the SQL statement.
      */
     @Override
-    public void deleteByGuid(String guid) {
+    public void deleteByGuid(String guid) throws DataStorageException {
         var sql = """
                 DELETE FROM RecipeIngredient
                 WHERE guid = ?
@@ -255,7 +254,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      * @throws DataStorageException if there is an error in the data storage or database operation
      */
     @Override
-    public void deleteAll() {
+    public void deleteAll() throws DataStorageException {
         var sql = "DELETE FROM RecipeIngredient";
         try (
                 var connection = connections.get();
@@ -275,7 +274,7 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
      * @throws DataStorageException If an error occurs while checking the existence of the recipeIngredient.
      */
     @Override
-    public boolean existsByGuid(String guid) {
+    public boolean existsByGuid(String guid) throws DataStorageException {
         var sql = """
                 SELECT id
                 FROM RecipeIngredient

@@ -65,8 +65,6 @@ public class RecipeTable extends MyTable<Recipe> {
         infoFrame.add(infoTabs);
         infoFrame.pack();
         infoFrame.setVisible(true);
-
-
     }
 
     private JPanel createInstructionsTab(GridBagConstraints gbc, Recipe recipe) {
@@ -88,8 +86,6 @@ public class RecipeTable extends MyTable<Recipe> {
 
     private JPanel createIngredientsTab(GridBagConstraints gbc, JTable table, Recipe recipe) {
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
-
-
 
         var model = (RecipeIngredientsTableModel) table.getModel();
         var rowSorter = new TableRowSorter<>(model);

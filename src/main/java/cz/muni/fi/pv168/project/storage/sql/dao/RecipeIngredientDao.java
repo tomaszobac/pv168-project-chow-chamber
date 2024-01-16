@@ -30,7 +30,6 @@ public final class RecipeIngredientDao implements DataAccessObject<RecipeIngredi
     private final IngredientDao ingredientDao;
     private final UnitDao unitDao;
 
-
     /**
      * Constructs a new RecipeIngredientDao object with the given Supplier of ConnectionHandler.
      *

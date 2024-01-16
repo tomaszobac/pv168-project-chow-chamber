@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Objects;
 
-
 /**
  * Represents a Recipe entity.
  * Extends the Entity class.

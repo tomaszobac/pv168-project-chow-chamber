@@ -25,7 +25,6 @@ public class ExportAction extends AbstractAction {
                 (GenericExportService) exportService,
                 () -> JOptionPane.showMessageDialog(parent, "Export has successfully finished."));
 
-
         putValue(SHORT_DESCRIPTION, "Exports data");
         putValue(MNEMONIC_KEY, KeyEvent.VK_E);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl E"));

@@ -64,5 +64,3 @@ public final class RecipeIngredientCrudService implements CrudService<RecipeIngr
         recipeIngredientRepository.deleteAll();
     }
 }
-
-

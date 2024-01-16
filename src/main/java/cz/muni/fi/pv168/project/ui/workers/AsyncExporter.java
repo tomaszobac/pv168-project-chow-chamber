@@ -13,7 +13,6 @@ import java.awt.Toolkit;
 import java.util.Collection;
 import java.util.Objects;
 
-
 /**
  * Implementation of asynchronous exporter for UI.
  */
@@ -22,7 +21,6 @@ public class AsyncExporter {
     private final GenericExportService exportService;
     private final Runnable onFinish;
     private final JProgressBar progressBar = new JProgressBar();
-
 
     public AsyncExporter(GenericExportService exportService, Runnable onFinish) {
         this.exportService = Objects.requireNonNull(exportService);

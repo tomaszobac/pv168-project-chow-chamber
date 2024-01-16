@@ -3,8 +3,15 @@ package cz.muni.fi.pv168.project.ui.workers;
 import cz.muni.fi.pv168.project.business.service.import_export.ImportService;
 import cz.muni.fi.pv168.project.business.service.import_export.format.Format;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -13,7 +20,6 @@ public class AsyncImporter {
     private final ImportService importService;
     private final Runnable onFinish;
     private final JProgressBar progressBar = new JProgressBar();
-
 
     public AsyncImporter(Component parent, ImportService importService, Runnable onFinish) {
         this.parent = parent;

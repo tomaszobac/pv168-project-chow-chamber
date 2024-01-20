@@ -24,6 +24,7 @@ import cz.muni.fi.pv168.project.ui.filters.IngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.RecipeTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.UnitTableFilter;
+import cz.muni.fi.pv168.project.ui.listeners.OutsideOfBoundsListener;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
@@ -142,11 +143,20 @@ public class MainWindow {
         filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterRecipeAction);
         convertAction = new ConvertAction(unitTable);
 
+        JScrollPane recipeJSP = new JScrollPane(recipeTable);
+        recipeJSP.addMouseListener(new OutsideOfBoundsListener(recipeTable));
+
+        JScrollPane unitJSP = new JScrollPane(unitTable);
+        unitJSP.addMouseListener(new OutsideOfBoundsListener(unitTable));
+
+        JScrollPane ingredientJSP = new JScrollPane(ingredientTable);
+        unitJSP.addMouseListener(new OutsideOfBoundsListener(ingredientTable));
+
         JTabbedPane mainFrameTabs = new JTabbedPane();
         mainFrameTabs.setOpaque(true);
-        mainFrameTabs.addTab("<html><b>Recipes</b></html>", new JScrollPane(recipeTable));
-        mainFrameTabs.addTab("<html><b>Units</b></html>", new JScrollPane(unitTable));
-        mainFrameTabs.addTab("<html><b>Ingredients</b></html>", new JScrollPane(ingredientTable));
+        mainFrameTabs.addTab("<html><b>Recipes</b></html>", recipeJSP);
+        mainFrameTabs.addTab("<html><b>Units</b></html>", unitJSP);
+        mainFrameTabs.addTab("<html><b>Ingredients</b></html>", ingredientJSP);
         mainFrame.add(mainFrameTabs, BorderLayout.CENTER);
 
         this.toolbar = createToolbar();

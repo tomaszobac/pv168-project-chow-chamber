@@ -1,7 +1,7 @@
 package cz.muni.fi.pv168.project.ui.listeners;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JTable;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

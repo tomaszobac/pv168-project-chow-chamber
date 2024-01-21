@@ -17,7 +17,7 @@ public interface ImportService {
      *
      * @throws BatchOperationException if the import cannot be done
      */
-    void importData(String filePath);
+    void importData(String filePath, boolean rewrite);
 
     /**
      * Gets all available formats for import.

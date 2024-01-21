@@ -40,12 +40,13 @@ public class GenericImportService implements ImportService {
     }
 
     @Override
-    public void importData(String filePath) {
-        recipeIngredientCrudService.deleteAll();
-        recipeCrudService.deleteAll();
-        ingredientCrudService.deleteAll();
-        unitCrudService.deleteAll();
-
+    public void importData(String filePath, boolean rewrite) {
+        if (rewrite){
+            recipeIngredientCrudService.deleteAll();
+            recipeCrudService.deleteAll();
+            ingredientCrudService.deleteAll();
+            unitCrudService.deleteAll();
+        }
         BatchJsonImporter batchJsonImporter = new BatchJsonImporter();
         Batch batch = batchJsonImporter.importBatch(
                 Objects.requireNonNullElse(filePath, "src/main/resources/database.json"));

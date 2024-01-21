@@ -8,6 +8,7 @@ import cz.muni.fi.pv168.project.util.Filter;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
+import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -41,8 +42,18 @@ public class ImportAction extends AbstractAction {
             if (filter instanceof Filter) {
                 importFile = ((Filter) filter).decorate(importFile);
             }
-
-            importer.importData(importFile);
+            Object[] options = {"Keep", "Keep and Import", "Import"};
+            int confirmResult = JOptionPane.showOptionDialog(null,
+                    "What would you like to do with the file?\n" + importFile,
+                    "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+            if (confirmResult == JOptionPane.NO_OPTION) {
+                // User chose "Keep and Import"
+                importer.importData(importFile, false);
+            } else if (confirmResult == JOptionPane.CANCEL_OPTION) {
+                // User chose "Import"
+                importer.importData(importFile, true);
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ public class AsyncImporter {
         return importService.getFormats();
     }
 
-    public void importData(String filePath) {
+    public void importData(String filePath, boolean rewrite) {
         JFrame progressBarWindow = new JFrame("Progress");
         progressBarWindow.setUndecorated(true);
         progressBarWindow.setMinimumSize(new Dimension(150, 50));
@@ -54,7 +54,7 @@ public class AsyncImporter {
         var asyncWorker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
-                importService.importData(filePath);
+                importService.importData(filePath, rewrite);
                 return null;
             }
 

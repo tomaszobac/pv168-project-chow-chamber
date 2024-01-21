@@ -17,8 +17,8 @@ public class TransactionalImportService implements ImportService {
     }
 
     @Override
-    public void importData(String filePath) {
-        transactionExecutor.executeInTransaction(() -> importService.importData(filePath));
+    public void importData(String filePath, boolean rewrite) {
+        transactionExecutor.executeInTransaction(() -> importService.importData(filePath, rewrite));
     }
 
     @Override

@@ -62,7 +62,7 @@ class GenericImportServiceIntegrationTest {
     @Test
     void importNoRecipes() {
         Path importFilePath = TEST_RESOURCES.resolve("empty.json");
-        genericImportService.importData(importFilePath.toString());
+        genericImportService.importData(importFilePath.toString(), true);
 
         assertThat(recipeCrudService.findAll())
                 .isEmpty();

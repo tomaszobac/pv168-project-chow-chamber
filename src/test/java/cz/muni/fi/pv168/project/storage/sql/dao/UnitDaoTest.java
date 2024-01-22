@@ -94,9 +94,6 @@ class UnitDaoTest {
 
         Collection<UnitEntity> units = unitDao.findAll();
         assertEquals(2, units.size());
-        for(UnitEntity u : units) {
-           System.out.println(u.toString());
-        }
         assertTrue(units.stream().anyMatch(u -> u.guid().equals(unit1.guid())));
         assertTrue(units.stream().anyMatch(u -> u.guid().equals(unit2.guid())));
     }

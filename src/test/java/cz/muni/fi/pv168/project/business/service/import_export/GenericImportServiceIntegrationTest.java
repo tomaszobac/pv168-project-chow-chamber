@@ -67,23 +67,4 @@ class GenericImportServiceIntegrationTest {
         assertThat(recipeCrudService.findAll())
                 .isEmpty();
     }
-
-    /*@Test
-    void importOneRecipe() {
-        Path importFilePath = TEST_RESOURCES.resolve("single-recipe.json");
-        genericImportService.importData(importFilePath.toString());
-
-        assertThat(recipeCrudService.findAll())
-                .size().isEqualTo(1);
-    }
-
-    @Test
-    void invalidNameFails() {
-        Path importFilePath = TEST_RESOURCES.resolve("invalid-name-recipe.json");
-
-        var stringPath = importFilePath.toString();
-        assertThatExceptionOfType(ValidationException.class)
-                .isThrownBy(() -> genericImportService.importData(stringPath))
-                .withMessageContaining("'Recipe name' length is not between 2 (inclusive) and 150 (inclusive)");
-    }*/
 }

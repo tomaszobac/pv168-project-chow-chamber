@@ -1,13 +1,14 @@
 package cz.muni.fi.pv168.project.storage.sql.db;
 
 import cz.muni.fi.pv168.project.storage.sql.dao.FatalDataStorageException;
+import org.h2.jdbcx.JdbcConnectionPool;
+import org.tinylog.Logger;
+
+import javax.sql.DataSource;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import javax.sql.DataSource;
-import org.h2.jdbcx.JdbcConnectionPool;
-import org.tinylog.Logger;
 
 /**
  * The class is responsible for managing H2 database connection and schemas
@@ -35,11 +36,8 @@ public final class DatabaseManager {
 
     public static DatabaseManager createTestInstance() {
         String connectionString = "jdbc:h2:mem:%s;%s".formatted(PROJECT_NAME, DB_PROPERTIES_STRING);
-        var databaseManager = new DatabaseManager(connectionString);
-        databaseManager.initSchema();
-        databaseManager.initData("test");
-
-        return databaseManager;
+        System.out.println(connectionString);
+        return new DatabaseManager(connectionString);
     }
 
     public ConnectionHandler getConnectionHandler() {

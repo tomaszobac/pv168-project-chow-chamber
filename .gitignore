@@ -15,4 +15,6 @@ hs_err_pid*
 # Project specific
 *.db
 *.log
+*.mv
+*.mv.db
 

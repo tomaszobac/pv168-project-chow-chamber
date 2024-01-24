@@ -170,10 +170,14 @@ public class RecipeDialog extends EntityDialog<Recipe> {
     @Override
     Recipe getEntity() {
         returnedOK = true;
-        recipe.setName(nameField.getText());
-        recipe.setCategory((RecipeCategory) categoryComboBox.getSelectedItem());
-        recipe.setInstructions(instructionsArea.getText());
         try {
+            String name = nameField.getText();
+            if (name.length() > 256 || name.isBlank()) {
+                throw new IllegalArgumentException("Invalid name");
+            }
+            recipe.setName(name);
+            recipe.setCategory((RecipeCategory) categoryComboBox.getSelectedItem());
+            recipe.setInstructions(instructionsArea.getText());
             recipe.setTime(getTime(timeField));
 
             String portions = portionsField.getText();

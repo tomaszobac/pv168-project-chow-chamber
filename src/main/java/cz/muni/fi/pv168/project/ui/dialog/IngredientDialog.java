@@ -48,10 +48,14 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
     Ingredient getEntity() {
         returnedOK = true;
         try{
-            ingredient.setName(nameField.getText());
+            String name = nameField.getText();
+            if (name.length() > 256 || name.isBlank()) {
+                throw new IllegalArgumentException("Invalid name");
+            }
+            ingredient.setName(name);
             ingredient.setCalories(Double.parseDouble(caloryField.getText()));
             ingredient.setUnit((Unit) unitComboBox.getSelectedItem());
-        } catch (NumberFormatException | NullPointerException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
             return null;
         } catch (Exception e) {

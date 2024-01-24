@@ -42,11 +42,15 @@ public class UnitDialog extends EntityDialog<Unit> {
     @Override
     Unit getEntity() {
         returnedOK = true;
-        unit.setName(nameField.getText());
-        unit.setType((UnitType) typeField.getSelectedItem());
         try{
+            String name = nameField.getText();
+            if (name.length() > 256 || name.isBlank()) {
+                throw new IllegalArgumentException("Invalid name");
+            }
+            unit.setName(name);
+            unit.setType((UnitType) typeField.getSelectedItem());
             unit.setConversionToBase(Double.parseDouble(baseField.getText()));
-        } catch (NumberFormatException e){
+        } catch (IllegalArgumentException e){
             JOptionPane.showMessageDialog(this, e.getMessage());
             return null;
         }

@@ -43,7 +43,11 @@ public class EditRecipeAction extends AbstractAction {
         int modelRow = recipeTable.convertRowIndexToModel(selectedRows[0]);
         var recipe = recipeTableModel.getEntity(modelRow);
         var dialog = new RecipeDialog(recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
-        dialog.show(recipeTable, "Edit recipe")
-                .ifPresent(recipeTableModel::updateRow);
+        var result = dialog.show(recipeTable, "Edit recipe");
+        while (dialog.getReturnedOK() && result.isEmpty()) {
+            dialog = new RecipeDialog(recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
+            result = dialog.show(recipeTable, "Edit recipe");
+        }
+        result.ifPresent(recipeTableModel::updateRow);
     }
 }

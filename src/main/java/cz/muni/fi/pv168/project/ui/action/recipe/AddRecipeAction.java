@@ -43,6 +43,11 @@ public class AddRecipeAction extends AbstractAction {
         recipeTableModel.addRowNoRefresh(recipe);
         var dialog = new RecipeDialog(recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
         var result = dialog.show(recipeTable, "Add recipe");
+        while (dialog.getReturnedOK() && result.isEmpty()) {
+            dialog = new RecipeDialog(recipe, ingredientTable, unitTable, recipeIngredientsTable, filter);
+            result = dialog.show(recipeTable, "Add recipe");
+        }
+
         if (!dialog.getReturnedOK() || result.isEmpty()) {
             clearAddedRecipeIngredients(recipe);
             deleteNewRecipe(recipeTableModel, recipe);

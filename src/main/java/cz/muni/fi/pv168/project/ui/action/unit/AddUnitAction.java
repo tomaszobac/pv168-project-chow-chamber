@@ -26,8 +26,13 @@ public class AddUnitAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         var unitTableModel = (UnitTableModel) this.unitTable.getModel();
-        var dialog = new UnitDialog(new Unit("Liter", UnitType.Volume,1.0));
-        dialog.show(unitTable, "Add unit")
-                .ifPresent(unitTableModel::addRow);
+        Unit unit = new Unit("Liter", UnitType.Volume,1.0);
+        var dialog = new UnitDialog(unit);
+        var result = dialog.show(unitTable, "Add unit");
+        while (dialog.getReturnedOK() && result.isEmpty()) {
+            dialog = new UnitDialog(unit);
+            result = dialog.show(unitTable, "Add unit");
+        }
+        result.ifPresent(unitTableModel::addRow);
     }
 }

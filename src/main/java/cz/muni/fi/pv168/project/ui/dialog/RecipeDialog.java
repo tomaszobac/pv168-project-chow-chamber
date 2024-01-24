@@ -175,7 +175,12 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         recipe.setInstructions(instructionsArea.getText());
         try {
             recipe.setTime(getTime(timeField));
-            recipe.setPortions(Integer.parseInt(portionsField.getText()));
+
+            String portions = portionsField.getText();
+            if (portions.length() > 10 || (portions.length() == 10 && !portions.startsWith("1"))) {
+                throw new IllegalArgumentException("Portions number is too big. Maximum is 1999999999");
+            }
+            recipe.setPortions(Integer.parseInt(portions));
         } catch (DateTimeException | IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
             return null;

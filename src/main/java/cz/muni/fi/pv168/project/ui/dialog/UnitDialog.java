@@ -14,6 +14,7 @@ public class UnitDialog extends EntityDialog<Unit> {
     private final ComboBoxModel<UnitType> typeField = new DefaultComboBoxModel<>(UnitType.values());
     private final JTextField baseField = new JTextField();
     private final Unit unit;
+    private boolean returnedOK = false;
 
     public UnitDialog(Unit unit) {
         this.unit = unit;
@@ -34,8 +35,13 @@ public class UnitDialog extends EntityDialog<Unit> {
         add("Base:", baseField);
     }
 
+    public boolean getReturnedOK() {
+        return returnedOK;
+    }
+
     @Override
     Unit getEntity() {
+        returnedOK = true;
         unit.setName(nameField.getText());
         unit.setType((UnitType) typeField.getSelectedItem());
         try{

@@ -15,6 +15,7 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
     private final JTextField unitField = new JTextField();
     private final JComboBox<Unit> unitComboBox;
     private final Ingredient ingredient;
+    private boolean returnedOK = false;
 
     public IngredientDialog(Ingredient ingredient, JTable unitTable) {
         this.ingredient = ingredient;
@@ -39,8 +40,13 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
         add("Unit:", unitComboBox);
     }
 
+    public boolean getReturnedOK() {
+        return returnedOK;
+    }
+
     @Override
     Ingredient getEntity() {
+        returnedOK = true;
         try{
             ingredient.setName(nameField.getText());
             ingredient.setCalories(Double.parseDouble(caloryField.getText()));

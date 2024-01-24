@@ -13,6 +13,6 @@ pom.xml.versionsBackup
 hs_err_pid*
 
 # Project specific
-*.dtb
+*.db
 *.log
 

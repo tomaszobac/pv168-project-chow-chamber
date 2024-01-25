@@ -46,6 +46,7 @@ public class RecipeDialog extends EntityDialog<Recipe> {
         categoryComboBox = new JComboBox<>();
         Arrays.stream(RecipeCategory.values()).forEach(categoryComboBox::addItem);
         categoryComboBox.setRenderer(new CategoryRenderer());
+        categoryComboBox.setSelectedItem(recipe.getCategory());
 
         timeField.setText(recipe.getTime().toString());
         portionsField.setText(Integer.toString(recipe.getPortions()));
@@ -185,6 +186,9 @@ public class RecipeDialog extends EntityDialog<Recipe> {
                 throw new IllegalArgumentException("Portions number is too big. Maximum is 1999999999");
             }
             recipe.setPortions(Integer.parseInt(portions));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Incorrect format of inputted value: " + portionsField.getText());
+            return null;
         } catch (DateTimeException | IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
             return null;

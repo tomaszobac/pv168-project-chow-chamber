@@ -12,7 +12,6 @@ import javax.swing.JTextField;
 public class IngredientDialog extends EntityDialog<Ingredient> {
     private final JTextField nameField = new JTextField();
     private final JTextField caloryField = new JTextField();
-    private final JTextField unitField = new JTextField();
     private final JComboBox<Unit> unitComboBox;
     private final Ingredient ingredient;
     private boolean returnedOK = false;
@@ -31,7 +30,7 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
     private void setValues() {
         nameField.setText(ingredient.getName());
         caloryField.setText(Double.toString(ingredient.getCalories()));
-        unitField.setText(ingredient.getUnit().getName());
+        unitComboBox.setSelectedItem(ingredient.getUnit());
     }
 
     private void addFields() {

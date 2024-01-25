@@ -18,7 +18,7 @@ public class FilterIngredientAction extends AbstractAction {
 
     public FilterIngredientAction(IngredientsTable ingredientTable, IngredientTableFilter filter, Action clearFilterAction) {
         super("Filter ingredients", Icons.FILTER_ICON);
-        putValue(SHORT_DESCRIPTION, "Filters recipes");
+        putValue(SHORT_DESCRIPTION, "Filters ingredients");
         putValue(MNEMONIC_KEY, KeyEvent.VK_F);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl F"));
         this.ingredientTable = ingredientTable;

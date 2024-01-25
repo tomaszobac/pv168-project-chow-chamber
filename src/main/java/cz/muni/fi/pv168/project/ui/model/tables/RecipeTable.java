@@ -94,6 +94,7 @@ public class RecipeTable extends MyTable<Recipe> {
         newTable.setRowSorter(rowSorter);
         JScrollPane recipeIngredientsScrollPane = new JScrollPane(newTable);
         newFilter.filterGuid(recipe.getGuid());
+        MainWindowUtilities.hideFirstColumn(table);
 
         ingredientsTab.add(recipeIngredientsScrollPane, gbc);
         return ingredientsTab;

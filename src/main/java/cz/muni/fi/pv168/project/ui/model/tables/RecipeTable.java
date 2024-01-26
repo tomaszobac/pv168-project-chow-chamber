@@ -1,6 +1,7 @@
 package cz.muni.fi.pv168.project.ui.model.tables;
 
 import cz.muni.fi.pv168.project.business.model.Recipe;
+import cz.muni.fi.pv168.project.business.model.RecipeIngredient;
 import cz.muni.fi.pv168.project.ui.MainWindowUtilities;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
@@ -21,6 +22,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class RecipeTable extends MyTable<Recipe> {
 
@@ -46,7 +49,7 @@ public class RecipeTable extends MyTable<Recipe> {
 
         JTabbedPane singleRecipeInfo = new JTabbedPane();
 
-        JPanel infoPanel = createInfoPanel(recipe);
+        JPanel infoPanel = createInfoPanel(recipe, recIncTable);
         singleRecipeInfo.addTab("Basic info", null, infoPanel, "First Tab");
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -100,7 +103,18 @@ public class RecipeTable extends MyTable<Recipe> {
         return ingredientsTab;
     }
 
-    private JPanel createInfoPanel(Recipe recipe) {
+    private double getCalories(Recipe recipe, JTable table) {
+        double calories = 0;
+        for(int i = 0; i < table.getRowCount(); i++) {
+            RecipeIngredient recipeIngredient = (RecipeIngredient) table.getValueAt(i, 0);
+            if (Objects.equals(recipeIngredient.getRecipe().getGuid(), recipe.getGuid())) {
+                calories += recipeIngredient.getCaloriesPerSetAmount(recipeIngredient.getUnit(), recipeIngredient.getIngredient().getCalories());
+            }
+        }
+        return calories;
+    }
+
+    private JPanel createInfoPanel(Recipe recipe, JTable recIngTable) {
         JPanel infoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 300, 20));
         infoPanel.add(MainWindowUtilities.createLabel("Name:", 0));
@@ -111,6 +125,9 @@ public class RecipeTable extends MyTable<Recipe> {
         infoPanel.add(MainWindowUtilities.createLabel(recipe.getTime().toString(), 1));
         infoPanel.add(MainWindowUtilities.createLabel("Portions:", 0));
         infoPanel.add(MainWindowUtilities.createLabel(Integer.toString(recipe.getPortions()), 1));
+        DecimalFormat df = new DecimalFormat("0.00");
+        infoPanel.add(MainWindowUtilities.createLabel("Calories:", 0));
+        infoPanel.add(MainWindowUtilities.createLabel(df.format(getCalories(recipe, recIngTable)) + " kcal", 1));
         return infoPanel;
     }
 }

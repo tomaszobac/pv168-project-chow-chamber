@@ -33,9 +33,12 @@ public class Ingredient extends Entity implements Serializable {
     public Ingredient(@JsonProperty("guid") String guid,
                       @JsonProperty("name") String name,
                       @JsonProperty("calories") double calories,
-                      @JsonProperty("unit") Unit unit) {
+                      @JsonProperty("unit") Unit unit) throws NumberFormatException {
         super(guid);
         this.name = Objects.requireNonNull(name, "Name must not be null");
+        if (calories < 0) {
+            throw new NumberFormatException("Calories must be bigger or equal 0");
+        }
         this.calories = calories;
         this.unit = Objects.requireNonNull(unit, "Unit must not be null");
     }
@@ -47,8 +50,11 @@ public class Ingredient extends Entity implements Serializable {
      * @param calories the number of calories in the ingredient
      * @param unit the unit of measurement for the ingredient (must not be null)
      */
-    public Ingredient(String name, double calories, Unit unit) {
+    public Ingredient(String name, double calories, Unit unit) throws NumberFormatException {
         this.name = Objects.requireNonNull(name, "Name must not be null");
+        if (calories < 0) {
+            throw new NumberFormatException("Calories must be bigger or equal 0");
+        }
         this.calories = calories;
         this.unit = Objects.requireNonNull(unit, "Unit must not be null");
     }
@@ -104,7 +110,10 @@ public class Ingredient extends Entity implements Serializable {
      *
      * @param calories the number of calories to set
      */
-    public void setCalories(double calories) {
+    public void setCalories(double calories) throws NumberFormatException {
+        if (calories < 0) {
+            throw new NumberFormatException("Calories must be bigger or equal 0");
+        }
         this.calories = calories;
     }
 

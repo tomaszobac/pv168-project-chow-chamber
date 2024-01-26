@@ -31,7 +31,6 @@ public class RecipeSqlRepository implements Repository<Recipe> {
         this.recipeMapper = recipeMapper;
     }
 
-
     /**
      * Returns a list of all recipes.
      *

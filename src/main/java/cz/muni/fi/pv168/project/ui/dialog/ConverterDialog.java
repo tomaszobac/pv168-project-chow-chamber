@@ -124,7 +124,7 @@ public class ConverterDialog extends EntityDialog<UnitTable> {
 
         JLabel fromLabel = new JLabel("From: ");
         add("", fromLabel, "Cell 0 1");
-        add("", fromAmountField, "cell 1 1, wmin 100lp, gapy 10");
+        add("", fromAmountField, "cell 1 1, wmin 100lp");
         add("", fromUnitComboBox, "cell 1 1, wmin 100lp");
 
         JLabel toLabel = new JLabel("To: ");
@@ -133,7 +133,7 @@ public class ConverterDialog extends EntityDialog<UnitTable> {
 
         JLabel resultLabel = new JLabel("Result: ");
         add("", resultLabel, "Cell 0 3");
-        add("", resultField, "cell 1 3, grow, gapy 10, span 2");
+        add("", resultField, "cell 1 3, grow, span 2");
     }
 
     @Override

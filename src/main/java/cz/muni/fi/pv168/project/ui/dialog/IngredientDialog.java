@@ -12,9 +12,9 @@ import javax.swing.JTextField;
 public class IngredientDialog extends EntityDialog<Ingredient> {
     private final JTextField nameField = new JTextField();
     private final JTextField caloryField = new JTextField();
-    private final JTextField unitField = new JTextField();
     private final JComboBox<Unit> unitComboBox;
     private final Ingredient ingredient;
+    private boolean returnedOK = false;
 
     public IngredientDialog(Ingredient ingredient, JTable unitTable) {
         this.ingredient = ingredient;
@@ -30,7 +30,7 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
     private void setValues() {
         nameField.setText(ingredient.getName());
         caloryField.setText(Double.toString(ingredient.getCalories()));
-        unitField.setText(ingredient.getUnit().getName());
+        unitComboBox.setSelectedItem(ingredient.getUnit());
     }
 
     private void addFields() {
@@ -39,15 +39,26 @@ public class IngredientDialog extends EntityDialog<Ingredient> {
         add("Unit:", unitComboBox);
     }
 
+    public boolean getReturnedOK() {
+        return returnedOK;
+    }
+
     @Override
     Ingredient getEntity() {
+        returnedOK = true;
         try{
-            ingredient.setName(nameField.getText());
+            String name = nameField.getText();
+            if (name.length() > 256 || name.isBlank()) {
+                throw new IllegalArgumentException("Invalid name");
+            }
+            ingredient.setName(name);
             ingredient.setCalories(Double.parseDouble(caloryField.getText()));
             ingredient.setUnit((Unit) unitComboBox.getSelectedItem());
-        } catch (NumberFormatException e){
+        } catch (IllegalArgumentException | NullPointerException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
             return null;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An error has occured");
         }
         return ingredient;
     }

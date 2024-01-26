@@ -14,6 +14,7 @@ public class UnitDialog extends EntityDialog<Unit> {
     private final ComboBoxModel<UnitType> typeField = new DefaultComboBoxModel<>(UnitType.values());
     private final JTextField baseField = new JTextField();
     private final Unit unit;
+    private boolean returnedOK = false;
 
     public UnitDialog(Unit unit) {
         this.unit = unit;
@@ -34,13 +35,22 @@ public class UnitDialog extends EntityDialog<Unit> {
         add("Base:", baseField);
     }
 
+    public boolean getReturnedOK() {
+        return returnedOK;
+    }
+
     @Override
     Unit getEntity() {
-        unit.setName(nameField.getText());
-        unit.setType((UnitType) typeField.getSelectedItem());
+        returnedOK = true;
         try{
+            String name = nameField.getText();
+            if (name.length() > 256 || name.isBlank()) {
+                throw new IllegalArgumentException("Invalid name");
+            }
+            unit.setName(name);
+            unit.setType((UnitType) typeField.getSelectedItem());
             unit.setConversionToBase(Double.parseDouble(baseField.getText()));
-        } catch (NumberFormatException e){
+        } catch (IllegalArgumentException e){
             JOptionPane.showMessageDialog(this, e.getMessage());
             return null;
         }

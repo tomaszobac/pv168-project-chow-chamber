@@ -87,42 +87,34 @@ public final class CustomValuesModelDecorator {
         }
     }
 
-    private static class TransposingListener implements ListDataListener {
-
-        private final ListDataListener delegate;
-        private final int transposition;
-
-        private TransposingListener(ListDataListener delegate, int transposition) {
-            this.delegate = delegate;
-            this.transposition = transposition;
-        }
+    private record TransposingListener(ListDataListener delegate, int transposition) implements ListDataListener {
 
         @Override
-        public void intervalAdded(ListDataEvent event) {
-            delegate.intervalAdded(transposeIndexes(event));
-        }
+            public void intervalAdded(ListDataEvent event) {
+                delegate.intervalAdded(transposeIndexes(event));
+            }
 
-        @Override
-        public void intervalRemoved(ListDataEvent event) {
-            delegate.intervalRemoved(transposeIndexes(event));
-        }
+            @Override
+            public void intervalRemoved(ListDataEvent event) {
+                delegate.intervalRemoved(transposeIndexes(event));
+            }
 
-        @Override
-        public void contentsChanged(ListDataEvent event) {
-            delegate.contentsChanged(transposeIndexes(event));
-        }
+            @Override
+            public void contentsChanged(ListDataEvent event) {
+                delegate.contentsChanged(transposeIndexes(event));
+            }
 
-        private ListDataEvent transposeIndexes(ListDataEvent event) {
-            return new ListDataEvent(
-                    event.getSource(),
-                    event.getType(),
-                    transposeIndex(event.getIndex0()),
-                    transposeIndex(event.getIndex1())
-            );
-        }
+            private ListDataEvent transposeIndexes(ListDataEvent event) {
+                return new ListDataEvent(
+                        event.getSource(),
+                        event.getType(),
+                        transposeIndex(event.getIndex0()),
+                        transposeIndex(event.getIndex1())
+                );
+            }
 
-        private int transposeIndex(int index) {
-            return index >= 0 ? index + transposition : index;
+            private int transposeIndex(int index) {
+                return index >= 0 ? index + transposition : index;
+            }
         }
-    }
 }

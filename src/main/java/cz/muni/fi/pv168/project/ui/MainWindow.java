@@ -24,6 +24,7 @@ import cz.muni.fi.pv168.project.ui.filters.IngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.RecipeIngredientTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.RecipeTableFilter;
 import cz.muni.fi.pv168.project.ui.filters.UnitTableFilter;
+import cz.muni.fi.pv168.project.ui.listeners.OutsideOfBoundsListener;
 import cz.muni.fi.pv168.project.ui.model.IngredientTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeIngredientsTableModel;
 import cz.muni.fi.pv168.project.ui.model.RecipeTableModel;
@@ -68,7 +69,7 @@ public class MainWindow {
     private final Action clearFilterIngredientAction;
     private final Action clearFilterUnitAction;
     private JToolBar toolbar;
-    private JMenuBar menubar;
+    private final JMenuBar menubar;
     private final RecipeTable recipeTable;
     private final UnitTable unitTable;
     private final IngredientsTable ingredientTable;
@@ -131,8 +132,8 @@ public class MainWindow {
         editAction = new EditRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientFilter);
         deleteAction = new DeleteRecipeAction(recipeTable);
 
-        importAction = new ImportAction(dependencyProvider.getImportService(), this::refresh);
-        exportAction = new ExportAction(dependencyProvider.getExportService());
+        importAction = new ImportAction(recipeTable, dependencyProvider.getImportService(), this::refresh);
+        exportAction = new ExportAction(recipeTable, dependencyProvider.getExportService());
 
         clearFilterRecipeAction = new ClearFilterRecipeAction(recipeTableFilter);
         clearFilterIngredientAction = new ClearFilterIngredientAction(ingredientTableFilter);
@@ -142,11 +143,20 @@ public class MainWindow {
         filterAction = new FilterRecipeAction(recipeTable, recipeTableFilter, clearFilterRecipeAction);
         convertAction = new ConvertAction(unitTable);
 
+        JScrollPane recipeJSP = new JScrollPane(recipeTable);
+        recipeJSP.addMouseListener(new OutsideOfBoundsListener(recipeTable));
+
+        JScrollPane unitJSP = new JScrollPane(unitTable);
+        unitJSP.addMouseListener(new OutsideOfBoundsListener(unitTable));
+
+        JScrollPane ingredientJSP = new JScrollPane(ingredientTable);
+        unitJSP.addMouseListener(new OutsideOfBoundsListener(ingredientTable));
+
         JTabbedPane mainFrameTabs = new JTabbedPane();
         mainFrameTabs.setOpaque(true);
-        mainFrameTabs.addTab("<html><b>Recipes</b></html>", new JScrollPane(recipeTable));
-        mainFrameTabs.addTab("<html><b>Units</b></html>", new JScrollPane(unitTable));
-        mainFrameTabs.addTab("<html><b>Ingredients</b></html>", new JScrollPane(ingredientTable));
+        mainFrameTabs.addTab("<html><b>Recipes</b></html>", recipeJSP);
+        mainFrameTabs.addTab("<html><b>Units</b></html>", unitJSP);
+        mainFrameTabs.addTab("<html><b>Ingredients</b></html>", ingredientJSP);
         mainFrame.add(mainFrameTabs, BorderLayout.CENTER);
 
         this.toolbar = createToolbar();
@@ -225,8 +235,8 @@ public class MainWindow {
     private JMenuBar createMenuBar(DependencyProvider dependencyProvider) {
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu editMenu = new JMenu("Edit");
-        editMenu.setMnemonic('e');
+        JMenu menuMenu = new JMenu("Menu");
+        menuMenu.setMnemonic('m');
 
         ArrayList<AbstractAction> list = new ArrayList<>();
         list.add(new AddRecipeAction(recipeTable, ingredientTable, unitTable, recipeIngredientsTable, recipeIngredientsTableFilter));
@@ -239,18 +249,18 @@ public class MainWindow {
                                             clearFilterRecipeAction, clearFilterIngredientAction, clearFilterUnitAction));
         list.add(new QuitAction());
 
-        addToMenu(list, editMenu, List.of(2,5,6));
+        addToMenu(list, menuMenu, List.of(2,5,6));
         list.clear();
 
         JMenu dataMenu = new JMenu("Data");
         dataMenu.setMnemonic('d');
 
-        list.add(new ImportAction(dependencyProvider.getImportService(), this::refresh));
-        list.add(new ExportAction(dependencyProvider.getExportService()));
+        list.add(new ImportAction(recipeTable, dependencyProvider.getImportService(), this::refresh));
+        list.add(new ExportAction(recipeTable, dependencyProvider.getExportService()));
 
         addToMenu(list, dataMenu, List.of());
 
-        menuBar.add(editMenu);
+        menuBar.add(menuMenu);
         menuBar.add(dataMenu);
         return menuBar;
     }

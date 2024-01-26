@@ -23,14 +23,19 @@ public class Unit extends Entity implements Serializable {
      * @param name The name of the unit.
      * @param type The type of the unit.
      * @param conversionToBase The conversion factor to the base unit.
+     * @throws NullPointerException One of the values is null.
+     * @throws NumberFormatException One of the Integer values was not within bounds.
      */
     @JsonCreator
     public Unit(@JsonProperty("guid") String guid,
                 @JsonProperty("name") String name,
                 @JsonProperty("type") UnitType type,
-                @JsonProperty("conversionToBase") double conversionToBase) {
+                @JsonProperty("conversionToBase") double conversionToBase) throws NumberFormatException {
         super(guid);
         this.name = Objects.requireNonNull(name);
+        if (conversionToBase <= 0) {
+            throw new NumberFormatException("Base must be bigger than 0");
+        }
         this.conversionToBase = conversionToBase;
         this.type = Objects.requireNonNull(type);
     }
@@ -43,8 +48,11 @@ public class Unit extends Entity implements Serializable {
      * @param conversionToBase The conversion factor to the base unit.
      * @throws NullPointerException if either name or type is null.
      */
-    public Unit(String name, UnitType type, double conversionToBase) {
+    public Unit(String name, UnitType type, double conversionToBase) throws NumberFormatException {
         this.name = Objects.requireNonNull(name, "name must not be null");
+        if (conversionToBase <= 0) {
+            throw new NumberFormatException("Base must be bigger than 0");
+        }
         this.conversionToBase = conversionToBase;
         this.type = Objects.requireNonNull(type, "type must not be null");
     }
@@ -101,7 +109,10 @@ public class Unit extends Entity implements Serializable {
      *
      * @param conversionToBase the conversion factor to set
      */
-    public void setConversionToBase(double conversionToBase) {
+    public void setConversionToBase(double conversionToBase) throws NumberFormatException {
+        if (conversionToBase <= 0) {
+            throw new NumberFormatException("Base must be bigger than 0");
+        }
         this.conversionToBase = conversionToBase;
     }
 

@@ -28,8 +28,13 @@ public class AddIngredientAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         var ingredientTableModel = (IngredientTableModel) this.ingredientTable.getModel();
-        var dialog = new IngredientDialog(new Ingredient("Flour", 250, TestTable.getTableTwo().get(1)), unitTable);
-        dialog.show(ingredientTable, "Add ingredient")
-                .ifPresent(ingredientTableModel::addRow);
+        Ingredient ingredient = new Ingredient("Flour", 250, TestTable.getTableTwo().get(1));
+        var dialog = new IngredientDialog(ingredient, unitTable);
+        var result = dialog.show(ingredientTable, "Add ingredient");
+        while(dialog.getReturnedOK() && result.isEmpty()) {
+            dialog = new IngredientDialog(ingredient, unitTable);
+            result = dialog.show(ingredientTable, "Add ingredient");
+        }
+        result.ifPresent(ingredientTableModel::addRow);
     }
 }

@@ -34,7 +34,11 @@ public class EditUnitAction extends AbstractAction {
         int modelRow = unitTable.convertRowIndexToModel(selectedRows[0]);
         var unit = unitTableModel.getEntity(modelRow);
         var dialog = new UnitDialog(unit);
-        dialog.show(unitTable, "Edit unit")
-                .ifPresent(unitTableModel::updateRow);
+        var result = dialog.show(unitTable, "Edit unit");
+        while (dialog.getReturnedOK() && result.isEmpty()) {
+            dialog = new UnitDialog(unit);
+            result = dialog.show(unitTable, "Edit unit");
+        }
+        result.ifPresent(unitTableModel::updateRow);
     }
 }

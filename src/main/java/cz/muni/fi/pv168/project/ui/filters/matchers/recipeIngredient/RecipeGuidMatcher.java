@@ -14,7 +14,7 @@ public class RecipeGuidMatcher extends EntityMatcher<RecipeIngredient> {
 
     @Override
     public boolean evaluate(RecipeIngredient recipeIngredient) {
-        if (guid.isEmpty() || Objects.isNull(guid)) {
+        if (Objects.isNull(guid) || guid.isEmpty()) {
             return true;
         }
         return recipeIngredient.getRecipe().getGuid().equals(this.guid);

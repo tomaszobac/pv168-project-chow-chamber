@@ -33,7 +33,6 @@ public class MyTable<T> extends JTable {
         getTableHeader().setDefaultRenderer(renderer);
         setFocusable(false);
     }
-
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
         Component component = super.prepareRenderer(renderer, row, column);
@@ -132,10 +131,6 @@ public class MyTable<T> extends JTable {
         infoTabs.setSelectedIndex(tabIndex);
     }
 
-    protected void openInfoWindow(MyTable<T> table) {
-        // Meant to be overriden
-    }
-    protected void openInfoWindow(MyTable<T> table, JTable recIncTable) {
-        // Meant to be overriden
-    }
+    protected void openInfoWindow(MyTable<T> table) {}
+    protected void openInfoWindow(MyTable<T> table, JTable recIncTable) {}
 }

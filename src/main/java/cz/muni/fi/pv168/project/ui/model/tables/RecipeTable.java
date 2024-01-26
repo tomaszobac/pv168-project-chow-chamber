@@ -65,8 +65,6 @@ public class RecipeTable extends MyTable<Recipe> {
         infoFrame.add(infoTabs);
         infoFrame.pack();
         infoFrame.setVisible(true);
-
-
     }
 
     private JPanel createInstructionsTab(GridBagConstraints gbc, Recipe recipe) {
@@ -89,8 +87,6 @@ public class RecipeTable extends MyTable<Recipe> {
     private JPanel createIngredientsTab(GridBagConstraints gbc, JTable table, Recipe recipe) {
         JPanel ingredientsTab = new JPanel(new GridBagLayout());
 
-
-
         var model = (RecipeIngredientsTableModel) table.getModel();
         var rowSorter = new TableRowSorter<>(model);
         var newTable = new RecipeIngredientsTable(model);
@@ -98,6 +94,7 @@ public class RecipeTable extends MyTable<Recipe> {
         newTable.setRowSorter(rowSorter);
         JScrollPane recipeIngredientsScrollPane = new JScrollPane(newTable);
         newFilter.filterGuid(recipe.getGuid());
+        MainWindowUtilities.hideFirstColumn(table);
 
         ingredientsTab.add(recipeIngredientsScrollPane, gbc);
         return ingredientsTab;

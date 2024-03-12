@@ -1,3 +1,6 @@
+# Disclaimer
+This is a backup of a semester-wide team project, which we made as part of the PV168 Seminar in Java programming course, published here for a showcase.
+
 # PV168 Project: Recipe DB
 
 Recipe DB is a database application containing number of recipes.
